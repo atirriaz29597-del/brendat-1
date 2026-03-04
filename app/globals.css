@@ -1,26 +1,92 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-primary: #000000;
+  --color-accent: #FF4A00;
+  --color-accent-dark: #E04300;
+  --color-accent-light: #FF6B2C;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f5f5f5;
+  --color-surface-dark: #000000;
+  --color-emerald: #10b981;
+  --color-amber: #f59e0b;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #ffffff;
+  color: #000000;
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
 }
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.7s ease-out both;
+}
+
+.animate-fade-in-up-delay {
+  animation: fade-in-up 0.7s 0.15s ease-out both;
+}
+
+.animate-fade-in-up-delay-2 {
+  animation: fade-in-up 0.7s 0.3s ease-out both;
+}
+
+/* With & Without falling cards */
+@keyframes fall-card-1 {
+  0% { opacity: 0; transform: translateY(-120%) rotate(0deg); }
+  60% { opacity: 1; transform: translateY(10%) rotate(-18deg); }
+  80% { transform: translateY(-2%) rotate(-15deg); }
+  100% { opacity: 1; transform: translateY(0) rotate(-12deg); }
+}
+@keyframes fall-card-2 {
+  0% { opacity: 0; transform: translateY(-120%) rotate(0deg); }
+  60% { opacity: 1; transform: translateY(10%) rotate(-35deg); }
+  80% { transform: translateY(-2%) rotate(-30deg); }
+  100% { opacity: 1; transform: translateY(0) rotate(-28deg); }
+}
+@keyframes fall-card-3 {
+  0% { opacity: 0; transform: translateY(-120%) rotate(0deg); }
+  60% { opacity: 1; transform: translateY(10%) rotate(-52deg); }
+  80% { transform: translateY(-2%) rotate(-48deg); }
+  100% { opacity: 1; transform: translateY(0) rotate(-45deg); }
+}
+@keyframes fall-card-4 {
+  0% { opacity: 0; transform: translateY(-120%) rotate(0deg); }
+  60% { opacity: 1; transform: translateY(10%) rotate(10deg); }
+  80% { transform: translateY(-2%) rotate(8deg); }
+  100% { opacity: 1; transform: translateY(0) rotate(5deg); }
+}
+@keyframes fall-card-5 {
+  0% { opacity: 0; transform: translateY(-120%) rotate(0deg); }
+  60% { opacity: 1; transform: translateY(10%) rotate(18deg); }
+  80% { transform: translateY(-2%) rotate(16deg); }
+  100% { opacity: 1; transform: translateY(0) rotate(12deg); }
+}
+@keyframes fall-card-6 {
+  0% { opacity: 0; transform: translateY(-80%) rotate(0deg); }
+  60% { opacity: 1; transform: translateY(10%) rotate(0deg); }
+  80% { transform: translateY(-2%) rotate(0deg); }
+  100% { opacity: 1; transform: translateY(0) rotate(0deg); }
+}
+.animate-fall-1 { animation: fall-card-1 0.9s 0.2s ease-out both; }
+.animate-fall-2 { animation: fall-card-2 0.9s 0.4s ease-out both; }
+.animate-fall-3 { animation: fall-card-3 0.9s 0.6s ease-out both; }
+.animate-fall-4 { animation: fall-card-4 0.9s 0.8s ease-out both; }
+.animate-fall-5 { animation: fall-card-5 0.9s 1.0s ease-out both; }
+.animate-fall-6 { animation: fall-card-6 0.9s 1.2s ease-out both; }

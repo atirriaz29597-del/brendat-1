@@ -1,0 +1,45 @@
+.falling-text-container {
+  width: 100%;
+  height: 100%;
+}
+
+.falling-text-target {
+  position: relative;
+  z-index: 2;
+}
+
+.falling-text-target .word {
+  display: inline-block;
+  padding: 6px 14px;
+  margin: 3px;
+  border: 1.5px solid rgba(255, 74, 0, 0.25);
+  border-radius: 14px;
+  background: #ffffff;
+  color: #111111;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  cursor: grab;
+  user-select: none;
+  transition: border-color 0.2s;
+}
+
+.falling-text-target .word:active {
+  cursor: grabbing;
+}
+
+.falling-text-target .word.highlighted {
+  color: #FF4A00;
+}
+
+.falling-text-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
