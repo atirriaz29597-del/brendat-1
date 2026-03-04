@@ -269,7 +269,7 @@ export async function POST(req: NextRequest) {
       to: [RECIPIENT_EMAIL],
       subject,
       html: htmlContent,
-      reply_to: type === "contact" ? data.email : undefined,
+      replyTo: type === "contact" ? data.email : undefined,
     });
 
     if (error) {
