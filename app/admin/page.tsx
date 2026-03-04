@@ -512,77 +512,22 @@ export default function AdminPricing() {
                 packagePrices.map((pkg) => {
                   const isEdited = editedPackagePrices[pkg.package_name] !== undefined;
                   const currentValue = isEdited ? editedPackagePrices[pkg.package_name] : pkg.price;
-                  
-                  // Package features
-                  const packageFeatures: Record<string, string[]> = {
-                    'Basic': [
-                      'Preparing & Filing Articles of Organization',
-                      'Name Availability Check',
-                      'Business Tax Consultation',
-                    ],
-                    'Standard': [
-                      'Preparing & Filing Articles of Organization',
-                      'Name Availability Check',
-                      'Registered Agent (1st year)',
-                      'EIN Business Tax Number',
-                      'Banking Resolutions',
-                      'Operating Agreement',
-                      'Fintech Bank Account Setup',
-                      'Phone & Email Support',
-                      'Business Tax Consultation',
-                      'Lifetime Compliance Alerts',
-                    ],
-                    'Premium': [
-                      'Preparing & Filing Articles of Organization',
-                      'Name Availability Check',
-                      'Registered Agent (1st year)',
-                      'EIN Business Tax Number',
-                      'Banking Resolutions',
-                      'Operating Agreement',
-                      'Fintech Bank Account Setup',
-                      'Domain Name + Business Email',
-                      'Expedited Filing (3 to 5 Business Days)',
-                      'Google My Business (GMB) Setup',
-                      'Unlimited Phone & Email Support',
-                      'Business Tax Consultation',
-                      'Lifetime Compliance Alerts',
-                      'IRS Form 2553',
-                      'Basic multi-page website (Home, About, Services, Contact)',
-                    ],
-                  };
-                  
-                  const features = packageFeatures[pkg.package_name] || [];
-                  
                   return (
-                    <div key={pkg.id} className={`bg-white rounded-xl border p-6 ${isEdited ? "border-amber-300 bg-amber-50" : "border-gray-200"}`}>
-                      <div className="flex items-center justify-between mb-4">
-                        <div>
-                          <h3 className="text-lg font-bold text-gray-900">{pkg.package_name}</h3>
-                          <p className="text-xs text-gray-400 mt-1">Last updated: {new Date(pkg.updated_at).toLocaleDateString()}</p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <span className="text-gray-400 text-lg">$</span>
-                          <input
-                            type="number"
-                            min="0"
-                            value={currentValue}
-                            onChange={(e) => setEditedPackagePrices((prev) => ({ ...prev, [pkg.package_name]: parseInt(e.target.value) || 0 }))}
-                            className="w-32 px-4 py-2 border border-gray-200 rounded-lg text-xl font-bold text-center focus:outline-none focus:ring-2 focus:ring-accent/20"
-                          />
-                          <span className="text-sm text-gray-500">+ State Fee</span>
-                          {isEdited && <span className="text-xs text-amber-600 font-medium">(was ${pkg.price})</span>}
-                        </div>
+                    <div key={pkg.id} className={`bg-white rounded-xl border p-6 flex items-center justify-between ${isEdited ? "border-amber-300 bg-amber-50" : "border-gray-200"}`}>
+                      <div>
+                        <h3 className="text-lg font-bold text-gray-900">{pkg.package_name}</h3>
+                        <p className="text-xs text-gray-400 mt-1">Last updated: {new Date(pkg.updated_at).toLocaleDateString()}</p>
                       </div>
-                      <div className="border-t border-gray-100 pt-4">
-                        <p className="text-xs font-semibold text-gray-500 uppercase mb-2">Included Features ({features.length})</p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
-                          {features.map((feature, idx) => (
-                            <div key={idx} className="flex items-center gap-2 text-sm text-gray-600">
-                              <span className="text-green-500">✓</span>
-                              {feature}
-                            </div>
-                          ))}
-                        </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-gray-400 text-lg">$</span>
+                        <input
+                          type="number"
+                          min="0"
+                          value={currentValue}
+                          onChange={(e) => setEditedPackagePrices((prev) => ({ ...prev, [pkg.package_name]: parseInt(e.target.value) || 0 }))}
+                          className="w-32 px-4 py-2 border border-gray-200 rounded-lg text-xl font-bold text-center focus:outline-none focus:ring-2 focus:ring-accent/20"
+                        />
+                        {isEdited && <span className="text-xs text-amber-600 font-medium">(was ${pkg.price})</span>}
                       </div>
                     </div>
                   );

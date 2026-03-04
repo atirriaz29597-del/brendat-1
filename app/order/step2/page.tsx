@@ -3,9 +3,9 @@
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle2, ChevronDown, Calendar, ArrowLeft, ArrowRight } from "lucide-react";
+import { CheckCircle2, Calendar, ArrowLeft, ArrowRight } from "lucide-react";
 import Header from "../../components/Header";
-import { STATE_FEES, packagePrices as defaultPackagePrices, comparisonFeatures as defaultFeatures } from "../data";
+import { STATE_FEES, packagePrices as defaultPackagePrices } from "../data";
 
 function Step2Inner() {
   const router = useRouter();
@@ -16,14 +16,6 @@ function Step2Inner() {
   // Dynamic prices from Supabase (fallback to hardcoded)
   const [statePrices, setStatePrices] = useState<Record<string, number>>(STATE_FEES);
   const [packagePricesData, setPackagePricesData] = useState<Record<string, number>>(defaultPackagePrices);
-  const [addonPrices, setAddonPrices] = useState<Record<string, number>>({
-    expedited_filing: 50,
-    contract_templates: 150,
-    ein_tax_number: 70,
-    operating_agreement: 99,
-    irs_form_2553: 50,
-  });
-  const [pricesLoading, setPricesLoading] = useState(true);
   
   // Map entity param to API entity type
   const getEntityType = (entityParam: string): string => {
@@ -43,12 +35,11 @@ function Step2Inner() {
   const entityType = getEntityType(entity);
 
   useEffect(() => {
-    async function fetchAllPrices() {
+    async function fetchPrices() {
       try {
-        const [stateRes, packageRes, addonRes] = await Promise.all([
+        const [stateRes, packageRes] = await Promise.all([
           fetch(`/api/state-prices?entity=${encodeURIComponent(entityType)}`),
           fetch(`/api/package-prices?state=${encodeURIComponent(state)}`),
-          fetch(`/api/addon-prices?state=${encodeURIComponent(state)}`),
         ]);
         
         if (stateRes.ok) {
@@ -59,41 +50,54 @@ function Step2Inner() {
           const data = await packageRes.json();
           setPackagePricesData(data);
         }
-        if (addonRes.ok) {
-          const data = await addonRes.json();
-          setAddonPrices(data);
-        }
       } catch (error) {
         console.error('Failed to fetch prices:', error);
-      } finally {
-        setPricesLoading(false);
       }
     }
     if (state) {
-      fetchAllPrices();
+      fetchPrices();
     }
   }, [state, entityType]);
   
   const stateFee = statePrices[state] ?? 50;
 
-  // Generate dynamic comparison features with updated addon prices
-  const comparisonFeatures = [
-    { label: "Preparing & Filing the Articles of Organization", sub: "See what's included →", basic: "✓", standard: "✓", premium: "✓" },
-    { label: "FREE 1st Year Registered Agent Service!", basic: "✓", standard: "✓", premium: "✓" },
-    { label: "FREE 1st Month of Virtual Address Service!", basic: "—", standard: "✓", premium: "✓" },
-    { label: "Expedited Filing", sub: "2 business days (instead of 3 weeks)", basic: `+ $${addonPrices.expedited_filing || 50}`, standard: `+ $${addonPrices.expedited_filing || 50}`, premium: "✓" },
-    { label: "Business Contract Templates", basic: `+ $${addonPrices.contract_templates || 150}`, standard: `+ $${addonPrices.contract_templates || 150}`, premium: "✓" },
-    { label: "EIN Business Tax Number", basic: `+ $${addonPrices.ein_tax_number || 70}`, standard: "✓", premium: "✓" },
-    { label: "Operating Agreement", basic: `+ $${addonPrices.operating_agreement || 99}`, standard: "✓", premium: "✓" },
-    { label: "Domain Name + Business Email", basic: "—", standard: "—", premium: "✓" },
-    { label: "FREE 1st Year Business Phone Number", sub: "*Offer valid only for US based clients.", basic: "—", standard: "—", premium: "✓" },
-    { label: "Lifetime Compliance Alerts", basic: "—", standard: "✓", premium: "✓" },
-    { label: "Unlimited Phone & Email Support", basic: "—", standard: "✓", premium: "✓" },
-    { label: "Online Access Dashboard", basic: "✓", standard: "✓", premium: "✓" },
-    { label: "Business Banking Account Offer", basic: "✓", standard: "✓", premium: "✓" },
-    { label: "Business Tax Consultation", basic: "—", standard: "✓", premium: "✓" },
-    { label: "IRS Form 2553", basic: `+ $${addonPrices.irs_form_2553 || 50}`, standard: "—", premium: "✓" },
-  ];
+  // Features included in each package
+  const packageFeatures: Record<"Basic" | "Standard" | "Premium", string[]> = {
+    Basic: [
+      "Preparing & Filing Articles of Organization",
+      "Name Availability Check",
+      "Business Tax Consultation",
+    ],
+    Standard: [
+      "Preparing & Filing Articles of Organization",
+      "Name Availability Check",
+      "Registered Agent (1st year)",
+      "EIN Business Tax Number",
+      "Banking Resolutions",
+      "Operating Agreement",
+      "Fintech Bank Account Setup",
+      "Phone & Email Support",
+      "Business Tax Consultation",
+      "Lifetime Compliance Alerts",
+    ],
+    Premium: [
+      "Preparing & Filing Articles of Organization",
+      "Name Availability Check",
+      "Registered Agent (1st year)",
+      "EIN Business Tax Number",
+      "Banking Resolutions",
+      "Operating Agreement",
+      "Fintech Bank Account Setup",
+      "Domain Name + Business Email",
+      "Expedited Filing (3 to 5 Business Days)",
+      "Google My Business (GMB) Setup",
+      "Unlimited Phone & Email Support",
+      "Business Tax Consultation",
+      "Lifetime Compliance Alerts",
+      "IRS Form 2553",
+      "Basic multi-page website (Home, About, Services, Contact)",
+    ],
+  };
 
   const [selectedPackage, setSelectedPackage] = useState<"Basic" | "Standard" | "Premium">("Standard");
   const orderTotal = (packagePricesData[selectedPackage] ?? 0) + stateFee;
@@ -136,58 +140,66 @@ function Step2Inner() {
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-[1fr_320px] gap-8 items-start">
-          {/* Comparison Table */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-lg overflow-x-auto">
-            <div className="min-w-[600px]">
-              {/* Header row */}
-              <div className="grid grid-cols-[1fr_120px_120px_120px] border-b border-gray-200">
-                <div className="p-6 flex flex-col justify-center">
-                  <h3 className="text-lg font-black text-black">Business Formation<br />Packages</h3>
-                </div>
-                {(["Basic", "Standard", "Premium"] as const).map((pkg) => (
-                  <div
-                    key={pkg}
-                    onClick={() => setSelectedPackage(pkg)}
-                    className={`p-4 text-center cursor-pointer transition-all border-l border-gray-200 relative ${selectedPackage === pkg ? (pkg === "Basic" ? "bg-gray-50" : "bg-accent/5") : "hover:bg-gray-50/50"}`}
-                  >
-                    {pkg === "Standard" && (
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-accent text-white text-[9px] font-black uppercase tracking-widest px-3 py-0.5 rounded-b-lg">Recommended</div>
-                    )}
-                    <span className={`inline-block text-xs font-bold rounded-full px-3 py-1 mb-2 mt-2 ${selectedPackage === pkg ? (pkg === "Basic" ? "bg-gray-200 text-black" : "bg-accent/15 text-accent") : "bg-gray-100 text-gray-500"}`}>
+          {/* Package Selection & Features */}
+          <div className="space-y-6">
+            {/* Package Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {(["Basic", "Standard", "Premium"] as const).map((pkg) => (
+                <div
+                  key={pkg}
+                  onClick={() => setSelectedPackage(pkg)}
+                  className={`relative p-6 rounded-2xl border-2 cursor-pointer transition-all ${
+                    selectedPackage === pkg 
+                      ? "border-accent bg-accent/5 shadow-lg shadow-accent/10" 
+                      : "border-gray-200 bg-white hover:border-gray-300"
+                  }`}
+                >
+                  {pkg === "Standard" && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full">Recommended</div>
+                  )}
+                  <div className="text-center">
+                    <span className={`inline-block text-xs font-bold rounded-full px-3 py-1 mb-3 ${
+                      selectedPackage === pkg ? "bg-accent/15 text-accent" : "bg-gray-100 text-gray-500"
+                    }`}>
                       {pkg}
                     </span>
-                    <div className="text-2xl font-black text-black">${packagePricesData[pkg] ?? 0}</div>
-                    <p className="text-[10px] text-gray-400 mt-0.5">+ ${stateFee} state fee</p>
-                    <div className={`flex items-center justify-center gap-1 mt-2 text-[10px] font-semibold ${pkg === "Premium" ? "text-accent" : "text-gray-400"}`}>
-                      <Calendar className="w-3 h-3" /> {pkg === "Premium" ? "2 days" : "3 weeks"}
+                    <div className="text-3xl font-black text-black">${packagePricesData[pkg] ?? 0}</div>
+                    <p className="text-xs text-gray-400 mt-1">+ ${stateFee} state fee</p>
+                    <div className={`flex items-center justify-center gap-1 mt-3 text-xs font-semibold ${
+                      pkg === "Premium" ? "text-accent" : "text-gray-400"
+                    }`}>
+                      <Calendar className="w-3 h-3" /> {pkg === "Premium" ? "3-5 days" : "3 weeks"}
                     </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Features List for Selected Package */}
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-black text-black">
+                  {selectedPackage} Package Includes:
+                </h3>
+                <span className="text-sm font-bold text-accent">
+                  ${packagePricesData[selectedPackage] ?? 0} + ${stateFee} State Fee
+                </span>
+              </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {packageFeatures[selectedPackage].map((feature, i) => (
+                  <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 hover:bg-accent/5 transition-colors">
+                    <CheckCircle2 className="w-5 h-5 text-accent shrink-0 mt-0.5" />
+                    <span className="text-sm font-medium text-gray-700">{feature}</span>
                   </div>
                 ))}
               </div>
-
-              {/* Feature rows */}
-              {comparisonFeatures.map((feat, i) => (
-                <div key={i} className={`grid grid-cols-[1fr_120px_120px_120px] border-b border-gray-100 last:border-b-0 ${i % 2 === 0 ? "bg-white" : "bg-gray-50/50"}`}>
-                  <div className="px-6 py-3.5 flex flex-col justify-center">
-                    <span className="text-sm font-semibold text-black italic">{feat.label}</span>
-                    {feat.sub && <span className="text-[10px] text-gray-400 mt-0.5">{feat.sub}</span>}
-                  </div>
-                  {(["basic", "standard", "premium"] as const).map((plan) => {
-                    const val = feat[plan];
-                    return (
-                      <div key={plan} className="px-2 py-3.5 flex items-center justify-center border-l border-gray-100">
-                        {val === "check" ? (
-                          <CheckCircle2 className="w-5 h-5 text-accent" />
-                        ) : val === "-" ? (
-                          <span className="w-4 h-0.5 bg-gray-300 rounded-full inline-block" />
-                        ) : (
-                          <span className="text-xs font-bold text-accent">{val}</span>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
+              
+              <div className="mt-6 pt-4 border-t border-gray-100 text-xs text-gray-400 text-center">
+                {selectedPackage === "Basic" && "Perfect for simple formations • Upgrade anytime"}
+                {selectedPackage === "Standard" && "Most popular choice • Everything you need to get started"}
+                {selectedPackage === "Premium" && "Complete package • Fastest processing time"}
+              </div>
             </div>
           </div>
 
