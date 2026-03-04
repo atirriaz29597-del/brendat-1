@@ -30,8 +30,8 @@ function Step2Inner() {
       try {
         const [stateRes, packageRes, addonRes] = await Promise.all([
           fetch('/api/state-prices'),
-          fetch('/api/package-prices'),
-          fetch('/api/addon-prices'),
+          fetch(`/api/package-prices?state=${encodeURIComponent(state)}`),
+          fetch(`/api/addon-prices?state=${encodeURIComponent(state)}`),
         ]);
         
         if (stateRes.ok) {
@@ -52,8 +52,10 @@ function Step2Inner() {
         setPricesLoading(false);
       }
     }
-    fetchAllPrices();
-  }, []);
+    if (state) {
+      fetchAllPrices();
+    }
+  }, [state]);
   
   const stateFee = statePrices[state] ?? 50;
 

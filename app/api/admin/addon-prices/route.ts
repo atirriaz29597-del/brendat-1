@@ -1,12 +1,20 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
-// GET: Fetch all addon prices with full details
-export async function GET() {
+// GET: Fetch addon prices for a specific state
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const state = searchParams.get('state');
+
+    if (!state) {
+      return NextResponse.json({ error: 'State parameter is required' }, { status: 400 });
+    }
+
     const { data, error } = await supabase
-      .from('addon_prices')
+      .from('state_addon_prices')
       .select('*')
+      .eq('state_name', state)
       .order('id');
 
     if (error) {
@@ -21,19 +29,24 @@ export async function GET() {
   }
 }
 
-// PUT: Update multiple addon prices
+// PUT: Update addon prices for a specific state
 export async function PUT(request: Request) {
   try {
-    const { updates } = await request.json();
+    const { state, updates } = await request.json();
     
+    if (!state) {
+      return NextResponse.json({ error: 'State is required' }, { status: 400 });
+    }
+
     if (!updates || typeof updates !== 'object') {
       return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
     }
 
     const updatePromises = Object.entries(updates).map(([addonKey, price]) =>
       supabase
-        .from('addon_prices')
+        .from('state_addon_prices')
         .update({ price: price as number, updated_at: new Date().toISOString() })
+        .eq('state_name', state)
         .eq('addon_key', addonKey)
     );
 

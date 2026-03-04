@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Save, RefreshCw, Search, AlertCircle, CheckCircle2, DollarSign, Package, Puzzle, MapPin, Lock, Eye, EyeOff } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Save, RefreshCw, Search, AlertCircle, CheckCircle2, DollarSign, Package, Puzzle, MapPin, Lock, Eye, EyeOff, ChevronDown } from "lucide-react";
 
 interface StatePrice {
   id: number;
@@ -12,6 +12,7 @@ interface StatePrice {
 
 interface PackagePrice {
   id: number;
+  state_name: string;
   package_name: string;
   price: number;
   updated_at: string;
@@ -19,6 +20,7 @@ interface PackagePrice {
 
 interface AddonPrice {
   id: number;
+  state_name: string;
   addon_name: string;
   addon_key: string;
   price: number;
@@ -28,6 +30,17 @@ interface AddonPrice {
 type TabType = "states" | "packages" | "addons";
 
 const ADMIN_PASSWORD = "Brendat@5432";
+
+const US_STATES = [
+  "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut",
+  "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa",
+  "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan",
+  "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire",
+  "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio",
+  "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
+  "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia",
+  "Wisconsin", "Wyoming"
+];
 
 export default function AdminPricing() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -46,13 +59,15 @@ export default function AdminPricing() {
 
   // Package prices
   const [packagePrices, setPackagePrices] = useState<PackagePrice[]>([]);
-  const [packageLoading, setPackageLoading] = useState(true);
+  const [packageLoading, setPackageLoading] = useState(false);
   const [editedPackagePrices, setEditedPackagePrices] = useState<Record<string, number>>({});
+  const [selectedStateForPackages, setSelectedStateForPackages] = useState("California");
 
   // Addon prices
   const [addonPrices, setAddonPrices] = useState<AddonPrice[]>([]);
-  const [addonLoading, setAddonLoading] = useState(true);
+  const [addonLoading, setAddonLoading] = useState(false);
   const [editedAddonPrices, setEditedAddonPrices] = useState<Record<string, number>>({});
+  const [selectedStateForAddons, setSelectedStateForAddons] = useState("California");
 
   const [saving, setSaving] = useState(false);
 
@@ -81,10 +96,10 @@ export default function AdminPricing() {
     }
   };
 
-  const fetchPackagePrices = async () => {
+  const fetchPackagePrices = useCallback(async (state: string) => {
     setPackageLoading(true);
     try {
-      const res = await fetch("/api/admin/package-prices");
+      const res = await fetch(`/api/admin/package-prices?state=${encodeURIComponent(state)}`);
       if (res.ok) {
         const data = await res.json();
         setPackagePrices(data);
@@ -95,12 +110,12 @@ export default function AdminPricing() {
     } finally {
       setPackageLoading(false);
     }
-  };
+  }, []);
 
-  const fetchAddonPrices = async () => {
+  const fetchAddonPrices = useCallback(async (state: string) => {
     setAddonLoading(true);
     try {
-      const res = await fetch("/api/admin/addon-prices");
+      const res = await fetch(`/api/admin/addon-prices?state=${encodeURIComponent(state)}`);
       if (res.ok) {
         const data = await res.json();
         setAddonPrices(data);
@@ -111,16 +126,28 @@ export default function AdminPricing() {
     } finally {
       setAddonLoading(false);
     }
-  };
+  }, []);
 
-  // Fetch prices when authenticated
+  // Fetch state prices when authenticated
   useEffect(() => {
     if (isAuthenticated) {
       fetchStatePrices();
-      fetchPackagePrices();
-      fetchAddonPrices();
     }
   }, [isAuthenticated]);
+
+  // Fetch package prices when state changes or authenticated
+  useEffect(() => {
+    if (isAuthenticated && selectedStateForPackages) {
+      fetchPackagePrices(selectedStateForPackages);
+    }
+  }, [isAuthenticated, selectedStateForPackages, fetchPackagePrices]);
+
+  // Fetch addon prices when state changes or authenticated
+  useEffect(() => {
+    if (isAuthenticated && selectedStateForAddons) {
+      fetchAddonPrices(selectedStateForAddons);
+    }
+  }, [isAuthenticated, selectedStateForAddons, fetchAddonPrices]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -219,11 +246,11 @@ export default function AdminPricing() {
       const res = await fetch("/api/admin/package-prices", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ updates: editedPackagePrices }),
+        body: JSON.stringify({ state: selectedStateForPackages, updates: editedPackagePrices }),
       });
       if (res.ok) {
-        setMessage({ type: "success", text: "Package prices updated!" });
-        await fetchPackagePrices();
+        setMessage({ type: "success", text: `Package prices updated for ${selectedStateForPackages}!` });
+        await fetchPackagePrices(selectedStateForPackages);
       } else {
         setMessage({ type: "error", text: "Failed to save package prices" });
       }
@@ -241,11 +268,11 @@ export default function AdminPricing() {
       const res = await fetch("/api/admin/addon-prices", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ updates: editedAddonPrices }),
+        body: JSON.stringify({ state: selectedStateForAddons, updates: editedAddonPrices }),
       });
       if (res.ok) {
-        setMessage({ type: "success", text: "Add-on prices updated!" });
-        await fetchAddonPrices();
+        setMessage({ type: "success", text: `Add-on prices updated for ${selectedStateForAddons}!` });
+        await fetchAddonPrices(selectedStateForAddons);
       } else {
         setMessage({ type: "error", text: "Failed to save add-on prices" });
       }
@@ -405,21 +432,38 @@ export default function AdminPricing() {
         {/* PACKAGE PRICES TAB */}
         {activeTab === "packages" && (
           <>
-            <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6 flex justify-between items-center">
-              <p className="text-sm text-gray-500">Edit the base price for each formation package.</p>
-              <div className="flex gap-3">
-                <button onClick={fetchPackagePrices} disabled={packageLoading} className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition-colors disabled:opacity-50">
-                  <RefreshCw className={`w-4 h-4 ${packageLoading ? "animate-spin" : ""}`} /> Refresh
-                </button>
-                <button onClick={handleSavePackages} disabled={saving || !hasPackageChanges} className="flex items-center gap-2 px-4 py-2 bg-accent hover:bg-accent-dark text-white rounded-lg text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                  <Save className="w-4 h-4" /> {saving ? "Saving..." : "Save Changes"}
-                </button>
+            <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
+              <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <label className="text-sm font-medium text-gray-700">State:</label>
+                  <div className="relative">
+                    <select
+                      value={selectedStateForPackages}
+                      onChange={(e) => setSelectedStateForPackages(e.target.value)}
+                      className="appearance-none pl-4 pr-10 py-2 border border-gray-200 rounded-lg text-sm font-medium bg-white focus:outline-none focus:ring-2 focus:ring-accent/20"
+                    >
+                      {US_STATES.map((state) => (
+                        <option key={state} value={state}>{state}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <button onClick={() => fetchPackagePrices(selectedStateForPackages)} disabled={packageLoading} className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition-colors disabled:opacity-50">
+                    <RefreshCw className={`w-4 h-4 ${packageLoading ? "animate-spin" : ""}`} /> Refresh
+                  </button>
+                  <button onClick={handleSavePackages} disabled={saving || !hasPackageChanges} className="flex items-center gap-2 px-4 py-2 bg-accent hover:bg-accent-dark text-white rounded-lg text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    <Save className="w-4 h-4" /> {saving ? "Saving..." : "Save Changes"}
+                  </button>
+                </div>
               </div>
+              <p className="text-sm text-gray-500 mt-3">Edit package prices for <strong>{selectedStateForPackages}</strong>. Select a different state to edit its prices.</p>
             </div>
 
             {hasPackageChanges && (
               <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 text-sm">
-                You have {Object.keys(editedPackagePrices).length} unsaved change(s).
+                You have {Object.keys(editedPackagePrices).length} unsaved change(s) for {selectedStateForPackages}.
               </div>
             )}
 
@@ -458,21 +502,38 @@ export default function AdminPricing() {
         {/* ADDON PRICES TAB */}
         {activeTab === "addons" && (
           <>
-            <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6 flex justify-between items-center">
-              <p className="text-sm text-gray-500">Edit prices for add-on services shown in the comparison table.</p>
-              <div className="flex gap-3">
-                <button onClick={fetchAddonPrices} disabled={addonLoading} className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition-colors disabled:opacity-50">
-                  <RefreshCw className={`w-4 h-4 ${addonLoading ? "animate-spin" : ""}`} /> Refresh
-                </button>
-                <button onClick={handleSaveAddons} disabled={saving || !hasAddonChanges} className="flex items-center gap-2 px-4 py-2 bg-accent hover:bg-accent-dark text-white rounded-lg text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                  <Save className="w-4 h-4" /> {saving ? "Saving..." : "Save Changes"}
-                </button>
+            <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
+              <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <label className="text-sm font-medium text-gray-700">State:</label>
+                  <div className="relative">
+                    <select
+                      value={selectedStateForAddons}
+                      onChange={(e) => setSelectedStateForAddons(e.target.value)}
+                      className="appearance-none pl-4 pr-10 py-2 border border-gray-200 rounded-lg text-sm font-medium bg-white focus:outline-none focus:ring-2 focus:ring-accent/20"
+                    >
+                      {US_STATES.map((state) => (
+                        <option key={state} value={state}>{state}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <button onClick={() => fetchAddonPrices(selectedStateForAddons)} disabled={addonLoading} className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition-colors disabled:opacity-50">
+                    <RefreshCw className={`w-4 h-4 ${addonLoading ? "animate-spin" : ""}`} /> Refresh
+                  </button>
+                  <button onClick={handleSaveAddons} disabled={saving || !hasAddonChanges} className="flex items-center gap-2 px-4 py-2 bg-accent hover:bg-accent-dark text-white rounded-lg text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    <Save className="w-4 h-4" /> {saving ? "Saving..." : "Save Changes"}
+                  </button>
+                </div>
               </div>
+              <p className="text-sm text-gray-500 mt-3">Edit add-on prices for <strong>{selectedStateForAddons}</strong>. Select a different state to edit its prices.</p>
             </div>
 
             {hasAddonChanges && (
               <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 text-sm">
-                You have {Object.keys(editedAddonPrices).length} unsaved change(s).
+                You have {Object.keys(editedAddonPrices).length} unsaved change(s) for {selectedStateForAddons}.
               </div>
             )}
 

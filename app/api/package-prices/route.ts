@@ -1,11 +1,19 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const state = searchParams.get('state');
+
+    if (!state) {
+      return NextResponse.json({ error: 'State parameter is required' }, { status: 400 });
+    }
+
     const { data, error } = await supabase
-      .from('package_prices')
+      .from('state_package_prices')
       .select('package_name, price')
+      .eq('state_name', state)
       .order('id');
 
     if (error) {
