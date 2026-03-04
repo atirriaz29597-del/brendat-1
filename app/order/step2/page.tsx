@@ -25,11 +25,28 @@ function Step2Inner() {
   });
   const [pricesLoading, setPricesLoading] = useState(true);
   
+  // Map entity param to API entity type
+  const getEntityType = (entityParam: string): string => {
+    const entityMap: Record<string, string> = {
+      'LLC': 'LLC',
+      'S-Corp': 'S-Corp',
+      'S-Corporation': 'S-Corp',
+      'C-Corp': 'C-Corp',
+      'C-Corporation': 'C-Corp',
+      'Corporation': 'C-Corp',
+      'Nonprofit': 'Nonprofit',
+      'Non-Profit': 'Nonprofit',
+    };
+    return entityMap[entityParam] || 'LLC';
+  };
+
+  const entityType = getEntityType(entity);
+
   useEffect(() => {
     async function fetchAllPrices() {
       try {
         const [stateRes, packageRes, addonRes] = await Promise.all([
-          fetch('/api/state-prices'),
+          fetch(`/api/state-prices?entity=${encodeURIComponent(entityType)}`),
           fetch(`/api/package-prices?state=${encodeURIComponent(state)}`),
           fetch(`/api/addon-prices?state=${encodeURIComponent(state)}`),
         ]);
@@ -55,7 +72,7 @@ function Step2Inner() {
     if (state) {
       fetchAllPrices();
     }
-  }, [state]);
+  }, [state, entityType]);
   
   const stateFee = statePrices[state] ?? 50;
 

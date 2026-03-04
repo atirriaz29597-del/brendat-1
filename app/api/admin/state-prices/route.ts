@@ -1,12 +1,16 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
-// GET: Fetch all state prices with full details
-export async function GET() {
+// GET: Fetch state prices for a specific entity type
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const entity = searchParams.get('entity') || 'LLC';
+
     const { data, error } = await supabase
-      .from('state_prices')
+      .from('state_entity_fees')
       .select('*')
+      .eq('entity_type', entity)
       .order('state_name');
 
     if (error) {
@@ -21,21 +25,22 @@ export async function GET() {
   }
 }
 
-// PUT: Update multiple state prices
+// PUT: Update multiple state prices for a specific entity type
 export async function PUT(request: Request) {
   try {
-    const { updates } = await request.json();
+    const { entity, updates } = await request.json();
     
-    if (!updates || typeof updates !== 'object') {
-      return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
+    if (!entity || !updates || typeof updates !== 'object') {
+      return NextResponse.json({ error: 'Invalid request body - entity and updates required' }, { status: 400 });
     }
 
-    // Update each state price
+    // Update each state price for the given entity
     const updatePromises = Object.entries(updates).map(([stateName, fee]) =>
       supabase
-        .from('state_prices')
+        .from('state_entity_fees')
         .update({ fee: fee as number, updated_at: new Date().toISOString() })
         .eq('state_name', stateName)
+        .eq('entity_type', entity)
     );
 
     const results = await Promise.all(updatePromises);

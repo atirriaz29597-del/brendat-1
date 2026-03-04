@@ -6,9 +6,13 @@ import { Save, RefreshCw, Search, AlertCircle, CheckCircle2, DollarSign, Package
 interface StatePrice {
   id: number;
   state_name: string;
-  fee: number;
+  entity_type: string;
+  fee: number | null;
   updated_at: string;
 }
+
+const ENTITY_TYPES = ['LLC', 'C-Corp', 'S-Corp', 'Nonprofit'] as const;
+type EntityType = typeof ENTITY_TYPES[number];
 
 interface PackagePrice {
   id: number;
@@ -53,9 +57,10 @@ export default function AdminPricing() {
 
   // State prices
   const [statePrices, setStatePrices] = useState<StatePrice[]>([]);
-  const [stateLoading, setStateLoading] = useState(true);
+  const [stateLoading, setStateLoading] = useState(false);
   const [stateSearch, setStateSearch] = useState("");
   const [editedStatePrices, setEditedStatePrices] = useState<Record<string, number>>({});
+  const [selectedEntityForStates, setSelectedEntityForStates] = useState<EntityType>('LLC');
 
   // Package prices
   const [packagePrices, setPackagePrices] = useState<PackagePrice[]>([]);
@@ -80,10 +85,10 @@ export default function AdminPricing() {
   }, []);
 
   // Fetch functions
-  const fetchStatePrices = async () => {
+  const fetchStatePrices = useCallback(async (entity: EntityType) => {
     setStateLoading(true);
     try {
-      const res = await fetch("/api/admin/state-prices");
+      const res = await fetch(`/api/admin/state-prices?entity=${encodeURIComponent(entity)}`);
       if (res.ok) {
         const data = await res.json();
         setStatePrices(data);
@@ -94,7 +99,7 @@ export default function AdminPricing() {
     } finally {
       setStateLoading(false);
     }
-  };
+  }, []);
 
   const fetchPackagePrices = useCallback(async (state: string) => {
     setPackageLoading(true);
@@ -128,12 +133,12 @@ export default function AdminPricing() {
     }
   }, []);
 
-  // Fetch state prices when authenticated
+  // Fetch state prices when authenticated or entity changes
   useEffect(() => {
-    if (isAuthenticated) {
-      fetchStatePrices();
+    if (isAuthenticated && selectedEntityForStates) {
+      fetchStatePrices(selectedEntityForStates);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, selectedEntityForStates, fetchStatePrices]);
 
   // Fetch package prices when state changes or authenticated
   useEffect(() => {
@@ -224,11 +229,11 @@ export default function AdminPricing() {
       const res = await fetch("/api/admin/state-prices", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ updates: editedStatePrices }),
+        body: JSON.stringify({ entity: selectedEntityForStates, updates: editedStatePrices }),
       });
       if (res.ok) {
-        setMessage({ type: "success", text: "State prices updated!" });
-        await fetchStatePrices();
+        setMessage({ type: "success", text: `${selectedEntityForStates} state fees updated!` });
+        await fetchStatePrices(selectedEntityForStates);
       } else {
         setMessage({ type: "error", text: "Failed to save state prices" });
       }
@@ -359,30 +364,50 @@ export default function AdminPricing() {
         {/* STATE FEES TAB */}
         {activeTab === "states" && (
           <>
-            <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
-              <div className="relative w-full sm:w-64">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search states..."
-                  value={stateSearch}
-                  onChange={(e) => setStateSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20"
-                />
+            <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
+              <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <label className="text-sm font-medium text-gray-700">Entity Type:</label>
+                  <div className="relative">
+                    <select
+                      value={selectedEntityForStates}
+                      onChange={(e) => setSelectedEntityForStates(e.target.value as EntityType)}
+                      className="appearance-none pl-4 pr-10 py-2 border border-gray-200 rounded-lg text-sm font-medium bg-white focus:outline-none focus:ring-2 focus:ring-accent/20"
+                    >
+                      {ENTITY_TYPES.map((entity) => (
+                        <option key={entity} value={entity}>{entity}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <button onClick={() => fetchStatePrices(selectedEntityForStates)} disabled={stateLoading} className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition-colors disabled:opacity-50">
+                    <RefreshCw className={`w-4 h-4 ${stateLoading ? "animate-spin" : ""}`} /> Refresh
+                  </button>
+                  <button onClick={handleSaveStates} disabled={saving || !hasStateChanges} className="flex items-center gap-2 px-4 py-2 bg-accent hover:bg-accent-dark text-white rounded-lg text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    <Save className="w-4 h-4" /> {saving ? "Saving..." : "Save Changes"}
+                  </button>
+                </div>
               </div>
-              <div className="flex gap-3">
-                <button onClick={fetchStatePrices} disabled={stateLoading} className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition-colors disabled:opacity-50">
-                  <RefreshCw className={`w-4 h-4 ${stateLoading ? "animate-spin" : ""}`} /> Refresh
-                </button>
-                <button onClick={handleSaveStates} disabled={saving || !hasStateChanges} className="flex items-center gap-2 px-4 py-2 bg-accent hover:bg-accent-dark text-white rounded-lg text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                  <Save className="w-4 h-4" /> {saving ? "Saving..." : "Save Changes"}
-                </button>
+              <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+                <div className="relative w-full sm:w-64">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search states..."
+                    value={stateSearch}
+                    onChange={(e) => setStateSearch(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20"
+                  />
+                </div>
+                <p className="text-sm text-gray-500">Editing <strong>{selectedEntityForStates}</strong> filing fees. Select a different entity to edit its fees.</p>
               </div>
             </div>
 
             {hasStateChanges && (
               <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 text-sm">
-                You have {Object.keys(editedStatePrices).length} unsaved change(s).
+                You have {Object.keys(editedStatePrices).length} unsaved change(s) for {selectedEntityForStates}.
               </div>
             )}
 
@@ -401,22 +426,35 @@ export default function AdminPricing() {
                   <tbody className="divide-y divide-gray-100">
                     {filteredStatePrices.map((price) => {
                       const isEdited = editedStatePrices[price.state_name] !== undefined;
-                      const currentValue = isEdited ? editedStatePrices[price.state_name] : price.fee;
+                      const currentValue = isEdited ? editedStatePrices[price.state_name] : (price.fee ?? 0);
+                      const isNA = price.fee === null && !isEdited;
                       return (
-                        <tr key={price.id} className={isEdited ? "bg-amber-50" : "hover:bg-gray-50"}>
+                        <tr key={price.id} className={isEdited ? "bg-amber-50" : isNA ? "bg-gray-50" : "hover:bg-gray-50"}>
                           <td className="px-6 py-4 text-sm font-medium text-gray-900">{price.state_name}</td>
                           <td className="px-6 py-4">
-                            <div className="flex items-center gap-2">
-                              <span className="text-gray-400">$</span>
-                              <input
-                                type="number"
-                                min="0"
-                                value={currentValue}
-                                onChange={(e) => setEditedStatePrices((prev) => ({ ...prev, [price.state_name]: parseInt(e.target.value) || 0 }))}
-                                className="w-24 px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20"
-                              />
-                              {isEdited && <span className="text-xs text-amber-600 font-medium">(was ${price.fee})</span>}
-                            </div>
+                            {isNA ? (
+                              <div className="flex items-center gap-2">
+                                <span className="text-gray-400 italic">N/A</span>
+                                <button
+                                  onClick={() => setEditedStatePrices((prev) => ({ ...prev, [price.state_name]: 0 }))}
+                                  className="text-xs text-accent hover:underline"
+                                >
+                                  Set fee
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="flex items-center gap-2">
+                                <span className="text-gray-400">$</span>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  value={currentValue}
+                                  onChange={(e) => setEditedStatePrices((prev) => ({ ...prev, [price.state_name]: parseInt(e.target.value) || 0 }))}
+                                  className="w-24 px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20"
+                                />
+                                {isEdited && <span className="text-xs text-amber-600 font-medium">(was {price.fee === null ? 'N/A' : `$${price.fee}`})</span>}
+                              </div>
+                            )}
                           </td>
                           <td className="px-6 py-4 text-sm text-gray-500">{new Date(price.updated_at).toLocaleDateString()}</td>
                         </tr>
