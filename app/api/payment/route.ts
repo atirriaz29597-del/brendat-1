@@ -15,9 +15,9 @@ import crypto from "crypto";
  * gateway and never stored.
  */
 
-const MERCHANT_ID = process.env.BAMS_MERCHANT_ID!;
-const KEY_ID = process.env.BAMS_KEY_ID!;
-const SECRET_KEY = process.env.BAMS_SECRET_KEY!; // base64-encoded
+const MERCHANT_ID = normalizeEnvValue(process.env.BAMS_MERCHANT_ID || "");
+const KEY_ID = normalizeEnvValue(process.env.BAMS_KEY_ID || "");
+const SECRET_KEY = normalizeEnvValue(process.env.BAMS_SECRET_KEY || ""); // base64-encoded
 const GATEWAY_HOST = normalizeGatewayHost(
   process.env.BAMS_GATEWAY_HOST || "apitest.cybersource.com"
 );
@@ -108,6 +108,12 @@ function normalizeGatewayHost(rawHost: string): string {
     .trim()
     .replace(/^https?:\/\//i, "")
     .replace(/\/+$/, "");
+}
+
+function normalizeEnvValue(rawValue: string): string {
+  const trimmed = rawValue.trim();
+  // Handles env platforms that store quoted strings, e.g. "value".
+  return trimmed.replace(/^['\"]+|['\"]+$/g, "").trim();
 }
 
 function isConfigured(): boolean {
@@ -299,6 +305,17 @@ export async function POST(req: NextRequest) {
     const data = await gatewayRes.json();
     console.log("[payment] Status:", gatewayRes.status);
     console.log("[payment] Response:", JSON.stringify(data, null, 2));
+
+    if (gatewayRes.status === 401) {
+      return NextResponse.json(
+        {
+          ok: false,
+          message:
+            "Payment processor authentication failed (401). Please verify production BAMS credentials and gateway host.",
+        },
+        { status: 502 }
+      );
+    }
 
     /* ── Evaluate response ── */
     // CyberSource returns status "AUTHORIZED" or "DECLINED" etc.
