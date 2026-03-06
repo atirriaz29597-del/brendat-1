@@ -18,8 +18,12 @@ import crypto from "crypto";
 const MERCHANT_ID = normalizeEnvValue(process.env.BAMS_MERCHANT_ID || "");
 const KEY_ID = normalizeEnvValue(process.env.BAMS_KEY_ID || "");
 const SECRET_KEY = normalizeEnvValue(process.env.BAMS_SECRET_KEY || ""); // base64-encoded
+const DEFAULT_GATEWAY_HOST =
+  process.env.NODE_ENV === "production"
+    ? "api.cybersource.com"
+    : "apitest.cybersource.com";
 const GATEWAY_HOST = normalizeGatewayHost(
-  process.env.BAMS_GATEWAY_HOST || "apitest.cybersource.com"
+  process.env.BAMS_GATEWAY_HOST || DEFAULT_GATEWAY_HOST
 );
 
 const PAYMENTS_PATH = "/pts/v2/payments";
@@ -120,6 +124,35 @@ function isConfigured(): boolean {
   return Boolean(MERCHANT_ID && KEY_ID && SECRET_KEY && GATEWAY_HOST);
 }
 
+function isTestGatewayHost(host: string): boolean {
+  return /apitest\.cybersource\.com$/i.test(host);
+}
+
+function isValidCardNumber(rawValue: string): boolean {
+  const digits = rawValue.replace(/\D/g, "");
+  return digits.length >= 13 && digits.length <= 19;
+}
+
+function isValidExpiry(rawExpiry: string): boolean {
+  const match = rawExpiry.trim().match(/^(\d{2})\/(\d{2}|\d{4})$/);
+  if (!match) return false;
+
+  const month = Number(match[1]);
+  if (!Number.isInteger(month) || month < 1 || month > 12) return false;
+
+  const yearPart = match[2];
+  const fullYear = yearPart.length === 2 ? 2000 + Number(yearPart) : Number(yearPart);
+  if (!Number.isInteger(fullYear)) return false;
+
+  const now = new Date();
+  const currentMonth = now.getMonth() + 1;
+  const currentYear = now.getFullYear();
+
+  if (fullYear < currentYear) return false;
+  if (fullYear === currentYear && month < currentMonth) return false;
+  return true;
+}
+
 /**
  * Build the HTTP Signature header value.
  *
@@ -166,6 +199,18 @@ function buildSignatureHeader(
    ═══════════════════════════════════════════ */
 export async function POST(req: NextRequest) {
   try {
+    if (process.env.NODE_ENV === "production" && isTestGatewayHost(GATEWAY_HOST)) {
+      console.error("[payment] Production is configured with test CyberSource gateway host.");
+      return NextResponse.json(
+        {
+          ok: false,
+          message:
+            "Payment service is configured for test mode on production. Please contact support.",
+        },
+        { status: 500 }
+      );
+    }
+
     if (!isConfigured()) {
       console.error("[payment] Missing gateway configuration.");
       return NextResponse.json(
@@ -223,6 +268,14 @@ export async function POST(req: NextRequest) {
     }
 
     const cleanCard = cardNumber.replace(/\s/g, "");
+
+    if (!isValidCardNumber(cleanCard) || !isValidExpiry(String(cardExpiry || ""))) {
+      return NextResponse.json(
+        { ok: false, message: "Invalid card information." },
+        { status: 400 }
+      );
+    }
+
     const [expMonth, rawYear] = cardExpiry.split("/");
     const expYear = rawYear.length === 2 ? `20${rawYear}` : rawYear;
 
@@ -323,7 +376,7 @@ export async function POST(req: NextRequest) {
 
     if (
       gatewayRes.ok &&
-      (txnStatus === "AUTHORIZED" || txnStatus === "PENDING")
+      ["AUTHORIZED", "PENDING", "TRANSMITTED", "CAPTURED"].includes(txnStatus)
     ) {
       return NextResponse.json({
         ok: true,

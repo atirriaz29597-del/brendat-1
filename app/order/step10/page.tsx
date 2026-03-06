@@ -7,6 +7,16 @@ import { ArrowLeft, CheckCircle2, Info, MapPin, Home, CreditCard, Lock } from "l
 import Header from "../../components/Header";
 import { buildPricingParams, resolveSelectedPricing } from "../pricing";
 
+const US_STATES = [
+  "Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware",
+  "Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky",
+  "Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi",
+  "Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico",
+  "New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania",
+  "Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont",
+  "Virginia","Washington","West Virginia","Wisconsin","Wyoming","District of Columbia",
+];
+
 function ProgressBar({ pct }: { pct: number }) {
   return (
     <div className="bg-white border-b border-gray-100 py-4">
@@ -106,6 +116,13 @@ function Step10Inner() {
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
   const [cvv, setCvv] = useState("");
+  const [useDifferentBillingAddress, setUseDifferentBillingAddress] = useState(false);
+  const [billingCountry, setBillingCountry] = useState(country || "United States");
+  const [billingStreet, setBillingStreet] = useState("");
+  const [billingAddressCont, setBillingAddressCont] = useState("");
+  const [billingCity, setBillingCity] = useState("");
+  const [billingState, setBillingState] = useState("");
+  const [billingZip, setBillingZip] = useState("");
   const [agreed, setAgreed] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [processing, setProcessing] = useState(false);
@@ -113,13 +130,90 @@ function Step10Inner() {
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
   const formatCardNumber = (v: string) => {
-    const d = v.replace(/\D/g, "").slice(0, 16);
+    const d = v.replace(/\D/g, "").slice(0, 19);
     return d.replace(/(.{4})/g, "$1 ").trim();
   };
   const formatExpiry = (v: string) => {
     const d = v.replace(/\D/g, "").slice(0, 4);
     if (d.length > 2) return d.slice(0, 2) + "/" + d.slice(2);
     return d;
+  };
+
+  const hasPreviousBillingAddress =
+    Boolean(street.trim()) &&
+    Boolean(city.trim()) &&
+    Boolean(addrState.trim()) &&
+    Boolean(zip.trim());
+
+  const normalizeCountryCode = (rawCountry: string) => {
+    const value = rawCountry.trim();
+    if (!value) return "US";
+    const normalized = value.toUpperCase();
+    if (normalized === "UNITED STATES" || normalized === "UNITED STATES OF AMERICA" || normalized === "USA") {
+      return "US";
+    }
+    return value;
+  };
+
+  const getEffectiveBillingAddress = () => {
+    if (!useDifferentBillingAddress) {
+      return {
+        address1: street.trim(),
+        address2: addressCont.trim(),
+        locality: city.trim(),
+        administrativeArea: addrState.trim(),
+        postalCode: zip.trim(),
+        country: normalizeCountryCode(country),
+      };
+    }
+
+    return {
+      address1: billingStreet.trim(),
+      address2: billingAddressCont.trim(),
+      locality: billingCity.trim(),
+      administrativeArea: billingState.trim(),
+      postalCode: billingZip.trim(),
+      country: normalizeCountryCode(billingCountry),
+    };
+  };
+
+  const luhnValid = (rawCard: string) => {
+    const digits = rawCard.replace(/\D/g, "");
+    let sum = 0;
+    let shouldDouble = false;
+
+    for (let i = digits.length - 1; i >= 0; i -= 1) {
+      let digit = Number(digits[i]);
+      if (Number.isNaN(digit)) return false;
+      if (shouldDouble) {
+        digit *= 2;
+        if (digit > 9) digit -= 9;
+      }
+      sum += digit;
+      shouldDouble = !shouldDouble;
+    }
+
+    return digits.length > 0 && sum % 10 === 0;
+  };
+
+  const isValidExpiry = (value: string) => {
+    const match = value.match(/^(\d{2})\/(\d{2}|\d{4})$/);
+    if (!match) return false;
+
+    const month = Number(match[1]);
+    if (!Number.isInteger(month) || month < 1 || month > 12) return false;
+
+    const rawYear = match[2];
+    const fullYear = rawYear.length === 2 ? 2000 + Number(rawYear) : Number(rawYear);
+    if (!Number.isInteger(fullYear)) return false;
+
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1;
+    const currentYear = now.getFullYear();
+
+    if (fullYear < currentYear) return false;
+    if (fullYear === currentYear && month < currentMonth) return false;
+    return true;
   };
 
   const buildBackUrl = () => {
@@ -150,9 +244,19 @@ function Step10Inner() {
   const validate = () => {
     const e: Record<string, string> = {};
     if (!cardName.trim()) e.cardName = "Cardholder name is required";
-    if (cardNumber.replace(/\s/g, "").length < 16) e.cardNumber = "Enter a valid 16-digit card number";
-    if (expiry.length < 5) e.expiry = "Enter a valid expiry date";
+    const cleanCardNumber = cardNumber.replace(/\s/g, "");
+    if (cleanCardNumber.length < 13 || cleanCardNumber.length > 19 || !luhnValid(cleanCardNumber)) {
+      e.cardNumber = "Enter a valid card number";
+    }
+    if (!isValidExpiry(expiry)) e.expiry = "Enter a valid expiry date";
     if (cvv.length < 3) e.cvv = "Enter a valid CVV";
+    const effectiveBillingAddress = getEffectiveBillingAddress();
+    if (!effectiveBillingAddress.address1) e.billingStreet = "Billing street address is required";
+    if (!effectiveBillingAddress.locality) e.billingCity = "Billing city is required";
+    if (!effectiveBillingAddress.administrativeArea) e.billingState = "Billing state is required";
+    if (!effectiveBillingAddress.postalCode || effectiveBillingAddress.postalCode.replace(/\D/g, "").length < 5) {
+      e.billingZip = "Valid billing ZIP code is required";
+    }
     if (!agreed) e.agreed = "You must agree to the terms to continue";
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -162,6 +266,7 @@ function Step10Inner() {
     if (!validate()) return;
     setProcessing(true);
     setPaymentError(null);
+    const effectiveBillingAddress = getEffectiveBillingAddress();
 
     try {
       const res = await fetch("/api/payment", {
@@ -175,14 +280,7 @@ function Step10Inner() {
           email,
           amount: orderTotal,
           planName: `${entity} ${pkg}`,
-          billingAddress: {
-            address1: street,
-            address2: addressCont,
-            locality: city,
-            administrativeArea: addrState,
-            postalCode: zip,
-            country: country === "United States" ? "US" : country,
-          },
+          billingAddress: effectiveBillingAddress,
         }),
       });
 
@@ -365,12 +463,136 @@ function Step10Inner() {
 
             {/* Billing Address */}
             <h3 className="text-base font-bold text-black mb-4">Billing Address</h3>
-            <div className="bg-amber-50 border border-amber-200 rounded-xl px-5 py-4 mb-8 flex items-center gap-3">
+            <div className="bg-amber-50 border border-amber-200 rounded-xl px-5 py-4 mb-4 flex items-center gap-3">
               <MapPin className="w-5 h-5 text-accent shrink-0" />
               <span className="text-sm text-gray-700 font-medium">
-                Address provided in previous step will be used as billing address.
+                {useDifferentBillingAddress
+                  ? "Enter the billing address exactly as it appears on the card statement."
+                  : "Address provided in previous step will be used as billing address."}
               </span>
             </div>
+
+            <div className="mb-6">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={useDifferentBillingAddress}
+                  onChange={(e) => setUseDifferentBillingAddress(e.target.checked)}
+                  className="h-4 w-4 rounded border-gray-300 text-accent focus:ring-accent"
+                />
+                <span className="text-sm font-medium text-gray-700">Use different billing address</span>
+              </label>
+              {!useDifferentBillingAddress && (
+                <div className="mt-3 text-sm text-gray-600">
+                  {hasPreviousBillingAddress ? (
+                    <span>
+                      {street}
+                      {addressCont ? `, ${addressCont}` : ""}, {city}, {addrState} {zip}
+                    </span>
+                  ) : (
+                    <span className="text-red-600 font-medium">
+                      Previous address is incomplete. Either go back and complete it or select a different billing address.
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {useDifferentBillingAddress && (
+              <div className="border border-gray-200 rounded-2xl p-6 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-bold text-gray-600 mb-2">Country</label>
+                    <input
+                      type="text"
+                      value={billingCountry}
+                      onChange={(e) => setBillingCountry(e.target.value)}
+                      placeholder="United States"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-medium text-black bg-white focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-bold text-gray-600 mb-2">Address</label>
+                    <input
+                      type="text"
+                      value={billingStreet}
+                      onChange={(e) => setBillingStreet(e.target.value)}
+                      placeholder="Street address"
+                      className={`w-full px-4 py-3 rounded-xl border text-sm font-medium text-black bg-white focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all ${errors.billingStreet ? "border-red-400" : "border-gray-200"}`}
+                    />
+                    {errors.billingStreet && (
+                      <div className="flex items-center gap-1.5 mt-1.5">
+                        <Info className="w-3.5 h-3.5 text-red-500" />
+                        <span className="text-xs text-red-500 font-medium">{errors.billingStreet}</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-bold text-gray-600 mb-2">
+                      Address (Cont) <span className="text-gray-400 font-normal">Optional</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={billingAddressCont}
+                      onChange={(e) => setBillingAddressCont(e.target.value)}
+                      placeholder="Apartment, suite, unit, building, floor, etc."
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-medium text-black bg-white focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-600 mb-2">City</label>
+                    <input
+                      type="text"
+                      value={billingCity}
+                      onChange={(e) => setBillingCity(e.target.value)}
+                      placeholder="City"
+                      className={`w-full px-4 py-3 rounded-xl border text-sm font-medium text-black bg-white focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all ${errors.billingCity ? "border-red-400" : "border-gray-200"}`}
+                    />
+                    {errors.billingCity && (
+                      <div className="flex items-center gap-1.5 mt-1.5">
+                        <Info className="w-3.5 h-3.5 text-red-500" />
+                        <span className="text-xs text-red-500 font-medium">{errors.billingCity}</span>
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-600 mb-2">State</label>
+                    <select
+                      value={billingState}
+                      onChange={(e) => setBillingState(e.target.value)}
+                      className={`w-full px-4 py-3 rounded-xl border text-sm font-medium bg-white focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all ${errors.billingState ? "border-red-400" : "border-gray-200"} ${!billingState ? "text-gray-400" : "text-black"}`}
+                    >
+                      <option value="">Select State</option>
+                      {US_STATES.map((s) => (
+                        <option key={s} value={s}>{s}</option>
+                      ))}
+                    </select>
+                    {errors.billingState && (
+                      <div className="flex items-center gap-1.5 mt-1.5">
+                        <Info className="w-3.5 h-3.5 text-red-500" />
+                        <span className="text-xs text-red-500 font-medium">{errors.billingState}</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-bold text-gray-600 mb-2">ZIP / Postal Code</label>
+                    <input
+                      type="text"
+                      value={billingZip}
+                      onChange={(e) => setBillingZip(e.target.value)}
+                      placeholder="ZIP / Postal Code"
+                      className={`w-full px-4 py-3 rounded-xl border text-sm font-medium text-black bg-white focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all ${errors.billingZip ? "border-red-400" : "border-gray-200"}`}
+                    />
+                    {errors.billingZip && (
+                      <div className="flex items-center gap-1.5 mt-1.5">
+                        <Info className="w-3.5 h-3.5 text-red-500" />
+                        <span className="text-xs text-red-500 font-medium">{errors.billingZip}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Agreement */}
             <div className="mb-8">
