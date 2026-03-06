@@ -29,6 +29,7 @@ import {
   UserCheck,
   CreditCard,
   Lock,
+  MessageCircle,
   X,
   Calendar,
   User,
@@ -45,9 +46,12 @@ import {
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import FallingText from "./components/FallingText";
+import FloatingContactButtons from "./components/FloatingContactButtons";
 
 /* ─── Payment Modal ─── */
 type Plan = { name: string; price: string; color: string };
+
+const WHATSAPP_HREF = "https://wa.me/13032468693?text=Hi%20Brendat%2C%20I%20need%20help%20with%20my%20business%20formation.";
 
 function PaymentModal({ plan, onClose }: { plan: Plan; onClose: () => void }) {
   const [step, setStep] = useState<"details" | "processing" | "success" | "error">("details");
@@ -454,6 +458,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-white text-primary">
       {activePlan && <PaymentModal plan={activePlan} onClose={closePayment} />}
       <Header />
+      <FloatingContactButtons />
 
       {/* ═══════════════ BANNER ═══════════════ */}
       <section className="relative min-h-[520px] md:min-h-[600px] flex items-center overflow-hidden">
@@ -473,12 +478,22 @@ export default function HomePage() {
             <p className="text-gray-700 text-base md:text-lg leading-relaxed">
               Starting a fully legal business can be challenging, but Brendat LLC makes it simple. We provide complete business registration services in the USA, including LLC and S corporation formation, legal services, trademarks, and everything you need to make doing business easier.
             </p>
-            <button
-              onClick={() => document.getElementById("hero")?.scrollIntoView({ behavior: "smooth" })}
-              className="mt-8 inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-7 py-3.5 rounded-xl shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-all text-sm"
-            >
-              Get Started <ArrowRight className="w-4 h-4" />
-            </button>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <button
+                onClick={() => document.getElementById("hero")?.scrollIntoView({ behavior: "smooth" })}
+                className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-7 py-3.5 rounded-xl shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-all text-sm"
+              >
+                Get Started <ArrowRight className="w-4 h-4" />
+              </button>
+              <a
+                href={WHATSAPP_HREF}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#25D366] bg-white/90 px-7 py-3.5 text-sm font-bold text-[#128C4A] shadow-lg shadow-black/10 transition-all hover:bg-[#25D366] hover:text-white"
+              >
+                WhatsApp <MessageCircle className="w-4 h-4" />
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -943,6 +958,15 @@ export default function HomePage() {
               </div>
             ) : null
           )}
+
+          <div className="mt-12 flex justify-start">
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 rounded-xl bg-accent px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-accent/25 transition-all hover:bg-accent-dark"
+            >
+              Contact Us <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
       </section>
 

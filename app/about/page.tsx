@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, CheckCircle2, Shield, Zap, Users, Globe, Award, TrendingUp, Heart, Star } from "lucide-react";
+import { ArrowRight, CheckCircle2, Shield, Zap, Users, Globe, Award, TrendingUp, Heart, Star } from "lucide-react";
+import Header from "../components/Header";
 
 const stats = [
   { value: "1M+", label: "Businesses Formed", desc: "Entrepreneurs trust Brendat" },
@@ -93,24 +94,7 @@ const awards = [
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white">
-
-      {/* ── HEADER ── */}
-      <header className="sticky top-0 z-50 border-b border-gray-200 bg-[#E6EFF0]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-20 items-center justify-between">
-            <Link href="/" className="flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-accent transition-colors">
-              <ArrowLeft className="w-4 h-4" /> Back to Home
-            </Link>
-            <Link href="/" className="text-xl font-black text-primary tracking-tight">Brendat</Link>
-            <Link
-              href="/contact"
-              className="bg-accent hover:bg-accent-dark text-white text-sm font-bold px-5 py-2.5 rounded-xl shadow-md shadow-accent/20 transition-all"
-            >
-              Get Started
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* ── HERO ── */}
       <section className="relative bg-primary overflow-hidden py-24 md:py-32">

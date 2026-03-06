@@ -6,6 +6,7 @@ import Link from "next/link";
 import { CheckCircle2, Calendar, ArrowLeft, ArrowRight } from "lucide-react";
 import Header from "../../components/Header";
 import { STATE_FEES, packagePrices as defaultPackagePrices } from "../data";
+import { buildPricingParams } from "../pricing";
 
 function Step2Inner() {
   const router = useRouter();
@@ -105,12 +106,18 @@ function Step2Inner() {
   };
 
   const [selectedPackage, setSelectedPackage] = useState<"Basic" | "Standard" | "Premium">("Standard");
-  const orderTotal = (packagePricesData[selectedPackage] ?? 0) + stateFee;
+  const selectedPackagePrice = packagePricesData[selectedPackage] ?? 0;
+  const orderTotal = selectedPackagePrice + stateFee;
 
   const handleNext = () => {
-    router.push(
-      `/order/step3?entity=${encodeURIComponent(entity)}&state=${encodeURIComponent(state)}&package=${selectedPackage}`
-    );
+    const nextParams = new URLSearchParams({
+      entity,
+      state,
+      package: selectedPackage,
+      ...buildPricingParams(selectedPackagePrice, stateFee),
+    });
+
+    router.push(`/order/step3?${nextParams.toString()}`);
   };
 
   // Show loading state while prices are being fetched
@@ -237,7 +244,7 @@ function Step2Inner() {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">{selectedPackage} Package:</span>
-                <span className="font-bold text-black">${packagePricesData[selectedPackage] ?? 0}</span>
+                <span className="font-bold text-black">${selectedPackagePrice}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">{state} State Fee:</span>

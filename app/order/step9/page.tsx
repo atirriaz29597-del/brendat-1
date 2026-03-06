@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Shield, BookOpen, Calculator, FileText, TrendingDown, AlertTriangle, Sparkles } from "lucide-react";
 import Header from "../../components/Header";
-import { STATE_FEES, packagePrices } from "../data";
+import { buildPricingParams, resolveSelectedPricing } from "../pricing";
 
 function ProgressBar({ pct }: { pct: number }) {
   return (
@@ -44,21 +44,21 @@ function Step9Inner() {
   const filing = params.get("filing") || "standard";
   const virtualAddress = (params.get("virtualAddress") || "own") as "virtual" | "own";
   const einChoice = (params.get("einChoice") || "skip") as "get" | "skip";
-  const stateFee = STATE_FEES[state] ?? 50;
+  const { packagePrice, stateFee } = resolveSelectedPricing(params, state, pkg);
   const expeditedFee = filing === "expedited" ? 50 : 0;
   const virtualAddressFee = virtualAddress === "virtual" ? 110 : 0;
   const einFee = (pkg === "Basic" && einChoice === "get") ? 70 : 0;
-  const orderTotal = packagePrices[pkg] + stateFee + expeditedFee + virtualAddressFee + einFee;
+  const orderTotal = packagePrice + stateFee + expeditedFee + virtualAddressFee + einFee;
 
   const [consultChoice, setConsultChoice] = useState<"yes" | "no">("no");
 
   const buildBackUrl = () => {
-    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress, einChoice });
+    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress, einChoice, ...buildPricingParams(packagePrice, stateFee) });
     return `/order/step8?${q.toString()}`;
   };
 
   const handleNext = () => {
-    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress, einChoice });
+    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress, einChoice, ...buildPricingParams(packagePrice, stateFee) });
     router.push(`/order/step10?${q.toString()}`);
   };
 
@@ -153,7 +153,7 @@ function Step9Inner() {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">{pkg} Package</span>
-                <span className="font-bold text-black">{packagePrices[pkg] === 0 ? "Free" : `$${packagePrices[pkg]}`}</span>
+                <span className="font-bold text-black">{packagePrice === 0 ? "Free" : `$${packagePrice}`}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">{state} State Filing Fee</span>

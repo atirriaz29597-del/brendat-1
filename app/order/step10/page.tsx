@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle2, Info, MapPin, Home, CreditCard, Lock } from "lucide-react";
 import Header from "../../components/Header";
-import { STATE_FEES, packagePrices } from "../data";
+import { buildPricingParams, resolveSelectedPricing } from "../pricing";
 
 function ProgressBar({ pct }: { pct: number }) {
   return (
@@ -86,11 +86,11 @@ function Step10Inner() {
   const filing = params.get("filing") || "standard";
   const virtualAddress = (params.get("virtualAddress") || "own") as "virtual" | "own";
   const einChoice = (params.get("einChoice") || "skip") as "get" | "skip";
-  const stateFee = STATE_FEES[state] ?? 50;
+  const { packagePrice, stateFee } = resolveSelectedPricing(params, state, pkg);
   const expeditedFee = filing === "expedited" ? 50 : 0;
   const virtualAddressFee = virtualAddress === "virtual" ? 110 : 0;
   const einFee = (pkg === "Basic" && einChoice === "get") ? 70 : 0;
-  const orderTotal = packagePrices[pkg] + stateFee + expeditedFee + virtualAddressFee + einFee;
+  const orderTotal = packagePrice + stateFee + expeditedFee + virtualAddressFee + einFee;
 
   const [cardName, setCardName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
@@ -113,7 +113,7 @@ function Step10Inner() {
   };
 
   const buildBackUrl = () => {
-    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress, einChoice });
+    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress, einChoice, ...buildPricingParams(packagePrice, stateFee) });
     return `/order/step9?${q.toString()}`;
   };
 
@@ -161,7 +161,7 @@ function Step10Inner() {
                 entity,
                 state,
                 packageName: pkg,
-                packagePrice: packagePrices[pkg],
+                packagePrice,
                 companyName,
                 designator,
                 filing,
@@ -381,7 +381,7 @@ function Step10Inner() {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">{pkg} Package</span>
-                <span className="font-bold text-black">{packagePrices[pkg] === 0 ? "Free" : `$${packagePrices[pkg]}`}</span>
+                <span className="font-bold text-black">{packagePrice === 0 ? "Free" : `$${packagePrice}`}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">{state} State Filing Fee</span>

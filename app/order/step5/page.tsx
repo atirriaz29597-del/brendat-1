@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { CheckCircle2, ArrowLeft, ArrowRight, Info, ChevronDown, Search } from "lucide-react";
 import Header from "../../components/Header";
-import { STATE_FEES, packagePrices } from "../data";
+import { buildPricingParams, resolveSelectedPricing } from "../pricing";
 
 const COUNTRIES = [
   { flag: "\u{1F1FA}\u{1F1F8}", name: "United States",          code: "+1",    digits: 10 },
@@ -237,9 +237,9 @@ function Step5Inner() {
   const companyName = params.get("name") || "";
   const designator = params.get("designator") || "LLC";
   const filing = params.get("filing") || "standard";
-  const stateFee = STATE_FEES[state] ?? 50;
+  const { packagePrice, stateFee } = resolveSelectedPricing(params, state, pkg);
   const expeditedFee = filing === "expedited" ? 50 : 0;
-  const orderTotal = packagePrices[pkg] + stateFee + expeditedFee;
+  const orderTotal = packagePrice + stateFee + expeditedFee;
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -260,7 +260,7 @@ function Step5Inner() {
   };
 
   const buildBackUrl = () =>
-    `/order/step4?entity=${encodeURIComponent(entity)}&state=${encodeURIComponent(state)}&package=${pkg}&name=${encodeURIComponent(companyName)}&designator=${encodeURIComponent(designator)}`;
+    `/order/step4?${new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, ...buildPricingParams(packagePrice, stateFee) }).toString()}`;
 
   const validate = () => {
     const e: Record<string, string> = {};
@@ -280,6 +280,7 @@ function Step5Inner() {
       firstName: firstName.trim(), lastName: lastName.trim(),
       email: email.trim(),
       phone: `${country.code} ${phone}`,
+      ...buildPricingParams(packagePrice, stateFee),
     });
     router.push(`/order/step6?${q.toString()}`);
   };
@@ -420,7 +421,7 @@ function Step5Inner() {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">{pkg} Package</span>
-                <span className="font-bold text-black">{packagePrices[pkg] === 0 ? "Free" : `$${packagePrices[pkg]}`}</span>
+                <span className="font-bold text-black">{packagePrice === 0 ? "Free" : `$${packagePrice}`}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">{state} State Filing Fee</span>

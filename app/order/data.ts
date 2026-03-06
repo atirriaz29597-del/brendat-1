@@ -14,7 +14,7 @@ export const STATE_FEES: Record<string, number> = {
 
 export const packagePrices: Record<string, number> = {
   Basic: 0,
-  Standard: 199,
+  Standard: 149,
   Premium: 299,
 };
 

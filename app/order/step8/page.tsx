@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { CheckCircle2, ArrowLeft, ArrowRight, ChevronDown, Info } from "lucide-react";
 import Header from "../../components/Header";
-import { STATE_FEES, packagePrices } from "../data";
+import { buildPricingParams, resolveSelectedPricing } from "../pricing";
 
 function ProgressBar({ pct }: { pct: number }) {
   return (
@@ -33,20 +33,20 @@ function Step8Inner() {
   const designator = params.get("designator") || "LLC";
   const filing = params.get("filing") || "standard";
   const virtualAddress = (params.get("virtualAddress") || "own") as "virtual" | "own";
-  const stateFee = STATE_FEES[state] ?? 50;
+  const { packagePrice, stateFee } = resolveSelectedPricing(params, state, pkg);
   const expeditedFee = filing === "expedited" ? 50 : 0;
   const virtualAddressFee = virtualAddress === "virtual" ? 110 : 0;
 
   const [einChoice, setEinChoice] = useState<"get" | "skip">("get");
   const einFee = (pkg === "Basic" && einChoice === "get") ? 70 : 0;
-  const orderTotal = packagePrices[pkg] + stateFee + expeditedFee + virtualAddressFee + einFee;
+  const orderTotal = packagePrice + stateFee + expeditedFee + virtualAddressFee + einFee;
 
   const [responsibleParty, setResponsibleParty] = useState("");
   const [businessPurpose, setBusinessPurpose] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const buildBackUrl = () => {
-    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress });
+    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress, ...buildPricingParams(packagePrice, stateFee) });
     return `/order/step7?${q.toString()}`;
   };
 
@@ -62,7 +62,7 @@ function Step8Inner() {
 
   const handleNext = () => {
     if (!validate()) return;
-    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress, einChoice });
+    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress, einChoice, ...buildPricingParams(packagePrice, stateFee) });
     router.push(`/order/step9?${q.toString()}`);
   };
 
@@ -189,7 +189,7 @@ function Step8Inner() {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">{pkg} Package</span>
-                <span className="font-bold text-black">{packagePrices[pkg] === 0 ? "Free" : `$${packagePrices[pkg]}`}</span>
+                <span className="font-bold text-black">{packagePrice === 0 ? "Free" : `$${packagePrice}`}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">{state} State Filing Fee</span>
