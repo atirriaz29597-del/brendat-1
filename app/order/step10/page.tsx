@@ -86,6 +86,16 @@ function Step10Inner() {
   const filing = params.get("filing") || "standard";
   const virtualAddress = (params.get("virtualAddress") || "own") as "virtual" | "own";
   const einChoice = (params.get("einChoice") || "skip") as "get" | "skip";
+  const firstName = params.get("firstName") || "";
+  const lastName = params.get("lastName") || "";
+  const email = params.get("email") || "";
+  const phone = params.get("phone") || "";
+  const country = params.get("country") || "United States";
+  const street = params.get("street") || "";
+  const addressCont = params.get("addressCont") || "";
+  const city = params.get("city") || "";
+  const addrState = params.get("addrState") || "";
+  const zip = params.get("zip") || "";
   const { packagePrice, stateFee } = resolveSelectedPricing(params, state, pkg);
   const expeditedFee = filing === "expedited" ? 50 : 0;
   const virtualAddressFee = virtualAddress === "virtual" ? 110 : 0;
@@ -113,7 +123,27 @@ function Step10Inner() {
   };
 
   const buildBackUrl = () => {
-    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress, einChoice, ...buildPricingParams(packagePrice, stateFee) });
+    const q = new URLSearchParams({
+      entity,
+      state,
+      package: pkg,
+      name: companyName,
+      designator,
+      filing,
+      firstName,
+      lastName,
+      email,
+      phone,
+      virtualAddress,
+      country,
+      street,
+      addressCont,
+      city,
+      addrState,
+      zip,
+      einChoice,
+      ...buildPricingParams(packagePrice, stateFee),
+    });
     return `/order/step9?${q.toString()}`;
   };
 
@@ -142,8 +172,17 @@ function Step10Inner() {
           cardExpiry: expiry,
           cardCvv: cvv,
           cardName,
+          email,
           amount: orderTotal,
           planName: `${entity} ${pkg}`,
+          billingAddress: {
+            address1: street,
+            address2: addressCont,
+            locality: city,
+            administrativeArea: addrState,
+            postalCode: zip,
+            country: country === "United States" ? "US" : country,
+          },
         }),
       });
 
@@ -169,6 +208,21 @@ function Step10Inner() {
                 expeditedFee,
                 orderTotal,
                 cardName,
+                contactPerson: {
+                  firstName,
+                  lastName,
+                  email,
+                  phone,
+                },
+                companyAddress: {
+                  useVirtualAddress: virtualAddress === "virtual",
+                  street1: street,
+                  street2: addressCont,
+                  city,
+                  state: addrState,
+                  zip,
+                  country,
+                },
                 transactionId: data.transactionId || "",
               },
             }),

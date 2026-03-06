@@ -23,6 +23,60 @@ const GATEWAY_HOST =
 
 const PAYMENTS_PATH = "/pts/v2/payments";
 
+const US_STATE_CODES: Record<string, string> = {
+  Alabama: "AL",
+  Alaska: "AK",
+  Arizona: "AZ",
+  Arkansas: "AR",
+  California: "CA",
+  Colorado: "CO",
+  Connecticut: "CT",
+  Delaware: "DE",
+  Florida: "FL",
+  Georgia: "GA",
+  Hawaii: "HI",
+  Idaho: "ID",
+  Illinois: "IL",
+  Indiana: "IN",
+  Iowa: "IA",
+  Kansas: "KS",
+  Kentucky: "KY",
+  Louisiana: "LA",
+  Maine: "ME",
+  Maryland: "MD",
+  Massachusetts: "MA",
+  Michigan: "MI",
+  Minnesota: "MN",
+  Mississippi: "MS",
+  Missouri: "MO",
+  Montana: "MT",
+  Nebraska: "NE",
+  Nevada: "NV",
+  "New Hampshire": "NH",
+  "New Jersey": "NJ",
+  "New Mexico": "NM",
+  "New York": "NY",
+  "North Carolina": "NC",
+  "North Dakota": "ND",
+  Ohio: "OH",
+  Oklahoma: "OK",
+  Oregon: "OR",
+  Pennsylvania: "PA",
+  "Rhode Island": "RI",
+  "South Carolina": "SC",
+  "South Dakota": "SD",
+  Tennessee: "TN",
+  Texas: "TX",
+  Utah: "UT",
+  Vermont: "VT",
+  Virginia: "VA",
+  Washington: "WA",
+  "West Virginia": "WV",
+  Wisconsin: "WI",
+  Wyoming: "WY",
+  "District of Columbia": "DC",
+};
+
 /* ═══════════════════════════════════════════
    CyberSource HTTP-Signature helpers
    ═══════════════════════════════════════════ */
@@ -36,6 +90,16 @@ function computeDigest(body: string): string {
 /** RFC 1123 date: "Thu, 18 Jul 2019 00:18:03 GMT" */
 function rfc1123Date(): string {
   return new Date().toUTCString();
+}
+
+function normalizeAdministrativeArea(value: string, country: string): string {
+  const trimmedValue = value.trim();
+
+  if (country.toUpperCase() !== "US") {
+    return trimmedValue;
+  }
+
+  return US_STATE_CODES[trimmedValue] || trimmedValue.toUpperCase();
 }
 
 /**
@@ -85,13 +149,42 @@ function buildSignatureHeader(
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { cardNumber, cardExpiry, cardCvv, cardName, email, amount, planName } =
-      body;
+    const {
+      cardNumber,
+      cardExpiry,
+      cardCvv,
+      cardName,
+      email,
+      amount,
+      planName,
+      billingAddress,
+    } = body;
+
+    const address1 = String(billingAddress?.address1 || "").trim();
+    const address2 = String(billingAddress?.address2 || "").trim();
+    const locality = String(billingAddress?.locality || "").trim();
+    const country = String(billingAddress?.country || "US").trim() || "US";
+    const administrativeArea = normalizeAdministrativeArea(
+      String(billingAddress?.administrativeArea || ""),
+      country
+    );
+    const postalCode = String(billingAddress?.postalCode || "").trim();
 
     /* ── Server-side validation ── */
-    if (!cardNumber || !cardExpiry || !cardCvv || !cardName || !amount) {
+    if (
+      !cardNumber ||
+      !cardExpiry ||
+      !cardCvv ||
+      !cardName ||
+      !email ||
+      !amount ||
+      !address1 ||
+      !locality ||
+      !administrativeArea ||
+      !postalCode
+    ) {
       return NextResponse.json(
-        { ok: false, message: "Missing required payment fields." },
+        { ok: false, message: "Missing required payment or billing fields." },
         { status: 400 }
       );
     }
@@ -126,13 +219,13 @@ export async function POST(req: NextRequest) {
         billTo: {
           firstName,
           lastName,
-          email: email || "customer@example.com",
-          country: "US",
-          // Minimal required address fields
-          address1: "N/A",
-          locality: "Atlanta",
-          administrativeArea: "GA",
-          postalCode: "30301",
+          email,
+          country,
+          address1,
+          ...(address2 ? { address2 } : {}),
+          locality,
+          administrativeArea,
+          postalCode,
         },
       },
     };

@@ -229,6 +229,16 @@ function Step7Inner() {
   const designator = params.get("designator") || "LLC";
   const filing = params.get("filing") || "standard";
   const virtualAddress = (params.get("virtualAddress") || "own") as "virtual" | "own";
+  const firstName = params.get("firstName") || "";
+  const lastName = params.get("lastName") || "";
+  const email = params.get("email") || "";
+  const phone = params.get("phone") || "";
+  const country = params.get("country") || "United States";
+  const street = params.get("street") || "";
+  const addressCont = params.get("addressCont") || "";
+  const city = params.get("city") || "";
+  const addrState = params.get("addrState") || "";
+  const zip = params.get("zip") || "";
   const { packagePrice, stateFee } = resolveSelectedPricing(params, state, pkg);
   const expeditedFee = filing === "expedited" ? 50 : 0;
   const virtualAddressFee = virtualAddress === "virtual" ? 110 : 0;
@@ -279,7 +289,26 @@ function Step7Inner() {
   };
 
   const buildBackUrl = () => {
-    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress, ...buildPricingParams(packagePrice, stateFee) });
+    const q = new URLSearchParams({
+      entity,
+      state,
+      package: pkg,
+      name: companyName,
+      designator,
+      filing,
+      firstName,
+      lastName,
+      email,
+      phone,
+      virtualAddress,
+      country,
+      street,
+      addressCont,
+      city,
+      addrState,
+      zip,
+      ...buildPricingParams(packagePrice, stateFee),
+    });
     return `/order/step6?${q.toString()}`;
   };
 
@@ -293,7 +322,26 @@ function Step7Inner() {
 
   const handleNext = () => {
     if (!validate()) return;
-    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress, ...buildPricingParams(packagePrice, stateFee) });
+    const q = new URLSearchParams({
+      entity,
+      state,
+      package: pkg,
+      name: companyName,
+      designator,
+      filing,
+      firstName,
+      lastName,
+      email,
+      phone,
+      virtualAddress,
+      country,
+      street,
+      addressCont,
+      city,
+      addrState,
+      zip,
+      ...buildPricingParams(packagePrice, stateFee),
+    });
     router.push(`/order/step8?${q.toString()}`);
   };
 

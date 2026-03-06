@@ -74,6 +74,7 @@ function Step6Inner() {
   const buildBackUrl = () => {
     const q = new URLSearchParams({
       entity, state, package: pkg, name: companyName, designator, filing,
+      firstName, lastName, email, phone,
       ...buildPricingParams(packagePrice, stateFee),
     });
     return `/order/step5?${q.toString()}`;
@@ -91,7 +92,26 @@ function Step6Inner() {
 
   const handleNext = () => {
     if (!validate()) return;
-    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress, ...buildPricingParams(packagePrice, stateFee) });
+    const q = new URLSearchParams({
+      entity,
+      state,
+      package: pkg,
+      name: companyName,
+      designator,
+      filing,
+      firstName,
+      lastName,
+      email,
+      phone,
+      virtualAddress,
+      country,
+      street: street.trim(),
+      addressCont: addressCont.trim(),
+      city: city.trim(),
+      addrState,
+      zip,
+      ...buildPricingParams(packagePrice, stateFee),
+    });
     router.push(`/order/step7?${q.toString()}`);
   };
 
