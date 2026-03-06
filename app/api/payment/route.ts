@@ -130,9 +130,9 @@ export async function POST(req: NextRequest) {
           country: "US",
           // Minimal required address fields
           address1: "N/A",
-          locality: "Houston",
-          administrativeArea: "TX",
-          postalCode: "77001",
+          locality: "Atlanta",
+          administrativeArea: "GA",
+          postalCode: "30301",
         },
       },
     };

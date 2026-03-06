@@ -107,7 +107,7 @@ export async function POST(req: NextRequest) {
                 </tr>
                 <tr>
                   <td style="padding: 8px 0; font-weight: bold; color: #4b5563;">Filing Speed:</td>
-                  <td style="padding: 8px 0; color: #111827;">${filing === "expedited" ? "Expedited (2 business days)" : "Standard (3 weeks)"}</td>
+                  <td style="padding: 8px 0; color: #111827;">${filing === "expedited" ? "Expedited (2 business days)" : "Standard (1-2 weeks)"}</td>
                 </tr>
               </table>
             </div>

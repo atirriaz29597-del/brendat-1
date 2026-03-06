@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Shield,
   CheckCircle,
@@ -21,13 +22,38 @@ import {
   MessageCircle,
   Briefcase,
   HelpCircle,
+  ArrowRight,
+  Clock,
 } from "lucide-react";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import HeroAvatars from "@/app/components/HeroAvatars";
 
+const STATE_FEES: { [key: string]: number } = {
+  "Alabama": 236, "Alaska": 250, "Arizona": 85, "Arkansas": 45, "California": 75, "Colorado": 50,
+  "Connecticut": 120, "Delaware": 140, "Florida": 125, "Georgia": 100, "Hawaii": 51, "Idaho": 100,
+  "Illinois": 175, "Indiana": 95, "Iowa": 50, "Kansas": 165, "Kentucky": 40, "Louisiana": 105,
+  "Maine": 175, "Maryland": 120, "Massachusetts": 500, "Michigan": 50, "Minnesota": 155,
+  "Mississippi": 50, "Missouri": 50, "Montana": 35, "Nebraska": 105, "Nevada": 425,
+  "New Hampshire": 100, "New Jersey": 125, "New Mexico": 50, "New York": 210, "North Carolina": 125,
+  "North Dakota": 135, "Ohio": 99, "Oklahoma": 104, "Oregon": 100, "Pennsylvania": 125,
+  "Rhode Island": 156, "South Carolina": 135, "South Dakota": 165, "Tennessee": 307, "Texas": 308,
+  "Utah": 76, "Vermont": 125, "Virginia": 100, "Washington": 200, "West Virginia": 130,
+  "Wisconsin": 130, "Wyoming": 100
+};
+
 export default function TrademarkRegistrationPage() {
+  const router = useRouter();
+  const [selectedEntity, setSelectedEntity] = useState("");
+  const [selectedState, setSelectedState] = useState("");
   const [openFaqIndex, setOpenFaqIndex] = React.useState<number | null>(null);
+
+  const handleStartBusiness = () => {
+    const params = new URLSearchParams();
+    if (selectedEntity) params.set("entity", selectedEntity);
+    if (selectedState) params.set("state", selectedState);
+    router.push(`/order/step2?${params.toString()}`);
+  };
 
   const toggleFaq = (index: number) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
@@ -213,29 +239,17 @@ export default function TrademarkRegistrationPage() {
               </div>
             </div>
             
-            {/* Main Pricing Card */}
-            <div className="bg-white text-gray-900 rounded-3xl p-8 shadow-2xl relative border-2 border-accent/20 md:scale-105">
-               <div className="absolute top-0 right-0 bg-accent text-white px-4 py-1 rounded-bl-xl rounded-tr-xl font-bold text-sm uppercase tracking-wider">
-                Premium Choice
-              </div>
-              <h3 className="text-2xl font-black text-gray-900 mb-2">Premium Trademark Registration</h3>
-              <p className="text-gray-500 mb-6 text-sm">
-                With our experienced trademark attorneys in USA, your application is prepared, filed, and monitored with precision.
-              </p>
-              <div className="text-4xl font-black text-gray-900 mb-2">$899 <span className="text-lg text-gray-500 font-normal">+ state filing fees</span></div>
-              
-              <ul className="space-y-3 mb-8">
-                {features.slice(0, 4).map((feature, index) => (
+            {/* Feature Highlights */}
+            <div className="bg-white text-gray-900 rounded-3xl p-8 shadow-2xl relative border-2 border-accent/20">
+              <h3 className="text-2xl font-black text-gray-900 mb-6">What&apos;s Included</h3>
+              <ul className="space-y-4">
+                {features.slice(0, 5).map((feature, index) => (
                   <li key={index} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
                     <span className="text-sm text-gray-700">{feature}</span>
                   </li>
                 ))}
               </ul>
-              
-              <Link href="/order/step2" className="block w-full bg-accent text-white py-3 rounded-lg font-bold hover:bg-accent/90 transition text-center shadow-md shadow-accent/25">
-                Register My Trademark <ChevronRight className="w-5 h-5 inline" />
-              </Link>
             </div>
           </div>
         </div>
@@ -301,39 +315,101 @@ export default function TrademarkRegistrationPage() {
         </div>
       </section>
 
-      {/* Additional Pricing Options */}
-      <section className="py-20 bg-gray-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl md:text-4xl font-black mb-8">Affordable, Transparent Pricing</h2>
-            <p className="text-xl mb-12 max-w-2xl mx-auto text-gray-300">
-              Seeking affordable trademark registration in USA? We offer flat-fee options with no hidden charges.
+      {/* ENTITY & STATE SELECTION */}
+      <section className="py-24 bg-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent pointer-events-none" />
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+              Start Your Business <span className="text-accent">Today</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Select your entity type and state to see pricing and get started
             </p>
-            
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <div className="bg-white text-gray-900 p-8 rounded-3xl shadow-xl border-4 border-gray-100">
-                    <h3 className="text-2xl font-black text-gray-900 mb-4">USA State Registration</h3>
-                    <div className="text-4xl font-black text-gray-900 mb-4">$99 <span className="text-sm text-gray-500 font-normal">+ state fees</span></div>
-                    <ul className="text-left space-y-4 mb-8">
-                       <li className="flex gap-3"><Check className="text-accent w-6 h-6 flex-shrink-0"/> In-state brand protection</li>
-                       <li className="flex gap-3"><Check className="text-accent w-6 h-6 flex-shrink-0"/> Affordable state-level security</li> 
-                    </ul>
-                    <Link href="/order/step2" className="block w-full bg-gray-900 text-white py-3 rounded-lg font-bold hover:bg-gray-800 transition shadow-md text-center">Get Started</Link>
+          </div>
+
+          <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 md:p-12">
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              {/* Entity Type Dropdown */}
+              <div className="relative">
+                <label className="block text-sm font-bold text-gray-700 mb-2">Entity Type</label>
+                <div className="relative">
+                  <select
+                    value={selectedEntity}
+                    onChange={(e) => setSelectedEntity(e.target.value)}
+                    className="w-full appearance-none bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 text-gray-900 font-medium focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all cursor-pointer"
+                  >
+                    <option value="">Select entity type...</option>
+                    <option value="llc">Limited Liability Company (LLC)</option>
+                    <option value="corporation">Corporation (C-Corp)</option>
+                    <option value="s-corp">S-Corporation</option>
+                    <option value="nonprofit">Nonprofit Organization</option>
+                    <option value="sole-proprietorship">Sole Proprietorship</option>
+                  </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
                 </div>
-                
-                <div className="bg-white text-gray-900 p-8 rounded-3xl shadow-xl border-4 border-gray-100">
-                    <h3 className="text-2xl font-black text-gray-900 mb-4">Federal USPTO Registration</h3>
-                    <div className="text-4xl font-black text-gray-900 mb-4">$249 <span className="text-sm text-gray-500 font-normal">+ USPTO fees</span></div>
-                    <ul className="text-left space-y-4 mb-8">
-                       <li className="flex gap-3"><Check className="text-accent w-6 h-6 flex-shrink-0"/> Nationwide protection</li>
-                       <li className="flex gap-3"><Check className="text-accent w-6 h-6 flex-shrink-0"/> Use of \u00AE symbol</li>
-                    </ul>
-                    <Link href="/order/step2" className="block w-full bg-gray-900 text-white py-3 rounded-lg font-bold hover:bg-gray-800 transition shadow-md text-center">Get Started</Link>
+              </div>
+
+              {/* State Dropdown */}
+              <div className="relative">
+                <label className="block text-sm font-bold text-gray-700 mb-2">State of Formation</label>
+                <div className="relative">
+                  <select
+                    value={selectedState}
+                    onChange={(e) => setSelectedState(e.target.value)}
+                    className="w-full appearance-none bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 text-gray-900 font-medium focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all cursor-pointer"
+                  >
+                    <option value="">Select state...</option>
+                    {Object.keys(STATE_FEES).map((state) => (
+                      <option key={state} value={state}>{state}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
                 </div>
+              </div>
             </div>
-            
-             <p className="mt-12 text-gray-400 text-sm">
-              We also offer cheap trademark registration packages for startups in USA, with optional add-ons like logo review, contract clauses, and licensing advice.
-            </p>
+
+            {/* State Fee Display */}
+            {selectedState && (
+              <div className="mb-8 p-6 bg-gradient-to-r from-accent/5 to-accent/10 rounded-2xl border border-accent/20">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">State Filing Fee for {selectedState}</p>
+                    <p className="text-3xl font-black text-gray-900">${STATE_FEES[selectedState]}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-gray-600 mb-1">Service Fee</p>
+                    <p className="text-3xl font-black text-accent">$0</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* CTA Button */}
+            <button
+              onClick={handleStartBusiness}
+              className="w-full bg-accent hover:bg-accent/90 text-white font-bold py-5 px-8 rounded-xl transition-all transform hover:scale-[1.02] shadow-lg shadow-accent/25 flex items-center justify-center gap-3 text-lg"
+            >
+              Continue
+              <ArrowRight className="w-5 h-5" />
+            </button>
+
+            {/* Trust Badges */}
+            <div className="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-gray-100">
+              <div className="text-center">
+                <Shield className="w-8 h-8 text-accent mx-auto mb-2" />
+                <p className="text-xs font-bold text-gray-900">Secure Process</p>
+              </div>
+              <div className="text-center">
+                <Clock className="w-8 h-8 text-accent mx-auto mb-2" />
+                <p className="text-xs font-bold text-gray-900">Fast Filing</p>
+              </div>
+              <div className="text-center">
+                <CheckCircle className="w-8 h-8 text-accent mx-auto mb-2" />
+                <p className="text-xs font-bold text-gray-900">Guaranteed</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { 
   Check, 
@@ -7,7 +9,9 @@ import {
   MessageCircle, 
   Shield, 
   Scale, 
-  ChevronRight, 
+  ChevronRight,
+  ChevronDown,
+  ArrowRight, 
   HelpCircle, 
   Clock,
   Briefcase,
@@ -98,6 +102,19 @@ const pricingPlans = [
     color: "accent"
   }
 ];
+
+const STATE_FEES: Record<string, number> = {
+  Alabama: 236, Alaska: 250, Arizona: 85, Arkansas: 45, California: 70,
+  Colorado: 25, Connecticut: 80, Delaware: 90, Florida: 125, Georgia: 100,
+  Hawaii: 51, Idaho: 100, Illinois: 75, Indiana: 50, Iowa: 45,
+  Kansas: 55, Kentucky: 40, Louisiana: 75, Maine: 85, Maryland: 300,
+  Massachusetts: 500, Michigan: 25, Minnesota: 155, Mississippi: 50, Missouri: 50,
+  Montana: 35, Nebraska: 10, Nevada: 425, "New Hampshire": 100, "New Jersey": 125,
+  "New Mexico": 50, "New York": 200, "North Carolina": 125, "North Dakota": 135, Ohio: 99,
+  Oklahoma: 100, Oregon: 100, Pennsylvania: 70, "Rhode Island": 150, "South Carolina": 110,
+  "South Dakota": 150, Tennessee: 300, Texas: 300, Utah: 59, Vermont: 125,
+  Virginia: 100, Washington: 180, "West Virginia": 25, Wisconsin: 130, Wyoming: 100,
+};
 
 const whyTrustReasons = [
   { icon: FileText, title: "No Confusing Paperwork", description: "Focus on growing your business while we manage the legal requirements. Our experts ensure your filings meet all USA annual report guidelines." },
@@ -202,6 +219,16 @@ const whoNeedsToFile = [
 ];
 
 export default function AnnualReportPage() {
+  const [selectedEntity, setSelectedEntity] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+  const router = useRouter();
+
+  const handleStartBusiness = () => {
+    if (selectedEntity && selectedState) {
+      router.push(`/order/step2?entity=${encodeURIComponent(selectedEntity)}&state=${encodeURIComponent(selectedState)}`);
+    }
+  };
+
   return (
     <>
       <Header />
@@ -229,52 +256,102 @@ export default function AnnualReportPage() {
           </div>
         </section>
 
-        {/* PRICING PLANS */}
+        {/* ENTITY & STATE SELECTION */}
         <section className="py-24 bg-white relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">What’s Included in Our Annual Business Report Filing Service in USA</h2>
+              <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">Start Your Filing in Minutes</h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Select your business type and state to get started with our expert filing service.
+              </p>
             </div>
-            <div className="grid lg:grid-cols-3 gap-8">
-              {pricingPlans.map((plan, i) => (
-                <div key={i} className={`relative bg-white rounded-3xl p-8 border-2 ${plan.color === "accent" ? "border-accent shadow-2xl shadow-accent/10 scale-105 z-10" : "border-gray-200 shadow-xl"} flex flex-col h-full`}>
-                  {plan.badge && <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-white text-xs font-black px-4 py-2 rounded-full uppercase tracking-widest">{plan.badge}</span>}
-                  
-                  <h3 className="text-2xl font-black text-gray-900 mb-2">{plan.name}</h3>
-                  <p className="text-sm text-gray-600 mb-6 min-h-[60px]">{plan.description}</p>
-                  
-                  <div className="mb-6">
-                    <div className="flex items-baseline flex-wrap">
-                      {plan.price === "Concierge Support" ? (
-                        <span className="text-2xl font-black text-gray-900">{plan.price}</span>
-                      ) : (
-                        <>
-                          <span className="text-4xl font-black text-gray-900">${plan.price}</span>
-                          <span className="text-sm font-bold text-gray-500 ml-1">{plan.period}</span>
-                        </>
-                      )}
+
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-gradient-to-br from-gray-50 to-white rounded-3xl p-8 md:p-12 border border-gray-200 shadow-xl">
+                <div className="grid md:grid-cols-2 gap-6 mb-8">
+                  {/* Entity Type Dropdown */}
+                  <div className="relative">
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Business Entity Type</label>
+                    <div className="relative">
+                      <select
+                        value={selectedEntity}
+                        onChange={(e) => setSelectedEntity(e.target.value)}
+                        className="w-full appearance-none bg-white border-2 border-gray-200 rounded-xl px-4 py-4 pr-10 text-gray-900 font-medium focus:border-accent focus:ring-0 focus:outline-none transition-colors cursor-pointer"
+                      >
+                        <option value="">Select Entity Type</option>
+                        <option value="LLC">Limited Liability Company (LLC)</option>
+                        <option value="C-Corporation">C-Corporation</option>
+                        <option value="S-Corporation">S-Corporation</option>
+                        <option value="Nonprofit">Nonprofit</option>
+                        <option value="Sole Proprietorship">Sole Proprietorship</option>
+                        <option value="Partnership">Partnership</option>
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
                     </div>
-                    {plan.subtext && <p className="text-sm text-gray-500 mt-1">{plan.subtext}</p>}
-                    {plan.priceSubtext && <p className="text-sm text-gray-500 mt-1">{plan.priceSubtext}</p>}
                   </div>
 
-                  <Link href={plan.href} className={`w-full text-center py-4 rounded-xl font-bold mb-8 transition-all ${plan.color === "accent" ? "bg-accent hover:bg-accent-dark text-white shadow-lg shadow-accent/25" : "bg-gray-900 hover:bg-gray-800 text-white"}`}>
-                    {plan.buttonText}
-                  </Link>
-
-                  <div className="pt-6 border-t border-gray-100 flex-1">
-                    <p className="font-bold text-gray-900 mb-4">{plan.includesLabel}</p>
-                    <ul className="space-y-4">
-                      {plan.features.map((feature, idx) => (
-                        <li key={idx} className="flex gap-3">
-                          <Check className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-                          <span className="text-sm text-gray-700">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
+                  {/* State Dropdown */}
+                  <div className="relative">
+                    <label className="block text-sm font-bold text-gray-700 mb-2">State of Formation</label>
+                    <div className="relative">
+                      <select
+                        value={selectedState}
+                        onChange={(e) => setSelectedState(e.target.value)}
+                        className="w-full appearance-none bg-white border-2 border-gray-200 rounded-xl px-4 py-4 pr-10 text-gray-900 font-medium focus:border-accent focus:ring-0 focus:outline-none transition-colors cursor-pointer"
+                      >
+                        <option value="">Select State</option>
+                        {Object.keys(STATE_FEES).map((state) => (
+                          <option key={state} value={state}>{state}</option>
+                        ))}
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                    </div>
                   </div>
                 </div>
-              ))}
+
+                {/* State Fee Display */}
+                {selectedState && (
+                  <div className="mb-8 p-4 bg-accent/5 rounded-xl border border-accent/20">
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-700 font-medium">State Filing Fee for {selectedState}:</span>
+                      <span className="text-2xl font-black text-accent">${STATE_FEES[selectedState]}</span>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-1">This fee is paid directly to the state</p>
+                  </div>
+                )}
+
+                {/* CTA Button */}
+                <button
+                  onClick={handleStartBusiness}
+                  disabled={!selectedEntity || !selectedState}
+                  className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl font-bold text-lg transition-all ${
+                    selectedEntity && selectedState
+                      ? "bg-accent hover:bg-accent-dark text-white shadow-lg shadow-accent/25 hover:shadow-xl"
+                      : "bg-gray-200 text-gray-500 cursor-not-allowed"
+                  }`}
+                >
+                  Continue to Filing
+                  <ArrowRight className="w-5 h-5" />
+                </button>
+
+                {/* Trust Badges */}
+                <div className="mt-8 pt-8 border-t border-gray-200">
+                  <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-500">
+                    <div className="flex items-center gap-2">
+                      <Shield className="w-5 h-5 text-accent" />
+                      <span>Secure & Confidential</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-5 h-5 text-accent" />
+                      <span>Fast Processing</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Check className="w-5 h-5 text-accent" />
+                      <span>100% Accuracy Guarantee</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>

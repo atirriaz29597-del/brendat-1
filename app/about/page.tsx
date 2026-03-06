@@ -59,7 +59,7 @@ const timeline = [
   {
     year: "2018",
     title: "Brendat Founded",
-    desc: "Started in Houston, TX by a team of attorneys and entrepreneurs frustrated by how painful and expensive business registration had become.",
+    desc: "Started in Georgia by a team of attorneys and entrepreneurs frustrated by how painful and expensive business registration had become.",
   },
   {
     year: "2019",
@@ -237,7 +237,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <span className="inline-block text-xs font-bold uppercase tracking-[0.15em] text-accent bg-orange-50 px-3 py-1.5 rounded-full mb-5">Our Story</span>
           <h2 className="text-4xl md:text-5xl font-black text-primary leading-tight mb-4 max-w-2xl">
-            From a Houston Garage to 1 Million+ Businesses
+            From a Georgia Garage to 1 Million+ Businesses
           </h2>
           <p className="text-gray-500 text-lg max-w-2xl mb-16 leading-relaxed">
             Every great company has an origin story. Ours started with a frustrating experience and a stubborn belief that there had to be a better way.

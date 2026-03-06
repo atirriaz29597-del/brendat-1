@@ -58,9 +58,11 @@ function Step6Inner() {
 
   const stateFee = STATE_FEES[state] ?? 50;
   const expeditedFee = filing === "expedited" ? 50 : 0;
-  const orderTotal = packagePrices[pkg] + stateFee + expeditedFee;
 
   const [virtualAddress, setVirtualAddress] = useState<"virtual" | "own">("virtual");
+  const virtualAddressFee = virtualAddress === "virtual" ? 110 : 0;
+  const orderTotal = packagePrices[pkg] + stateFee + expeditedFee + virtualAddressFee;
+
   const [country] = useState("United States");
   const [street, setStreet] = useState("");
   const [addressCont, setAddressCont] = useState("");
@@ -88,7 +90,7 @@ function Step6Inner() {
 
   const handleNext = () => {
     if (!validate()) return;
-    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing });
+    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress });
     router.push(`/order/step7?${q.toString()}`);
   };
 
@@ -116,7 +118,9 @@ function Step6Inner() {
               <div className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-2xl p-6 mb-6">
                 <div className="flex items-center gap-3 mb-4">
                   <h3 className="text-lg font-black text-black">Virtual Address</h3>
-                  <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-black rounded-full uppercase tracking-wide">First Month Free</span>
+                  {virtualAddress === "virtual" && (
+                    <span className="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-black rounded-full uppercase tracking-wide">$110 charges for One Year.</span>
+                  )}
                 </div>
 
                 <div className="space-y-3 mb-6">
@@ -295,10 +299,16 @@ function Step6Inner() {
                 <span className="text-gray-500">{state} State Filing Fee</span>
                 <span className="font-bold text-black">${stateFee}</span>
               </div>
+              {expeditedFee > 0 && (
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Expedited Filing</span>
+                  <span className="font-bold text-black">${expeditedFee}</span>
+                </div>
+              )}
               {virtualAddress === "virtual" && (
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Business Address (1st Month)</span>
-                  <span className="font-bold text-emerald-600">Free</span>
+                  <span className="text-gray-500">Virtual Address (1 Year)</span>
+                  <span className="font-bold text-black">$110</span>
                 </div>
               )}
               <div className="flex justify-between items-center">
@@ -310,7 +320,7 @@ function Step6Inner() {
                   <span className="text-gray-500">Phone Support</span>
                   <CheckCircle2 className="w-4 h-4 text-accent" />
                 </div>
-                <p className="text-xs text-accent mt-1">Available Monday - Friday<br />From 9 A.M. To 6 P.M. CST</p>
+                <p className="text-xs text-accent mt-1">Available Monday - Saturday<br />8AM - 8PM CT</p>
               </div>
               <div className="border-t border-gray-200 pt-4 flex justify-between">
                 <span className="font-black text-black">Total:</span>

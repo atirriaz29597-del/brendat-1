@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Shield,
   CheckCircle,
@@ -18,14 +19,39 @@ import {
   ChevronDown,
   FileCheck,
   UserCheck,
+  ArrowRight,
+  Clock,
 } from "lucide-react";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import Image from "next/image";
 import Link from "next/link";
 
+const STATE_FEES: { [key: string]: number } = {
+  "Alabama": 236, "Alaska": 250, "Arizona": 85, "Arkansas": 45, "California": 75, "Colorado": 50,
+  "Connecticut": 120, "Delaware": 140, "Florida": 125, "Georgia": 100, "Hawaii": 51, "Idaho": 100,
+  "Illinois": 175, "Indiana": 95, "Iowa": 50, "Kansas": 165, "Kentucky": 40, "Louisiana": 105,
+  "Maine": 175, "Maryland": 120, "Massachusetts": 500, "Michigan": 50, "Minnesota": 155,
+  "Mississippi": 50, "Missouri": 50, "Montana": 35, "Nebraska": 105, "Nevada": 425,
+  "New Hampshire": 100, "New Jersey": 125, "New Mexico": 50, "New York": 210, "North Carolina": 125,
+  "North Dakota": 135, "Ohio": 99, "Oklahoma": 104, "Oregon": 100, "Pennsylvania": 125,
+  "Rhode Island": 156, "South Carolina": 135, "South Dakota": 165, "Tennessee": 307, "Texas": 308,
+  "Utah": 76, "Vermont": 125, "Virginia": 100, "Washington": 200, "West Virginia": 130,
+  "Wisconsin": 130, "Wyoming": 100
+};
+
 export default function HealthcareDirectivePage() {
+  const router = useRouter();
+  const [selectedEntity, setSelectedEntity] = useState("");
+  const [selectedState, setSelectedState] = useState("");
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
+
+  const handleStartBusiness = () => {
+    const params = new URLSearchParams();
+    if (selectedEntity) params.set("entity", selectedEntity);
+    if (selectedState) params.set("state", selectedState);
+    router.push(`/order/step2?${params.toString()}`);
+  };
 
   const whyChoose = [
     {
@@ -249,86 +275,100 @@ export default function HealthcareDirectivePage() {
         </div>
       </section>
 
-      {/* Pricing */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Essential */}
-            <div className="bg-gray-50 p-8 rounded-3xl border-2 border-gray-100 shadow-lg hover:-translate-y-1 transition-transform">
-              <div className="mb-4">
-                <h3 className="text-xl font-black text-gray-900 mb-1">Essential Health Directive</h3>
-                <div className="flex items-baseline gap-2 mb-3">
-                  <span className="text-4xl font-black text-gray-900">$39</span>
-                </div>
-              </div>
-              <Link href="/order/step2" className="block w-full py-3 rounded-xl font-bold mb-6 transition shadow-md bg-gray-900 text-white hover:bg-gray-800 text-center">
-                Get My Healthcare Directive
-              </Link>
-              <p className="text-xs font-bold text-gray-500 uppercase mb-3 tracking-wider">Includes:</p>
-              <ul className="space-y-3">
-                <li className="flex items-start gap-3 text-sm text-gray-700">
-                  <CheckCircle className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                  USA Living Will (Directive to Physicians)
-                </li>
-                <li className="flex items-start gap-3 text-sm text-gray-700">
-                  <CheckCircle className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                  Medical Power of Attorney
-                </li>
-                <li className="flex items-start gap-3 text-sm text-gray-700">
-                  <CheckCircle className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                  Guided online questionnaire to simplify the process
-                </li>
-                <li className="flex items-start gap-3 text-sm text-gray-700">
-                  <CheckCircle className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                  Unlimited revisions for 30 days
-                </li>
-                <li className="flex items-start gap-3 text-sm text-gray-700">
-                  <CheckCircle className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                  Secure online document storage
-                </li>
-              </ul>
-            </div>
-
-            {/* Premium */}
-            <div className="relative bg-white p-8 rounded-3xl border-2 border-accent shadow-2xl hover:-translate-y-1 transition-transform scale-105">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-accent text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wider">
-                Most Popular
-              </div>
-              <div className="mb-4">
-                <h3 className="text-xl font-black text-gray-900 mb-1">Premium Healthcare Directive</h3>
-                <div className="flex items-baseline gap-2 mb-3">
-                  <span className="text-4xl font-black text-gray-900">$49</span>
-                </div>
-              </div>
-              <Link href="/order/step2" className="block w-full py-3 rounded-xl font-bold mb-6 transition shadow-md bg-accent text-white hover:bg-accent/90 shadow-accent/20 text-center">
-                Get Advance Healthcare Directive
-              </Link>
-              <p className="text-xs font-bold text-gray-500 uppercase mb-3 tracking-wider">Everything in Essential, plus:</p>
-              <ul className="space-y-3">
-                <li className="flex items-start gap-3 text-sm text-gray-700">
-                  <CheckCircle className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                  Attorney review of your directive for accuracy and compliance
-                </li>
-                <li className="flex items-start gap-3 text-sm text-gray-700">
-                  <CheckCircle className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                  Unlimited 30-minute calls with an attorney for 2 weeks*
-                </li>
-                <li className="flex items-start gap-3 text-sm text-gray-700">
-                  <CheckCircle className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                  Personalized guidance and advice for your family
-                </li>
-              </ul>
-            </div>
+      {/* ENTITY & STATE SELECTION */}
+      <section className="py-24 bg-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent"></div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+              Start Your Business Today
+            </h2>
+            <p className="text-xl text-gray-600">
+              Select your entity type and state to see pricing
+            </p>
           </div>
 
-          <div className="text-center mt-8">
-            <p className="text-sm text-gray-600">
-              We also offer comprehensive{" "}
-              <a href="/estate-plans" className="text-accent font-bold hover:underline">
-                estate plan packages
-              </a>
-              .
-            </p>
+          <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 md:p-12">
+            {/* Entity Type Selection */}
+            <div className="mb-8">
+              <label className="block text-sm font-bold text-gray-700 mb-3 uppercase tracking-wider">
+                Entity Type
+              </label>
+              <div className="relative">
+                <select
+                  value={selectedEntity}
+                  onChange={(e) => setSelectedEntity(e.target.value)}
+                  className="w-full p-4 text-lg border-2 border-gray-200 rounded-xl appearance-none bg-white focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all cursor-pointer font-medium"
+                >
+                  <option value="">Select your entity type...</option>
+                  <option value="llc">Limited Liability Company (LLC)</option>
+                  <option value="corporation">Corporation (C-Corp / S-Corp)</option>
+                  <option value="nonprofit">Nonprofit Organization</option>
+                  <option value="sole-proprietorship">Sole Proprietorship</option>
+                  <option value="dba">DBA (Doing Business As)</option>
+                </select>
+                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* State Selection */}
+            <div className="mb-8">
+              <label className="block text-sm font-bold text-gray-700 mb-3 uppercase tracking-wider">
+                State of Formation
+              </label>
+              <div className="relative">
+                <select
+                  value={selectedState}
+                  onChange={(e) => setSelectedState(e.target.value)}
+                  className="w-full p-4 text-lg border-2 border-gray-200 rounded-xl appearance-none bg-white focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all cursor-pointer font-medium"
+                >
+                  <option value="">Select your state...</option>
+                  {Object.keys(STATE_FEES).map((state) => (
+                    <option key={state} value={state}>{state}</option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Price Display */}
+            {selectedState && (
+              <div className="mb-8 p-6 bg-gradient-to-r from-accent/5 to-accent/10 rounded-2xl border border-accent/20">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-700 font-medium">State Filing Fee:</span>
+                  <span className="text-3xl font-black text-accent">${STATE_FEES[selectedState as keyof typeof STATE_FEES]}</span>
+                </div>
+                <p className="text-sm text-gray-500 mt-2">+ Service fee calculated at checkout</p>
+              </div>
+            )}
+
+            {/* Continue Button */}
+            <button
+              onClick={handleStartBusiness}
+              disabled={!selectedEntity || !selectedState}
+              className="w-full py-5 bg-accent text-white text-xl font-bold rounded-xl shadow-lg shadow-accent/30 hover:shadow-xl hover:shadow-accent/40 hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg flex items-center justify-center gap-3"
+            >
+              Continue
+              <ArrowRight className="w-6 h-6" />
+            </button>
+
+            {/* Trust Badges */}
+            <div className="mt-8 pt-8 border-t border-gray-100">
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div className="flex flex-col items-center">
+                  <Shield className="w-8 h-8 text-accent mb-2" />
+                  <span className="text-xs font-medium text-gray-600">Secure Process</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <Clock className="w-8 h-8 text-accent mb-2" />
+                  <span className="text-xs font-medium text-gray-600">Fast Filing</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <CheckCircle className="w-8 h-8 text-accent mb-2" />
+                  <span className="text-xs font-medium text-gray-600">Guaranteed</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

@@ -28,7 +28,8 @@ function Step4Inner() {
   expeditedDate.setDate(today.getDate() + 2);
   while (expeditedDate.getDay() === 0 || expeditedDate.getDay() === 6) expeditedDate.setDate(expeditedDate.getDate() + 1);
   const standardDate = new Date(today);
-  standardDate.setDate(today.getDate() + 21);
+  // 1-2 weeks for Basic/Standard, 3-5 days for Premium
+  standardDate.setDate(today.getDate() + (pkg === "Premium" ? 5 : 14));
   const formatDate = (d: Date) => d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "2-digit" });
 
   return (
@@ -61,7 +62,7 @@ function Step4Inner() {
             State Filing <span className="text-accent">Time</span>
           </h1>
           <p className="text-gray-500 text-base">
-            The typical state filing time for <strong className="text-black">{state}</strong> is <strong className="text-black">3 weeks</strong>. Choose the speed that works for you.
+            The typical state filing time for <strong className="text-black">{state}</strong> is <strong className="text-black">{pkg === "Premium" ? "3-5 days" : "1-2 weeks"}</strong>. Choose the speed that works for you.
           </p>
         </div>
 
@@ -75,7 +76,7 @@ function Step4Inner() {
                 className={`relative text-left rounded-2xl border-2 p-5 transition-all ${filingSpeed === "expedited" ? "border-accent bg-accent/5 shadow-md" : "border-gray-200 hover:border-gray-300"}`}
               >
                 <span className="absolute -top-3 left-4 bg-accent text-white text-[10px] font-black uppercase tracking-widest px-3 py-0.5 rounded-full">Fast</span>
-                <div className="flex items-center justify-between mb-3 mt-1">
+                <div className="flex items-center justify-between mb-1 mt-1">
                   <div className="flex items-center gap-3">
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${filingSpeed === "expedited" ? "border-accent" : "border-gray-300"}`}>
                       {filingSpeed === "expedited" && <div className="w-2.5 h-2.5 rounded-full bg-accent" />}
@@ -84,6 +85,7 @@ function Step4Inner() {
                   </div>
                   <span className="font-black text-black">$50</span>
                 </div>
+                <p className="text-[10px] text-gray-500 ml-8 mb-2">including state expedite fee</p>
                 <p className="text-xs text-accent font-semibold">Estimated Formation Date:</p>
                 <p className="text-sm font-bold text-accent">{formatDate(expeditedDate)}*</p>
               </button>
@@ -98,7 +100,7 @@ function Step4Inner() {
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${filingSpeed === "standard" ? "border-accent" : "border-gray-300"}`}>
                       {filingSpeed === "standard" && <div className="w-2.5 h-2.5 rounded-full bg-accent" />}
                     </div>
-                    <span className="font-bold text-black text-sm">3 weeks filing time.</span>
+                    <span className="font-bold text-black text-sm">{pkg === "Premium" ? "3-5 days" : "1-2 weeks"} filing time.</span>
                   </div>
                   <span className="font-black text-black">$0</span>
                 </div>
@@ -168,7 +170,7 @@ function Step4Inner() {
                   <span className="text-gray-500">Phone Support</span>
                   <CheckCircle2 className="w-4 h-4 text-accent" />
                 </div>
-                <p className="text-xs text-accent mt-1">Available Monday - Friday<br />From 9 A.M. To 6 P.M. CST</p>
+                <p className="text-xs text-accent mt-1">Available Monday - Saturday<br />8AM - 8PM CT</p>
               </div>
               <div className="border-t border-gray-200 pt-4 flex justify-between">
                 <span className="font-black text-black">Total:</span>

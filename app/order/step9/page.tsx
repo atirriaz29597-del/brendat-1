@@ -42,19 +42,23 @@ function Step9Inner() {
   const companyName = params.get("name") || "";
   const designator = params.get("designator") || "LLC";
   const filing = params.get("filing") || "standard";
+  const virtualAddress = (params.get("virtualAddress") || "own") as "virtual" | "own";
+  const einChoice = (params.get("einChoice") || "skip") as "get" | "skip";
   const stateFee = STATE_FEES[state] ?? 50;
   const expeditedFee = filing === "expedited" ? 50 : 0;
-  const orderTotal = packagePrices[pkg] + stateFee + expeditedFee;
+  const virtualAddressFee = virtualAddress === "virtual" ? 110 : 0;
+  const einFee = (pkg === "Basic" && einChoice === "get") ? 70 : 0;
+  const orderTotal = packagePrices[pkg] + stateFee + expeditedFee + virtualAddressFee + einFee;
 
   const [consultChoice, setConsultChoice] = useState<"yes" | "no">("no");
 
   const buildBackUrl = () => {
-    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing });
+    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress, einChoice });
     return `/order/step8?${q.toString()}`;
   };
 
   const handleNext = () => {
-    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing });
+    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress, einChoice });
     router.push(`/order/step10?${q.toString()}`);
   };
 
@@ -165,6 +169,18 @@ function Step9Inner() {
                 <span className="text-gray-500">Business Address (1st Month)</span>
                 <span className="font-bold text-emerald-600">Free</span>
               </div>
+              {virtualAddress === "virtual" && (
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Virtual Address (1 Year)</span>
+                  <span className="font-bold text-black">$110</span>
+                </div>
+              )}
+              {pkg === "Basic" && einChoice === "get" && (
+                <div className="flex justify-between">
+                  <span className="text-gray-500">EIN Filing Fee</span>
+                  <span className="font-bold text-black">$70</span>
+                </div>
+              )}
               {consultChoice === "yes" && (
                 <div className="flex justify-between">
                   <span className="text-gray-500">Tax Consultation</span>

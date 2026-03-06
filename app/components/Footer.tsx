@@ -17,8 +17,13 @@ export default function Footer() {
               </span>
             </Link>
             <p className="max-w-sm mb-8 leading-relaxed text-sm">
-              Houston-based business formation and management platform empowering entrepreneurs across all 50 states to start, run, and grow with confidence.
+              Georgia-based business formation and management platform empowering entrepreneurs across all 50 states to start, run, and grow with confidence.
             </p>
+            <div className="space-y-2 text-sm mb-6">
+              <p><span className="text-gray-500">Phone:</span> <a href="tel:+13032468693" className="hover:text-accent-light transition-colors">+1 303 246-8693</a></p>
+              <p><span className="text-gray-500">Email:</span> <a href="mailto:contact@brendat.com" className="hover:text-accent-light transition-colors">contact@brendat.com</a></p>
+              <p><span className="text-gray-500">Hours:</span> Mon–Sat: 8AM–8PM CT</p>
+            </div>
             <div className="flex gap-3">
               {[Globe, Phone, MessageCircle].map((Icon, i) => (
                 <div key={i} className="w-10 h-10 rounded-full bg-gray-800 border border-gray-700 flex items-center justify-center hover:bg-accent hover:border-accent text-gray-400 hover:text-white transition-all cursor-pointer">
@@ -61,7 +66,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-xs max-w-2xl leading-relaxed text-center md:text-left">
-            <strong className="text-gray-300">Disclaimer:</strong> Brendat is a document filing service and is NOT a law firm. We do not provide legal, financial, or tax advice. Information provided is for general purposes only. Houston, TX.
+            <strong className="text-gray-300">Disclaimer:</strong> Brendat is a document filing service and is NOT a law firm. We do not provide legal, financial, or tax advice. Information provided is for general purposes only. Georgia, USA.
           </p>
           <p className="text-xs whitespace-nowrap text-gray-500">
             © {new Date().getFullYear()} Brendat Inc. All rights reserved.

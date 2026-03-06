@@ -200,7 +200,7 @@ function Step3Inner() {
                   <span className="text-gray-500">Phone Support</span>
                   <CheckCircle2 className="w-4 h-4 text-accent" />
                 </div>
-                <p className="text-xs text-accent mt-1">Available Monday - Friday<br />From 9 A.M. To 6 P.M. CST</p>
+                <p className="text-xs text-accent mt-1">Available Monday - Saturday<br />8AM - 8PM CT</p>
               </div>
               <div className="border-t border-gray-200 pt-4 flex justify-between">
                 <span className="font-black text-black">Total:</span>

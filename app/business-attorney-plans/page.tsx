@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import HeroAvatars from "@/app/components/HeroAvatars";
@@ -26,11 +27,34 @@ import {
   UserCheck,
   Target,
   Search,
-  Star
+  Star,
+  ArrowRight
 } from "lucide-react";
 
+const STATE_FEES: { [key: string]: number } = {
+  "Alabama": 236, "Alaska": 250, "Arizona": 85, "Arkansas": 45, "California": 75,
+  "Colorado": 50, "Connecticut": 120, "Delaware": 140, "Florida": 155, "Georgia": 140,
+  "Hawaii": 50, "Idaho": 100, "Illinois": 175, "Indiana": 95, "Iowa": 50,
+  "Kansas": 160, "Kentucky": 40, "Louisiana": 75, "Maine": 175, "Maryland": 450,
+  "Massachusetts": 500, "Michigan": 50, "Minnesota": 155, "Mississippi": 50, "Missouri": 50,
+  "Montana": 35, "Nebraska": 100, "Nevada": 425, "New Hampshire": 100, "New Jersey": 125,
+  "New Mexico": 50, "New York": 210, "North Carolina": 125, "North Dakota": 135, "Ohio": 99,
+  "Oklahoma": 104, "Oregon": 100, "Pennsylvania": 125, "Rhode Island": 150, "South Carolina": 110,
+  "South Dakota": 150, "Tennessee": 300, "Texas": 308, "Utah": 76, "Vermont": 125,
+  "Virginia": 100, "Washington": 200, "West Virginia": 100, "Wisconsin": 130, "Wyoming": 100
+};
+
 export default function BusinessAttorneyPlans() {
+  const router = useRouter();
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
+  const [selectedEntity, setSelectedEntity] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+
+  const handleStartBusiness = () => {
+    if (selectedEntity && selectedState) {
+      router.push(`/order/step2?entity=${selectedEntity}&state=${selectedState}`);
+    }
+  };
 
   const features = [
     {
@@ -298,55 +322,98 @@ export default function BusinessAttorneyPlans() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section id="pricing" className="py-20 bg-gradient-to-br from-gray-50 to-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-4">
-              Select Your Business Attorney Plan
+      {/* ENTITY & STATE SELECTION */}
+      <section id="pricing" className="py-24 bg-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent"></div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+              Start Your Business Today
             </h2>
-            <p className="text-lg text-gray-600">
-              Choose the plan that works best for your business needs.
+            <p className="text-xl text-gray-600">
+              Select your entity type and state to see pricing
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* 12-Month Plan */}
-            <div className="relative bg-white border-2 border-accent rounded-2xl shadow-xl overflow-hidden">
-              <div className="absolute top-0 right-0 bg-accent text-white px-4 py-1 text-sm font-bold rounded-bl-xl">
-                Most Popular
-              </div>
-              <div className="p-8">
-                <h3 className="text-2xl font-black text-gray-900 mb-4">12-Month Plan</h3>
-                <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-5xl font-black text-accent">$39.09</span>
-                  <span className="text-gray-600 font-medium">/mo</span>
-                </div>
-                <p className="text-sm text-gray-600 mb-6">billed annually at $469†</p>
-                <a
-                  href="#contact"
-                  className="block w-full bg-accent text-white text-center py-4 rounded-xl font-bold text-lg hover:bg-accent/90 transition-all shadow-lg hover:shadow-xl"
+          <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 md:p-12">
+            {/* Entity Type Selection */}
+            <div className="mb-8">
+              <label className="block text-sm font-bold text-gray-700 mb-3 uppercase tracking-wider">
+                Entity Type
+              </label>
+              <div className="relative">
+                <select
+                  value={selectedEntity}
+                  onChange={(e) => setSelectedEntity(e.target.value)}
+                  className="w-full p-4 text-lg border-2 border-gray-200 rounded-xl appearance-none bg-white focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all cursor-pointer font-medium"
                 >
-                  Get Legal Support Now
-                </a>
+                  <option value="">Select your entity type...</option>
+                  <option value="llc">Limited Liability Company (LLC)</option>
+                  <option value="corporation">Corporation (C-Corp / S-Corp)</option>
+                  <option value="nonprofit">Nonprofit Organization</option>
+                  <option value="sole-proprietorship">Sole Proprietorship</option>
+                  <option value="dba">DBA (Doing Business As)</option>
+                </select>
+                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
               </div>
             </div>
 
-            {/* 6-Month Plan */}
-            <div className="bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
-              <div className="p-8">
-                <h3 className="text-2xl font-black text-gray-900 mb-4">6-Month Plan</h3>
-                <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-5xl font-black text-gray-900">$43.17</span>
-                  <span className="text-gray-600 font-medium">/mo</span>
-                </div>
-                <p className="text-sm text-gray-600 mb-6">billed every 6 months at $259†</p>
-                <a
-                  href="#contact"
-                  className="block w-full bg-gray-900 text-white text-center py-4 rounded-xl font-bold text-lg hover:bg-gray-800 transition-all"
+            {/* State Selection */}
+            <div className="mb-8">
+              <label className="block text-sm font-bold text-gray-700 mb-3 uppercase tracking-wider">
+                State of Formation
+              </label>
+              <div className="relative">
+                <select
+                  value={selectedState}
+                  onChange={(e) => setSelectedState(e.target.value)}
+                  className="w-full p-4 text-lg border-2 border-gray-200 rounded-xl appearance-none bg-white focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all cursor-pointer font-medium"
                 >
-                  Talk To Business Attorney
-                </a>
+                  <option value="">Select your state...</option>
+                  {Object.keys(STATE_FEES).map((state) => (
+                    <option key={state} value={state}>{state}</option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Price Display */}
+            {selectedState && (
+              <div className="mb-8 p-6 bg-gradient-to-r from-accent/5 to-accent/10 rounded-2xl border border-accent/20">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-700 font-medium">State Filing Fee:</span>
+                  <span className="text-3xl font-black text-accent">${STATE_FEES[selectedState as keyof typeof STATE_FEES]}</span>
+                </div>
+                <p className="text-sm text-gray-500 mt-2">+ Service fee calculated at checkout</p>
+              </div>
+            )}
+
+            {/* Continue Button */}
+            <button
+              onClick={handleStartBusiness}
+              disabled={!selectedEntity || !selectedState}
+              className="w-full py-5 bg-accent text-white text-xl font-bold rounded-xl shadow-lg shadow-accent/30 hover:shadow-xl hover:shadow-accent/40 hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg flex items-center justify-center gap-3"
+            >
+              Continue
+              <ArrowRight className="w-6 h-6" />
+            </button>
+
+            {/* Trust Badges */}
+            <div className="mt-8 pt-8 border-t border-gray-100">
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div className="flex flex-col items-center">
+                  <Shield className="w-8 h-8 text-accent mb-2" />
+                  <span className="text-xs font-medium text-gray-600">Secure Process</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <Clock className="w-8 h-8 text-accent mb-2" />
+                  <span className="text-xs font-medium text-gray-600">Fast Filing</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <CheckCircle className="w-8 h-8 text-accent mb-2" />
+                  <span className="text-xs font-medium text-gray-600">Guaranteed</span>
+                </div>
               </div>
             </div>
           </div>

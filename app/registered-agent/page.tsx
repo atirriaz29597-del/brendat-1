@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { 
   Check, 
   Phone, 
@@ -30,7 +31,10 @@ import {
   MapPin,
   Lock,
   RefreshCw,
-  Star
+  Star,
+  ChevronDown,
+  ArrowRight,
+  CheckCircle,
 } from "lucide-react";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
@@ -119,7 +123,31 @@ const faqs = [
   { question: "Why should I choose an established registered agent service?", answer: "Established services like Brendat ensure reliability, privacy, and compliance expertise that an individual or fly-by-night service cannot match." }
 ];
 
+const STATE_FEES: { [key: string]: number } = {
+  "Alabama": 236, "Alaska": 250, "Arizona": 85, "Arkansas": 45, "California": 75, "Colorado": 50,
+  "Connecticut": 120, "Delaware": 140, "Florida": 125, "Georgia": 100, "Hawaii": 51, "Idaho": 100,
+  "Illinois": 175, "Indiana": 95, "Iowa": 50, "Kansas": 165, "Kentucky": 40, "Louisiana": 105,
+  "Maine": 175, "Maryland": 120, "Massachusetts": 500, "Michigan": 50, "Minnesota": 155,
+  "Mississippi": 50, "Missouri": 50, "Montana": 35, "Nebraska": 105, "Nevada": 425,
+  "New Hampshire": 100, "New Jersey": 125, "New Mexico": 50, "New York": 210, "North Carolina": 125,
+  "North Dakota": 135, "Ohio": 99, "Oklahoma": 104, "Oregon": 100, "Pennsylvania": 125,
+  "Rhode Island": 156, "South Carolina": 135, "South Dakota": 165, "Tennessee": 307, "Texas": 308,
+  "Utah": 76, "Vermont": 125, "Virginia": 100, "Washington": 200, "West Virginia": 130,
+  "Wisconsin": 130, "Wyoming": 100
+};
+
 export default function RegisteredAgentPage() {
+  const router = useRouter();
+  const [selectedEntity, setSelectedEntity] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+
+  const handleStartBusiness = () => {
+    const params = new URLSearchParams();
+    if (selectedEntity) params.set("entity", selectedEntity);
+    if (selectedState) params.set("state", selectedState);
+    router.push(`/order/step2?${params.toString()}`);
+  };
+
   return (
     <>
       <Header />
@@ -173,34 +201,98 @@ export default function RegisteredAgentPage() {
           </div>
         </section>
 
-        {/* PRICING CARD */}
-        <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-lg mx-auto">
-              <div className="bg-white rounded-3xl p-8 border-2 border-accent shadow-2xl shadow-accent/10 relative overflow-hidden">
-                <div className="absolute top-0 right-0 bg-accent text-white text-xs font-black px-4 py-2 rounded-bl-xl uppercase tracking-widest">Most Popular</div>
-                
-                <h3 className="text-2xl font-black text-gray-900 mb-2">Registered Agent Services</h3>
-                <div className="mb-6">
-                  <span className="text-5xl font-black text-gray-900">$249</span>
-                  <span className="text-lg font-bold text-gray-500">/yr*</span>
-                  <p className="text-sm text-gray-400 mt-1">Auto renews. Cancel anytime*</p>
+        {/* ENTITY & STATE SELECTION */}
+        <section className="py-24 bg-white relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent pointer-events-none" />
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+                Start Your Business <span className="text-accent">Today</span>
+              </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Select your entity type and state to see pricing and get started
+              </p>
+            </div>
+
+            <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 md:p-12">
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                {/* Entity Type Dropdown */}
+                <div className="relative">
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Entity Type</label>
+                  <div className="relative">
+                    <select
+                      value={selectedEntity}
+                      onChange={(e) => setSelectedEntity(e.target.value)}
+                      className="w-full appearance-none bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 text-gray-900 font-medium focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all cursor-pointer"
+                    >
+                      <option value="">Select entity type...</option>
+                      <option value="llc">Limited Liability Company (LLC)</option>
+                      <option value="corporation">Corporation (C-Corp)</option>
+                      <option value="s-corp">S-Corporation</option>
+                      <option value="nonprofit">Nonprofit Organization</option>
+                      <option value="sole-proprietorship">Sole Proprietorship</option>
+                    </select>
+                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                  </div>
                 </div>
 
-                <Link href="/order/step2" className="block w-full text-center bg-accent hover:bg-accent-dark text-white text-lg font-bold py-4 rounded-xl shadow-lg shadow-accent/25 mb-8 transition-all">
-                  Choose My Registered Agent in USA
-                </Link>
+                {/* State Dropdown */}
+                <div className="relative">
+                  <label className="block text-sm font-bold text-gray-700 mb-2">State of Formation</label>
+                  <div className="relative">
+                    <select
+                      value={selectedState}
+                      onChange={(e) => setSelectedState(e.target.value)}
+                      className="w-full appearance-none bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 text-gray-900 font-medium focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all cursor-pointer"
+                    >
+                      <option value="">Select state...</option>
+                      {Object.keys(STATE_FEES).map((state) => (
+                        <option key={state} value={state}>{state}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                  </div>
+                </div>
+              </div>
 
-                <div className="pt-6 border-t border-gray-100">
-                  <p className="font-bold text-gray-900 mb-4">Includes:</p>
-                  <ul className="space-y-3">
-                    {registeredAgentIncludes.map((item, idx) => (
-                      <li key={idx} className="flex gap-3">
-                        <Check className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-                        <span className="text-sm text-gray-700">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+              {/* State Fee Display */}
+              {selectedState && (
+                <div className="mb-8 p-6 bg-gradient-to-r from-accent/5 to-accent/10 rounded-2xl border border-accent/20">
+                  <div className="flex items-center justify-between flex-wrap gap-4">
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">State Filing Fee for {selectedState}</p>
+                      <p className="text-3xl font-black text-gray-900">${STATE_FEES[selectedState]}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm text-gray-600 mb-1">Service Fee</p>
+                      <p className="text-3xl font-black text-accent">$0</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* CTA Button */}
+              <button
+                onClick={handleStartBusiness}
+                className="w-full bg-accent hover:bg-accent/90 text-white font-bold py-5 px-8 rounded-xl transition-all transform hover:scale-[1.02] shadow-lg shadow-accent/25 flex items-center justify-center gap-3 text-lg"
+              >
+                Continue
+                <ArrowRight className="w-5 h-5" />
+              </button>
+
+              {/* Trust Badges */}
+              <div className="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-gray-100">
+                <div className="text-center">
+                  <Shield className="w-8 h-8 text-accent mx-auto mb-2" />
+                  <p className="text-xs font-bold text-gray-900">Secure Process</p>
+                </div>
+                <div className="text-center">
+                  <Clock className="w-8 h-8 text-accent mx-auto mb-2" />
+                  <p className="text-xs font-bold text-gray-900">Fast Filing</p>
+                </div>
+                <div className="text-center">
+                  <CheckCircle className="w-8 h-8 text-accent mx-auto mb-2" />
+                  <p className="text-xs font-bold text-gray-900">Guaranteed</p>
                 </div>
               </div>
             </div>

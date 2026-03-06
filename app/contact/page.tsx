@@ -117,19 +117,19 @@ export default function ContactPage() {
                   {
                     icon: Phone,
                     title: "Phone",
-                    detail: "(713) 555-0123",
-                    sub: "Mon–Sat, 8am–8pm CT",
+                    detail: "+1 303 246-8693",
+                    sub: "Mon–Sat, 8AM–8PM CT",
                   },
                   {
                     icon: Mail,
                     title: "Email",
-                    detail: "support@Brendat.com",
+                    detail: "contact@brendat.com",
                     sub: "Average response: under 1 hour",
                   },
                   {
                     icon: MapPin,
                     title: "Office",
-                    detail: "Houston, TX",
+                    detail: "Georgia, USA",
                     sub: "Serving all 50 states",
                   },
                   {
@@ -317,7 +317,7 @@ export default function ContactPage() {
       <footer className="bg-primary py-8">
         <div className="mx-auto max-w-7xl px-4 text-center">
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} Brendat Inc. All rights reserved. Houston, TX.
+            © {new Date().getFullYear()} Brendat Inc. All rights reserved. Georgia, USA.
           </p>
         </div>
       </footer>

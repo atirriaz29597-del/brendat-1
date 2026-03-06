@@ -28,7 +28,7 @@ export const comparisonFeatures: {
   { label: "Preparing & Filing the Articles of Organization", sub: "See what's included →", basic: "✓", standard: "✓", premium: "✓" },
   { label: "FREE 1st Year Registered Agent Service!", basic: "✓", standard: "✓", premium: "✓" },
   { label: "FREE 1st Month of Virtual Address Service!", basic: "—", standard: "✓", premium: "✓" },
-  { label: "Expedited Filing", sub: "2 business days (instead of 3 weeks)", basic: "+ $50", standard: "+ $50", premium: "✓" },
+  { label: "Expedited Filing", sub: "2 business days (instead of 1-2 weeks)", basic: "+ $50", standard: "+ $50", premium: "✓" },
   { label: "Business Contract Templates", basic: "+ $150", standard: "+ $150", premium: "✓" },
   { label: "EIN Business Tax Number", basic: "+ $70", standard: "✓", premium: "✓" },
   { label: "Operating Agreement", basic: "+ $99", standard: "✓", premium: "✓" },

@@ -16,6 +16,7 @@ function Step2Inner() {
   // Dynamic prices from Supabase (fallback to hardcoded)
   const [statePrices, setStatePrices] = useState<Record<string, number>>(STATE_FEES);
   const [packagePricesData, setPackagePricesData] = useState<Record<string, number>>(defaultPackagePrices);
+  const [pricesLoaded, setPricesLoaded] = useState(false);
   
   // Map entity param to API entity type
   const getEntityType = (entityParam: string): string => {
@@ -52,10 +53,14 @@ function Step2Inner() {
         }
       } catch (error) {
         console.error('Failed to fetch prices:', error);
+      } finally {
+        setPricesLoaded(true);
       }
     }
     if (state) {
       fetchPrices();
+    } else {
+      setPricesLoaded(true);
     }
   }, [state, entityType]);
   
@@ -75,7 +80,7 @@ function Step2Inner() {
       "EIN Business Tax Number",
       "Banking Resolutions",
       "Operating Agreement",
-      "Fintech Bank Account Setup",
+      "Business Banking Account Offer",
       "Phone & Email Support",
       "Business Tax Consultation",
       "Lifetime Compliance Alerts",
@@ -107,6 +112,21 @@ function Step2Inner() {
       `/order/step3?entity=${encodeURIComponent(entity)}&state=${encodeURIComponent(state)}&package=${selectedPackage}`
     );
   };
+
+  // Show loading state while prices are being fetched
+  if (!pricesLoaded) {
+    return (
+      <div className="min-h-screen bg-white text-black">
+        <Header />
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-gray-500 font-medium">Loading packages...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white text-black">
@@ -168,7 +188,7 @@ function Step2Inner() {
                     <div className={`flex items-center justify-center gap-1 mt-3 text-xs font-semibold ${
                       pkg === "Premium" ? "text-accent" : "text-gray-400"
                     }`}>
-                      <Calendar className="w-3 h-3" /> {pkg === "Premium" ? "3-5 days" : "3 weeks"}
+                      <Calendar className="w-3 h-3" /> {pkg === "Premium" ? "3-5 days" : "1-2 weeks"}
                     </div>
                   </div>
                 </div>

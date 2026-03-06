@@ -228,9 +228,11 @@ function Step7Inner() {
   const companyName = params.get("name") || "";
   const designator = params.get("designator") || "LLC";
   const filing = params.get("filing") || "standard";
+  const virtualAddress = (params.get("virtualAddress") || "own") as "virtual" | "own";
   const stateFee = STATE_FEES[state] ?? 50;
   const expeditedFee = filing === "expedited" ? 50 : 0;
-  const orderTotal = packagePrices[pkg] + stateFee + expeditedFee;
+  const virtualAddressFee = virtualAddress === "virtual" ? 110 : 0;
+  const orderTotal = packagePrices[pkg] + stateFee + expeditedFee + virtualAddressFee;
 
   const [numDirectors, setNumDirectors] = useState("");
   const [directors, setDirectors] = useState<string[]>([]);
@@ -277,7 +279,7 @@ function Step7Inner() {
   };
 
   const buildBackUrl = () => {
-    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing });
+    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress });
     return `/order/step6?${q.toString()}`;
   };
 
@@ -291,7 +293,7 @@ function Step7Inner() {
 
   const handleNext = () => {
     if (!validate()) return;
-    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing });
+    const q = new URLSearchParams({ entity, state, package: pkg, name: companyName, designator, filing, virtualAddress });
     router.push(`/order/step8?${q.toString()}`);
   };
 
@@ -477,6 +479,12 @@ function Step7Inner() {
                 <span className="text-gray-500">Business Address (1st Month)</span>
                 <span className="font-bold text-emerald-600">Free</span>
               </div>
+              {virtualAddress === "virtual" && (
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Virtual Address (1 Year)</span>
+                  <span className="font-bold text-black">$110</span>
+                </div>
+              )}
               <div className="border-t border-gray-200 pt-4 flex justify-between">
                 <span className="font-black text-black">Total:</span>
                 <span className="font-black text-black text-xl">${orderTotal.toFixed(2)}</span>

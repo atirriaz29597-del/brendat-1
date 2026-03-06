@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Shield,
   FileText,
@@ -22,13 +23,38 @@ import {
   User,
   Star,
   Users,
+  ArrowRight,
+  Clock,
 } from "lucide-react";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import HeroAvatars from "@/app/components/HeroAvatars";
 
+const STATE_FEES: { [key: string]: number } = {
+  "Alabama": 236, "Alaska": 250, "Arizona": 85, "Arkansas": 45, "California": 75, "Colorado": 50,
+  "Connecticut": 120, "Delaware": 140, "Florida": 125, "Georgia": 100, "Hawaii": 51, "Idaho": 100,
+  "Illinois": 175, "Indiana": 95, "Iowa": 50, "Kansas": 165, "Kentucky": 40, "Louisiana": 105,
+  "Maine": 175, "Maryland": 120, "Massachusetts": 500, "Michigan": 50, "Minnesota": 155,
+  "Mississippi": 50, "Missouri": 50, "Montana": 35, "Nebraska": 105, "Nevada": 425,
+  "New Hampshire": 100, "New Jersey": 125, "New Mexico": 50, "New York": 210, "North Carolina": 125,
+  "North Dakota": 135, "Ohio": 99, "Oklahoma": 104, "Oregon": 100, "Pennsylvania": 125,
+  "Rhode Island": 156, "South Carolina": 135, "South Dakota": 165, "Tennessee": 307, "Texas": 308,
+  "Utah": 76, "Vermont": 125, "Virginia": 100, "Washington": 200, "West Virginia": 130,
+  "Wisconsin": 130, "Wyoming": 100
+};
+
 export default function CopyrightPage() {
+  const router = useRouter();
+  const [selectedEntity, setSelectedEntity] = useState("");
+  const [selectedState, setSelectedState] = useState("");
   const [openFaqIndex, setOpenFaqIndex] = React.useState<number | null>(null);
+
+  const handleStartBusiness = () => {
+    const params = new URLSearchParams();
+    if (selectedEntity) params.set("entity", selectedEntity);
+    if (selectedState) params.set("state", selectedState);
+    router.push(`/order/step2?${params.toString()}`);
+  };
 
   const toggleFaq = (index: number) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
@@ -169,7 +195,7 @@ export default function CopyrightPage() {
                 Whether you’re an author, artist, or business owner, our USA copyright registration services make it simple to secure your rights, prevent unauthorized use, and receive an official certificate of copyright registration. From online filing to full legal support, we’ll guide you through every step so your work stays yours.
               </p>
               <div className="flex items-center gap-4 mb-8">
-                 <p className="font-bold text-gray-900 text-lg">Copyright registration $114 + filing fees.</p>
+                 <p className="font-bold text-gray-900 text-lg">Get started with copyright registration today.</p>
               </div>
               <Link href="/order/step2" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
                 Register My Copyright
@@ -179,14 +205,7 @@ export default function CopyrightPage() {
             <div>
                <div className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 relative overflow-hidden">
                    <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-bl-full -mr-8 -mt-8" />
-                   <h3 className="text-2xl font-black text-gray-900 mb-2">Affordable Package for Copyright Registration in USA</h3>
-                   <div className="flex items-baseline gap-1 mb-6">
-                      <span className="text-4xl font-black text-accent">$144</span>
-                      <span className="text-gray-500 font-medium">+state filing fees</span>
-                   </div>
-                   <Link href="/order/step2" className="block w-full text-center bg-accent text-white py-3 rounded-xl font-bold mb-8 hover:bg-accent/90 transition shadow-lg shadow-accent/20">
-                      Register My Copyright Now
-                   </Link>
+                   <h3 className="text-2xl font-black text-gray-900 mb-4">What&apos;s Included</h3>
                    <div className="space-y-4">
                       <ul className="space-y-3">
                         {packageIncludes.map((item, i) => (
@@ -198,6 +217,104 @@ export default function CopyrightPage() {
                       </ul>
                    </div>
                </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ENTITY & STATE SELECTION */}
+      <section className="py-24 bg-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent pointer-events-none" />
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+              Start Your Business <span className="text-accent">Today</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Select your entity type and state to see pricing and get started
+            </p>
+          </div>
+
+          <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 md:p-12">
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              {/* Entity Type Dropdown */}
+              <div className="relative">
+                <label className="block text-sm font-bold text-gray-700 mb-2">Entity Type</label>
+                <div className="relative">
+                  <select
+                    value={selectedEntity}
+                    onChange={(e) => setSelectedEntity(e.target.value)}
+                    className="w-full appearance-none bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 text-gray-900 font-medium focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all cursor-pointer"
+                  >
+                    <option value="">Select entity type...</option>
+                    <option value="llc">Limited Liability Company (LLC)</option>
+                    <option value="corporation">Corporation (C-Corp)</option>
+                    <option value="s-corp">S-Corporation</option>
+                    <option value="nonprofit">Nonprofit Organization</option>
+                    <option value="sole-proprietorship">Sole Proprietorship</option>
+                  </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                </div>
+              </div>
+
+              {/* State Dropdown */}
+              <div className="relative">
+                <label className="block text-sm font-bold text-gray-700 mb-2">State of Formation</label>
+                <div className="relative">
+                  <select
+                    value={selectedState}
+                    onChange={(e) => setSelectedState(e.target.value)}
+                    className="w-full appearance-none bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 text-gray-900 font-medium focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all cursor-pointer"
+                  >
+                    <option value="">Select state...</option>
+                    {Object.keys(STATE_FEES).map((state) => (
+                      <option key={state} value={state}>{state}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                </div>
+              </div>
+            </div>
+
+            {/* State Fee Display */}
+            {selectedState && (
+              <div className="mb-8 p-6 bg-gradient-to-r from-accent/5 to-accent/10 rounded-2xl border border-accent/20">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">State Filing Fee for {selectedState}</p>
+                    <p className="text-3xl font-black text-gray-900">${STATE_FEES[selectedState]}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-gray-600 mb-1">Service Fee</p>
+                    <p className="text-3xl font-black text-accent">$0</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* CTA Button */}
+            <button
+              onClick={handleStartBusiness}
+              className="w-full bg-accent hover:bg-accent/90 text-white font-bold py-5 px-8 rounded-xl transition-all transform hover:scale-[1.02] shadow-lg shadow-accent/25 flex items-center justify-center gap-3 text-lg"
+            >
+              Continue
+              <ArrowRight className="w-5 h-5" />
+            </button>
+
+            {/* Trust Badges */}
+            <div className="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-gray-100">
+              <div className="text-center">
+                <Shield className="w-8 h-8 text-accent mx-auto mb-2" />
+                <p className="text-xs font-bold text-gray-900">Secure Process</p>
+              </div>
+              <div className="text-center">
+                <Clock className="w-8 h-8 text-accent mx-auto mb-2" />
+                <p className="text-xs font-bold text-gray-900">Fast Filing</p>
+              </div>
+              <div className="text-center">
+                <CheckCircle className="w-8 h-8 text-accent mx-auto mb-2" />
+                <p className="text-xs font-bold text-gray-900">Guaranteed</p>
+              </div>
             </div>
           </div>
         </div>

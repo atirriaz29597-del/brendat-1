@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   Check,
   Phone,
@@ -9,6 +11,8 @@ import {
   Shield,
   Scale,
   ChevronRight,
+  ChevronDown,
+  ArrowRight,
   Star,
   Clock,
   HelpCircle,
@@ -24,6 +28,21 @@ import {
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import HeroAvatars from "@/app/components/HeroAvatars";
+
+/* ── State Fees Data ──────────────────────────────────────── */
+const STATE_FEES: Record<string, number> = {
+  Alabama: 236, Alaska: 250, Arizona: 50, Arkansas: 45, California: 70,
+  Colorado: 50, Connecticut: 120, Delaware: 90, Florida: 125, Georgia: 100,
+  Hawaii: 50, Idaho: 100, Illinois: 150, Indiana: 95, Iowa: 50, Kansas: 160,
+  Louisiana: 75, Maine: 175, Maryland: 100, Massachusetts: 500, Michigan: 50,
+  Minnesota: 155, Mississippi: 50, Missouri: 50, Montana: 70, Nebraska: 105,
+  Nevada: 75, "New Hampshire": 100, "New Jersey": 125, "New Mexico": 50,
+  "New York": 200, "North Carolina": 125, "North Dakota": 135, Ohio: 99,
+  Oklahoma: 100, Oregon: 100, Pennsylvania: 125, "Rhode Island": 150,
+  "South Carolina": 110, "South Dakota": 150, Tennessee: 300, Texas: 300,
+  Utah: 72, Vermont: 125, Virginia: 100, Washington: 200, "Washington DC": 220,
+  "West Virginia": 100, Wisconsin: 130, Wyoming: 100,
+};
 
 const pricingPlans = [
   {
@@ -243,6 +262,16 @@ const reviews = [
 ];
 
 export default function NonprofitPage() {
+  const [selectedEntity, setSelectedEntity] = useState("Nonprofit");
+  const [selectedState, setSelectedState] = useState("");
+  const router = useRouter();
+
+  const handleStartBusiness = () => {
+    if (selectedEntity && selectedState) {
+      router.push(`/order/step2?entity=${encodeURIComponent(selectedEntity)}&state=${encodeURIComponent(selectedState)}`);
+    }
+  };
+
   return (
     <>
       <Header />

@@ -1,11 +1,28 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Check, Phone, MessageCircle, Shield, DollarSign, FileText, Building2, Users, Scale, ChevronRight, Star, Clock, HelpCircle, Briefcase, TrendingUp, Zap } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Check, Phone, MessageCircle, Shield, DollarSign, FileText, Building2, Users, Scale, ChevronRight, ChevronDown, ArrowRight, Star, Clock, HelpCircle, Briefcase, TrendingUp, Zap } from "lucide-react";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import HeroAvatars from "@/app/components/HeroAvatars";
+
+/* ── State Fees Data ──────────────────────────────────────── */
+const STATE_FEES: Record<string, number> = {
+  Alabama: 236, Alaska: 250, Arizona: 50, Arkansas: 45, California: 70,
+  Colorado: 50, Connecticut: 120, Delaware: 90, Florida: 125, Georgia: 100,
+  Hawaii: 50, Idaho: 100, Illinois: 150, Indiana: 95, Iowa: 50, Kansas: 160,
+  Louisiana: 75, Maine: 175, Maryland: 100, Massachusetts: 500, Michigan: 50,
+  Minnesota: 155, Mississippi: 50, Missouri: 50, Montana: 70, Nebraska: 105,
+  Nevada: 75, "New Hampshire": 100, "New Jersey": 125, "New Mexico": 50,
+  "New York": 200, "North Carolina": 125, "North Dakota": 135, Ohio: 99,
+  Oklahoma: 100, Oregon: 100, Pennsylvania: 125, "Rhode Island": 150,
+  "South Carolina": 110, "South Dakota": 150, Tennessee: 300, Texas: 300,
+  Utah: 72, Vermont: 125, Virginia: 100, Washington: 200, "Washington DC": 220,
+  "West Virginia": 100, Wisconsin: 130, Wyoming: 100,
+};
 
 /* ── Why Choose Data ──────────────────────────────────────── */
 const whyChoose = [
@@ -168,6 +185,16 @@ const requirementItems = [
 ];
 
 export default function CorporationPage() {
+  const [selectedEntity, setSelectedEntity] = useState("C-Corporation");
+  const [selectedState, setSelectedState] = useState("");
+  const router = useRouter();
+
+  const handleStartBusiness = () => {
+    if (selectedEntity && selectedState) {
+      router.push(`/order/step2?entity=${encodeURIComponent(selectedEntity)}&state=${encodeURIComponent(selectedState)}`);
+    }
+  };
+
   return (
     <>
       <Header />
@@ -537,7 +564,76 @@ export default function CorporationPage() {
           </div>
         </div>
       </section>
+      {/* ── Start Your Business Section ────────────────────── */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-left mb-10">
+            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
+              Start Your Corporation Today
+            </h2>
+            <p className="text-gray-600 text-base max-w-lg leading-relaxed">
+              Choose your entity type and state to begin the formation process.
+            </p>
+          </div>
 
+          {/* Form card */}
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-8 md:p-10 max-w-4xl">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
+              {/* Pick Entity */}
+              <div>
+                <div className="flex items-center gap-3 border border-accent rounded-xl px-4 py-3.5 bg-gray-50 focus-within:ring-2 ring-accent/30 transition-all">
+                  <span className="flex items-center justify-center w-7 h-7 rounded-full bg-accent text-white text-xs font-bold shrink-0">1</span>
+                  <div className="flex flex-col flex-1">
+                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-none mb-0.5">Entity Type</span>
+                    <select
+                      value={selectedEntity}
+                      onChange={(e) => setSelectedEntity(e.target.value)}
+                      className="bg-transparent text-black border-none focus:outline-none w-full font-semibold appearance-none cursor-pointer text-sm"
+                    >
+                      <option value="">Pick Entity</option>
+                      <option>LLC</option>
+                      <option>S-Corporation</option>
+                      <option>C-Corporation</option>
+                      <option>Nonprofit</option>
+                    </select>
+                  </div>
+                  <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 pointer-events-none" />
+                </div>
+              </div>
+
+              {/* Select State */}
+              <div>
+                <div className="flex items-center gap-3 border border-accent rounded-xl px-4 py-3.5 bg-gray-50 focus-within:ring-2 ring-accent/30 transition-all">
+                  <span className="flex items-center justify-center w-7 h-7 rounded-full bg-accent text-white text-xs font-bold shrink-0">2</span>
+                  <div className="flex flex-col flex-1">
+                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-none mb-0.5">State</span>
+                    <select
+                      value={selectedState}
+                      onChange={(e) => setSelectedState(e.target.value)}
+                      className="bg-transparent text-black border-none focus:outline-none w-full font-semibold appearance-none cursor-pointer text-sm"
+                    >
+                      <option value="">Select State</option>
+                      {Object.keys(STATE_FEES).map((st) => (
+                        <option key={st}>{st}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 pointer-events-none" />
+                </div>
+              </div>
+
+              {/* CTA Button */}
+              <button
+                onClick={handleStartBusiness}
+                disabled={!selectedEntity || !selectedState}
+                className="bg-accent hover:bg-accent-dark disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-xl px-6 py-3.5 transition-all flex items-center justify-center gap-2 shadow-lg shadow-accent/25 text-sm whitespace-nowrap"
+              >
+                Start My Business <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
       {/* ── Contact/CTA Section ────────────────────────────────── */}
       <section className="py-16 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

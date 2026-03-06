@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Shield,
   CheckCircle,
@@ -18,14 +19,38 @@ import {
   ChevronDown,
   TrendingUp,
   Clock,
+  ArrowRight,
 } from "lucide-react";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import Image from "next/image";
 import Link from "next/link";
 
+const STATE_FEES: { [key: string]: number } = {
+  "Alabama": 236, "Alaska": 250, "Arizona": 85, "Arkansas": 45, "California": 75, "Colorado": 50,
+  "Connecticut": 120, "Delaware": 140, "Florida": 125, "Georgia": 100, "Hawaii": 51, "Idaho": 100,
+  "Illinois": 175, "Indiana": 95, "Iowa": 50, "Kansas": 165, "Kentucky": 40, "Louisiana": 105,
+  "Maine": 175, "Maryland": 120, "Massachusetts": 500, "Michigan": 50, "Minnesota": 155,
+  "Mississippi": 50, "Missouri": 50, "Montana": 35, "Nebraska": 105, "Nevada": 425,
+  "New Hampshire": 100, "New Jersey": 125, "New Mexico": 50, "New York": 210, "North Carolina": 125,
+  "North Dakota": 135, "Ohio": 99, "Oklahoma": 104, "Oregon": 100, "Pennsylvania": 125,
+  "Rhode Island": 156, "South Carolina": 135, "South Dakota": 165, "Tennessee": 307, "Texas": 308,
+  "Utah": 76, "Vermont": 125, "Virginia": 100, "Washington": 200, "West Virginia": 130,
+  "Wisconsin": 130, "Wyoming": 100
+};
+
 export default function PowerOfAttorneyPage() {
+  const router = useRouter();
+  const [selectedEntity, setSelectedEntity] = useState("");
+  const [selectedState, setSelectedState] = useState("");
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
+
+  const handleStartBusiness = () => {
+    const params = new URLSearchParams();
+    if (selectedEntity) params.set("entity", selectedEntity);
+    if (selectedState) params.set("state", selectedState);
+    router.push(`/order/step2?${params.toString()}`);
+  };
 
   const whyChoose = [
     {
@@ -230,92 +255,100 @@ export default function PowerOfAttorneyPage() {
         </div>
       </section>
 
-      {/* Pricing */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Basic */}
-            <div className="bg-gray-50 p-8 rounded-3xl border-2 border-gray-100 shadow-lg hover:-translate-y-1 transition-transform">
-              <div className="mb-4">
-                <h3 className="text-xl font-black text-gray-900 mb-1">Basic Power of Attorney</h3>
-                <div className="flex items-baseline gap-2 mb-3">
-                  <span className="text-4xl font-black text-gray-900">$39</span>
-                </div>
-                <p className="text-sm text-gray-600">
-                  Perfect for individuals who want a quick and affordable way to establish a valid Power of Attorney in USA.
-                </p>
-              </div>
-              <Link href="/order/step2" className="block w-full py-3 rounded-xl font-bold mb-6 transition shadow-md bg-gray-900 text-white hover:bg-gray-800 text-center">
-                Start My Power of Attorney
-              </Link>
-              <p className="text-xs font-bold text-gray-500 uppercase mb-3 tracking-wider">Includes:</p>
-              <ul className="space-y-3">
-                <li className="flex items-start gap-3 text-sm text-gray-700">
-                  <CheckCircle className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                  Attorney-prepared Financial Power of Attorney
-                </li>
-                <li className="flex items-start gap-3 text-sm text-gray-700">
-                  <CheckCircle className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                  Guided online questionnaire to simplify the process
-                </li>
-                <li className="flex items-start gap-3 text-sm text-gray-700">
-                  <CheckCircle className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                  Unlimited revisions for 30 days
-                </li>
-                <li className="flex items-start gap-3 text-sm text-gray-700">
-                  <CheckCircle className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                  Secure online storage of your documents
-                </li>
-              </ul>
-            </div>
-
-            {/* Premium */}
-            <div className="relative bg-white p-8 rounded-3xl border-2 border-accent shadow-2xl hover:-translate-y-1 transition-transform scale-105">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-accent text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wider">
-                Most Popular
-              </div>
-              <div className="mb-4">
-                <h3 className="text-xl font-black text-gray-900 mb-1">Premium Power of Attorney</h3>
-                <div className="flex items-baseline gap-2 mb-3">
-                  <span className="text-4xl font-black text-gray-900">$49</span>
-                </div>
-                <p className="text-sm text-gray-600">
-                  Ideal for those who want added peace of mind with attorney involvement and ongoing support.
-                </p>
-              </div>
-              <Link href="/order/step2" className="block w-full py-3 rounded-xl font-bold mb-6 transition shadow-md bg-accent text-white hover:bg-accent/90 shadow-accent/20 text-center">
-                Start My Power of Attorney
-              </Link>
-              <p className="text-xs font-bold text-gray-500 uppercase mb-3 tracking-wider">Everything in Basic, plus:</p>
-              <ul className="space-y-3">
-                <li className="flex items-start gap-3 text-sm text-gray-700">
-                  <CheckCircle className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                  Attorney review to ensure compliance with USA law
-                </li>
-                <li className="flex items-start gap-3 text-sm text-gray-700">
-                  <CheckCircle className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                  Unlimited 30-minute consultations with a power of attorney lawyer near you for 2 weeks*
-                </li>
-                <li className="flex items-start gap-3 text-sm text-gray-700">
-                  <CheckCircle className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                  Personalized legal advice for you and your family
-                </li>
-                <li className="flex items-start gap-3 text-sm text-gray-700">
-                  <CheckCircle className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                  Access to comprehensive estate planning packages for your future needs
-                </li>
-              </ul>
-            </div>
+      {/* ENTITY & STATE SELECTION */}
+      <section className="py-24 bg-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent pointer-events-none" />
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+              Start Your Business <span className="text-accent">Today</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Select your entity type and state to see pricing and get started
+            </p>
           </div>
 
-          <div className="text-center mt-8">
-            <p className="text-sm text-gray-600">
-              We also offer comprehensive{" "}
-              <a href="/estate-plans" className="text-accent font-bold hover:underline">
-                estate plan packages
-              </a>
-              .
-            </p>
+          <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 md:p-12">
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              {/* Entity Type Dropdown */}
+              <div className="relative">
+                <label className="block text-sm font-bold text-gray-700 mb-2">Entity Type</label>
+                <div className="relative">
+                  <select
+                    value={selectedEntity}
+                    onChange={(e) => setSelectedEntity(e.target.value)}
+                    className="w-full appearance-none bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 text-gray-900 font-medium focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all cursor-pointer"
+                  >
+                    <option value="">Select entity type...</option>
+                    <option value="llc">Limited Liability Company (LLC)</option>
+                    <option value="corporation">Corporation (C-Corp)</option>
+                    <option value="s-corp">S-Corporation</option>
+                    <option value="nonprofit">Nonprofit Organization</option>
+                    <option value="sole-proprietorship">Sole Proprietorship</option>
+                  </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                </div>
+              </div>
+
+              {/* State Dropdown */}
+              <div className="relative">
+                <label className="block text-sm font-bold text-gray-700 mb-2">State of Formation</label>
+                <div className="relative">
+                  <select
+                    value={selectedState}
+                    onChange={(e) => setSelectedState(e.target.value)}
+                    className="w-full appearance-none bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 text-gray-900 font-medium focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all cursor-pointer"
+                  >
+                    <option value="">Select state...</option>
+                    {Object.keys(STATE_FEES).map((state) => (
+                      <option key={state} value={state}>{state}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                </div>
+              </div>
+            </div>
+
+            {/* State Fee Display */}
+            {selectedState && (
+              <div className="mb-8 p-6 bg-gradient-to-r from-accent/5 to-accent/10 rounded-2xl border border-accent/20">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">State Filing Fee for {selectedState}</p>
+                    <p className="text-3xl font-black text-gray-900">${STATE_FEES[selectedState]}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-gray-600 mb-1">Service Fee</p>
+                    <p className="text-3xl font-black text-accent">$0</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* CTA Button */}
+            <button
+              onClick={handleStartBusiness}
+              className="w-full bg-accent hover:bg-accent/90 text-white font-bold py-5 px-8 rounded-xl transition-all transform hover:scale-[1.02] shadow-lg shadow-accent/25 flex items-center justify-center gap-3 text-lg"
+            >
+              Continue
+              <ArrowRight className="w-5 h-5" />
+            </button>
+
+            {/* Trust Badges */}
+            <div className="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-gray-100">
+              <div className="text-center">
+                <Shield className="w-8 h-8 text-accent mx-auto mb-2" />
+                <p className="text-xs font-bold text-gray-900">Secure Process</p>
+              </div>
+              <div className="text-center">
+                <Clock className="w-8 h-8 text-accent mx-auto mb-2" />
+                <p className="text-xs font-bold text-gray-900">Fast Filing</p>
+              </div>
+              <div className="text-center">
+                <CheckCircle className="w-8 h-8 text-accent mx-auto mb-2" />
+                <p className="text-xs font-bold text-gray-900">Guaranteed</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>

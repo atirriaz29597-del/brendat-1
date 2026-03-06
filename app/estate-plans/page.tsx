@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Shield,
   CheckCircle,
@@ -13,6 +14,9 @@ import {
   HelpCircle,
   MessageCircle,
   Phone,
+  ChevronDown,
+  ArrowRight,
+  Clock,
 } from "lucide-react";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
@@ -20,8 +24,71 @@ import Link from "next/link";
 
 type Plan = "individual" | "couple";
 
+const STATE_FEES: { [key: string]: number } = {
+  "Alabama": 236,
+  "Alaska": 250,
+  "Arizona": 85,
+  "Arkansas": 45,
+  "California": 75,
+  "Colorado": 50,
+  "Connecticut": 120,
+  "Delaware": 140,
+  "Florida": 125,
+  "Georgia": 100,
+  "Hawaii": 51,
+  "Idaho": 100,
+  "Illinois": 175,
+  "Indiana": 95,
+  "Iowa": 50,
+  "Kansas": 165,
+  "Kentucky": 40,
+  "Louisiana": 105,
+  "Maine": 175,
+  "Maryland": 120,
+  "Massachusetts": 500,
+  "Michigan": 50,
+  "Minnesota": 155,
+  "Mississippi": 50,
+  "Missouri": 50,
+  "Montana": 35,
+  "Nebraska": 105,
+  "Nevada": 425,
+  "New Hampshire": 100,
+  "New Jersey": 125,
+  "New Mexico": 50,
+  "New York": 210,
+  "North Carolina": 125,
+  "North Dakota": 135,
+  "Ohio": 99,
+  "Oklahoma": 104,
+  "Oregon": 100,
+  "Pennsylvania": 125,
+  "Rhode Island": 156,
+  "South Carolina": 135,
+  "South Dakota": 165,
+  "Tennessee": 307,
+  "Texas": 308,
+  "Utah": 76,
+  "Vermont": 125,
+  "Virginia": 100,
+  "Washington": 200,
+  "West Virginia": 130,
+  "Wisconsin": 130,
+  "Wyoming": 100
+};
+
 export default function EstatePlansPage() {
+  const router = useRouter();
+  const [selectedEntity, setSelectedEntity] = useState("");
+  const [selectedState, setSelectedState] = useState("");
   const [activePlan, setActivePlan] = useState<Plan>("individual");
+
+  const handleStartBusiness = () => {
+    const params = new URLSearchParams();
+    if (selectedEntity) params.set("entity", selectedEntity);
+    if (selectedState) params.set("state", selectedState);
+    router.push(`/order/step2?${params.toString()}`);
+  };
 
   const whyMatters = [
     {
@@ -251,79 +318,104 @@ export default function EstatePlansPage() {
         </div>
       </section>
 
-      {/* Pricing Plans */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+      {/* ENTITY & STATE SELECTION */}
+      <section className="py-24 bg-gray-50 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-              Affordable, Attorney-Backed Estate Plans for Every Stage of Life
+              Start Your Filing in Minutes
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Create your will or trust online with ease. With Brendat's premium estate planning services, you'll receive one year of attorney support, covering estate planning guidance and a wide range of personal legal matters so that you can make confident decisions about your future and your family's security.
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Select your business type and state to get started with our expert filing service.
             </p>
           </div>
 
-          {/* Individual / Couple toggle */}
-          <div className="flex justify-center mb-12">
-            <div className="bg-white rounded-xl p-1.5 shadow-sm border border-gray-100 flex gap-1">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-8 md:p-12 border border-gray-200 shadow-xl">
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                {/* Entity Type Dropdown */}
+                <div className="relative">
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Business Entity Type</label>
+                  <div className="relative">
+                    <select
+                      value={selectedEntity}
+                      onChange={(e) => setSelectedEntity(e.target.value)}
+                      className="w-full appearance-none bg-white border-2 border-gray-200 rounded-xl px-4 py-4 pr-10 text-gray-900 font-medium focus:border-accent focus:ring-0 focus:outline-none transition-colors cursor-pointer"
+                    >
+                      <option value="">Select Entity Type</option>
+                      <option value="LLC">Limited Liability Company (LLC)</option>
+                      <option value="C-Corporation">C-Corporation</option>
+                      <option value="S-Corporation">S-Corporation</option>
+                      <option value="Nonprofit">Nonprofit</option>
+                      <option value="Sole Proprietorship">Sole Proprietorship</option>
+                      <option value="Partnership">Partnership</option>
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                  </div>
+                </div>
+
+                {/* State Dropdown */}
+                <div className="relative">
+                  <label className="block text-sm font-bold text-gray-700 mb-2">State of Formation</label>
+                  <div className="relative">
+                    <select
+                      value={selectedState}
+                      onChange={(e) => setSelectedState(e.target.value)}
+                      className="w-full appearance-none bg-white border-2 border-gray-200 rounded-xl px-4 py-4 pr-10 text-gray-900 font-medium focus:border-accent focus:ring-0 focus:outline-none transition-colors cursor-pointer"
+                    >
+                      <option value="">Select State</option>
+                      {Object.keys(STATE_FEES).map((state) => (
+                        <option key={state} value={state}>{state}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                  </div>
+                </div>
+              </div>
+
+              {/* State Fee Display */}
+              {selectedState && (
+                <div className="mb-8 p-4 bg-accent/5 rounded-xl border border-accent/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-700 font-medium">State Filing Fee for {selectedState}:</span>
+                    <span className="text-2xl font-black text-accent">${STATE_FEES[selectedState]}</span>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-1">This fee is paid directly to the state</p>
+                </div>
+              )}
+
+              {/* CTA Button */}
               <button
-                onClick={() => setActivePlan("individual")}
-                className={`px-8 py-3 rounded-lg font-bold text-sm transition ${
-                  activePlan === "individual"
-                    ? "bg-accent text-white shadow"
-                    : "text-gray-600 hover:text-accent"
+                onClick={handleStartBusiness}
+                disabled={!selectedEntity || !selectedState}
+                className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl font-bold text-lg transition-all ${
+                  selectedEntity && selectedState
+                    ? "bg-accent hover:bg-accent-dark text-white shadow-lg shadow-accent/25 hover:shadow-xl"
+                    : "bg-gray-200 text-gray-500 cursor-not-allowed"
                 }`}
               >
-                Individual
+                Continue to Filing
+                <ArrowRight className="w-5 h-5" />
               </button>
-              <button
-                onClick={() => setActivePlan("couple")}
-                className={`px-8 py-3 rounded-lg font-bold text-sm transition ${
-                  activePlan === "couple"
-                    ? "bg-accent text-white shadow"
-                    : "text-gray-600 hover:text-accent"
-                }`}
-              >
-                Couple
-              </button>
-            </div>
-          </div>
 
-          {/* Will Plans */}
-          <div className="mb-16">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-black text-gray-900 mb-2">Why choose a will</h3>
-              <p className="text-gray-600">Make a plan for your children and assets for the future</p>
+              {/* Trust Badges */}
+              <div className="mt-8 pt-8 border-t border-gray-200">
+                <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-500">
+                  <div className="flex items-center gap-2">
+                    <Shield className="w-5 h-5 text-accent" />
+                    <span>Secure & Confidential</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-accent" />
+                    <span>Fast Processing</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-5 h-5 text-accent" />
+                    <span>100% Accuracy Guarantee</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-              {willPlans.map((plan, i) => (
-                <PricingCard key={i} plan={plan} />
-              ))}
-            </div>
-          </div>
-
-          {/* Trust Plans */}
-          <div className="mb-10">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-black text-gray-900 mb-2">Why choose a trust</h3>
-              <p className="text-gray-600">Get the protection of a will and avoid probate</p>
-            </div>
-            <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-              {trustPlans.map((plan, i) => (
-                <PricingCard key={i} plan={plan} />
-              ))}
-            </div>
-          </div>
-
-          <div className="text-center mt-8 space-y-2">
-            <p className="text-gray-700 font-semibold">
-              Have questions?{" "}
-              <span className="text-accent font-bold">Call (303) 246-8693</span>{" "}
-              for a free discovery call.
-            </p>
-            <p className="text-xs text-gray-500 max-w-xl mx-auto">
-              If an attorney from our network advises you to set up a last will instead of a living trust or vice versa, please call us to change your order. See Brendat Guarantee for exact terms.
-            </p>
           </div>
         </div>
       </section>

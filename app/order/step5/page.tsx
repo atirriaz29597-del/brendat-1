@@ -426,6 +426,12 @@ function Step5Inner() {
                 <span className="text-gray-500">{state} State Filing Fee</span>
                 <span className="font-bold text-black">${stateFee}</span>
               </div>
+              {expeditedFee > 0 && (
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Expedited Filing</span>
+                  <span className="font-bold text-black">${expeditedFee}</span>
+                </div>
+              )}
               <div className="flex justify-between items-center">
                 <span className="text-gray-500">Electronic Delivery</span>
                 <CheckCircle2 className="w-4 h-4 text-accent" />
@@ -435,7 +441,7 @@ function Step5Inner() {
                   <span className="text-gray-500">Phone Support</span>
                   <CheckCircle2 className="w-4 h-4 text-accent" />
                 </div>
-                <p className="text-xs text-accent mt-1">Available Monday - Friday<br />From 9 A.M. To 6 P.M. CST</p>
+                <p className="text-xs text-accent mt-1">Available Monday - Saturday<br />8AM - 8PM CT</p>
               </div>
               <div className="border-t border-gray-200 pt-4 flex justify-between">
                 <span className="font-black text-black">Total:</span>

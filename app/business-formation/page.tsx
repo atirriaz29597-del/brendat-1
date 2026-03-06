@@ -1,59 +1,28 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Check, Phone, MessageCircle, Shield, DollarSign, FileText, Building2, Users, Scale, ChevronRight, Star, Clock, HelpCircle, Briefcase } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Check, Phone, MessageCircle, Shield, DollarSign, FileText, Building2, Users, Scale, ChevronRight, ChevronDown, ArrowRight, Star, Clock, HelpCircle, Briefcase } from "lucide-react";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import HeroAvatars from "@/app/components/HeroAvatars";
 
-/* ── Pricing Data ─────────────────────────────────────────── */
-const pricingPlans = [
-  {
-    name: "Basic",
-    price: "$0",
-    priceNote: "+state filing fees",
-    description: "Perfect for entrepreneurs who want to get their business officially registered, fast and simple.",
-    buttonText: "Register My Business",
-    features: [
-      "We handle the articles of organization filing, including official paperwork to legally form your LLC with the state of USA.",
-      "Business name availability check to ensure your chosen name is unique and ready to claim.",
-      "Get a session with a tax pro from Brendat to help you start on the right financial foot.",
-    ],
-    highlighted: false,
-  },
-  {
-    name: "Pro",
-    price: "$249",
-    priceNote: "+state filing fees",
-    description: "Ideal for entrepreneurs ready to launch and actively operate their business or side hustle.",
-    buttonText: "Register My Business",
-    badge: "Recommended",
-    features: [
-      "An operating agreement to set clear rules for running your business and resolving disputes.",
-      "EIN (Employer Identification Number), which is essential for taxes, opening a business bank account, and hiring employees.",
-      "Unlimited 30-minute consultations to discuss new legal matters with a qualified business attorney in USA during your included 30-day subscription.",
-      "Choose your business lawyer based on state, experience, and client ratings.",
-      "1-year of access to 150+ customizable legal documents & unlimited eSignatures.",
-      "Launch your professional online presence in minutes with WIX-powered tools.",
-    ],
-    highlighted: true,
-  },
-  {
-    name: "Premium",
-    price: "$299",
-    priceNote: "+state filing fees",
-    description: "Perfect business owners who want to streamline operations and stay on top of cash flow.",
-    buttonText: "Register My Business",
-    features: [
-      "Bookkeeping tools to easily track finances, simplify tax prep, and cut accounting costs (6-month subscription included).",
-      "Unlimited customizable proposals & invoices to help you get paid faster with professional, branded documents.",
-      "Save time while maximizing deductions and refund with auto-categorization.",
-      "Record every business mile for effortless expense reporting and tax savings.",
-    ],
-    highlighted: false,
-  },
-];
+/* ── State Fees Data ──────────────────────────────────────── */
+const STATE_FEES: Record<string, number> = {
+  Alabama: 236, Alaska: 250, Arizona: 50, Arkansas: 45, California: 70,
+  Colorado: 50, Connecticut: 120, Delaware: 90, Florida: 125, Georgia: 100,
+  Hawaii: 50, Idaho: 100, Illinois: 150, Indiana: 95, Iowa: 50, Kansas: 160,
+  Louisiana: 75, Maine: 175, Maryland: 100, Massachusetts: 500, Michigan: 50,
+  Minnesota: 155, Mississippi: 50, Missouri: 50, Montana: 70, Nebraska: 105,
+  Nevada: 75, "New Hampshire": 100, "New Jersey": 125, "New Mexico": 50,
+  "New York": 200, "North Carolina": 125, "North Dakota": 135, Ohio: 99,
+  Oklahoma: 100, Oregon: 100, Pennsylvania: 125, "Rhode Island": 150,
+  "South Carolina": 110, "South Dakota": 150, Tennessee: 300, Texas: 300,
+  Utah: 72, Vermont: 125, Virginia: 100, Washington: 200, "Washington DC": 220,
+  "West Virginia": 100, Wisconsin: 130, Wyoming: 100,
+};
 
 /* ── Entity Types Data ────────────────────────────────────── */
 const entityTypes = [
@@ -216,6 +185,16 @@ const reviews = [
 ];
 
 export default function BusinessFormationPage() {
+  const [selectedEntity, setSelectedEntity] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+  const router = useRouter();
+
+  const handleStartBusiness = () => {
+    if (selectedEntity && selectedState) {
+      router.push(`/order/step2?entity=${encodeURIComponent(selectedEntity)}&state=${encodeURIComponent(selectedState)}`);
+    }
+  };
+
   return (
     <>
       <Header />
@@ -456,55 +435,73 @@ export default function BusinessFormationPage() {
         </div>
       </section>
 
-      {/* ── Pricing Section ────────────────────────────────────── */}
+      {/* ── Start Your Business Section ──────────────────────── */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-8">
-            {pricingPlans.map((plan) => (
-              <div
-                key={plan.name}
-                className={`relative rounded-2xl p-8 ${
-                  plan.highlighted
-                    ? "bg-gradient-to-b from-accent/5 to-accent/10 border-2 border-accent shadow-xl shadow-accent/10"
-                    : "bg-white border border-gray-200"
-                }`}
-              >
-                {plan.badge && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">
-                    {plan.badge}
+          <div className="text-left mb-10">
+            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
+              Start Your Business Today
+            </h2>
+            <p className="text-gray-600 text-base max-w-lg leading-relaxed">
+              Choose your entity type and state to begin the formation process.
+            </p>
+          </div>
+
+          {/* Form card */}
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-8 md:p-10 max-w-4xl">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
+              {/* Pick Entity */}
+              <div>
+                <div className="flex items-center gap-3 border border-accent rounded-xl px-4 py-3.5 bg-gray-50 focus-within:ring-2 ring-accent/30 transition-all">
+                  <span className="flex items-center justify-center w-7 h-7 rounded-full bg-accent text-white text-xs font-bold shrink-0">1</span>
+                  <div className="flex flex-col flex-1">
+                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-none mb-0.5">Entity Type</span>
+                    <select
+                      value={selectedEntity}
+                      onChange={(e) => setSelectedEntity(e.target.value)}
+                      className="bg-transparent text-black border-none focus:outline-none w-full font-semibold appearance-none cursor-pointer text-sm"
+                    >
+                      <option value="">Pick Entity</option>
+                      <option>LLC</option>
+                      <option>S-Corporation</option>
+                      <option>C-Corporation</option>
+                      <option>Nonprofit</option>
+                    </select>
                   </div>
-                )}
-                <div className="text-center mb-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                  <div className="flex items-baseline justify-center gap-1">
-                    <span className="text-4xl font-black text-gray-900">{plan.price}</span>
-                    <span className="text-sm text-gray-500">{plan.priceNote}</span>
-                  </div>
-                  <p className="text-sm text-gray-600 mt-3">{plan.description}</p>
-                </div>
-                <Link
-                  href="/order/step2"
-                  className={`block w-full text-center font-bold py-3 rounded-xl mb-6 transition-all ${
-                    plan.highlighted
-                      ? "bg-accent hover:bg-accent-dark text-white shadow-md shadow-accent/20"
-                      : "bg-white border-2 border-gray-200 hover:border-accent text-gray-700 hover:text-accent"
-                  }`}
-                >
-                  {plan.buttonText}
-                </Link>
-                <div className="space-y-4">
-                  <p className="text-xs font-bold uppercase tracking-wider text-gray-400">Includes:</p>
-                  {plan.features.map((feature, i) => (
-                    <div key={i} className="flex gap-3">
-                      <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${plan.highlighted ? "bg-accent/20" : "bg-gray-200"}`}>
-                        <Check className={`w-3 h-3 ${plan.highlighted ? "text-accent" : "text-gray-500"}`} />
-                      </div>
-                      <p className="text-sm text-gray-600">{feature}</p>
-                    </div>
-                  ))}
+                  <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 pointer-events-none" />
                 </div>
               </div>
-            ))}
+
+              {/* Select State */}
+              <div>
+                <div className="flex items-center gap-3 border border-accent rounded-xl px-4 py-3.5 bg-gray-50 focus-within:ring-2 ring-accent/30 transition-all">
+                  <span className="flex items-center justify-center w-7 h-7 rounded-full bg-accent text-white text-xs font-bold shrink-0">2</span>
+                  <div className="flex flex-col flex-1">
+                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-none mb-0.5">State</span>
+                    <select
+                      value={selectedState}
+                      onChange={(e) => setSelectedState(e.target.value)}
+                      className="bg-transparent text-black border-none focus:outline-none w-full font-semibold appearance-none cursor-pointer text-sm"
+                    >
+                      <option value="">Select State</option>
+                      {Object.keys(STATE_FEES).map((st) => (
+                        <option key={st}>{st}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 pointer-events-none" />
+                </div>
+              </div>
+
+              {/* CTA Button */}
+              <button
+                onClick={handleStartBusiness}
+                disabled={!selectedEntity || !selectedState}
+                className="bg-accent hover:bg-accent-dark disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-xl px-6 py-3.5 transition-all flex items-center justify-center gap-2 shadow-lg shadow-accent/25 text-sm whitespace-nowrap"
+              >
+                Start My Business <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       </section>
