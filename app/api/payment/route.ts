@@ -18,8 +18,9 @@ import crypto from "crypto";
 const MERCHANT_ID = process.env.BAMS_MERCHANT_ID!;
 const KEY_ID = process.env.BAMS_KEY_ID!;
 const SECRET_KEY = process.env.BAMS_SECRET_KEY!; // base64-encoded
-const GATEWAY_HOST =
-  process.env.BAMS_GATEWAY_HOST || "apitest.cybersource.com";
+const GATEWAY_HOST = normalizeGatewayHost(
+  process.env.BAMS_GATEWAY_HOST || "apitest.cybersource.com"
+);
 
 const PAYMENTS_PATH = "/pts/v2/payments";
 
@@ -102,6 +103,17 @@ function normalizeAdministrativeArea(value: string, country: string): string {
   return US_STATE_CODES[trimmedValue] || trimmedValue.toUpperCase();
 }
 
+function normalizeGatewayHost(rawHost: string): string {
+  return rawHost
+    .trim()
+    .replace(/^https?:\/\//i, "")
+    .replace(/\/+$/, "");
+}
+
+function isConfigured(): boolean {
+  return Boolean(MERCHANT_ID && KEY_ID && SECRET_KEY && GATEWAY_HOST);
+}
+
 /**
  * Build the HTTP Signature header value.
  *
@@ -129,7 +141,7 @@ function buildSignatureHeader(
     `v-c-merchant-id: ${merchantId}`,
   ].join("\n");
 
-  const decodedKey = Buffer.from(SECRET_KEY, "base64");
+  const decodedKey = Buffer.from(SECRET_KEY.replace(/\s+/g, ""), "base64");
   const signatureHash = crypto
     .createHmac("sha256", decodedKey)
     .update(signatureString, "utf8")
@@ -148,6 +160,18 @@ function buildSignatureHeader(
    ═══════════════════════════════════════════ */
 export async function POST(req: NextRequest) {
   try {
+    if (!isConfigured()) {
+      console.error("[payment] Missing gateway configuration.");
+      return NextResponse.json(
+        {
+          ok: false,
+          message:
+            "Payment service is not configured correctly. Please contact support.",
+        },
+        { status: 500 }
+      );
+    }
+
     const body = await req.json();
     const {
       cardNumber,
@@ -169,6 +193,7 @@ export async function POST(req: NextRequest) {
       country
     );
     const postalCode = String(billingAddress?.postalCode || "").trim();
+    const numericAmount = Number(amount);
 
     /* ── Server-side validation ── */
     if (
@@ -181,7 +206,9 @@ export async function POST(req: NextRequest) {
       !address1 ||
       !locality ||
       !administrativeArea ||
-      !postalCode
+      !postalCode ||
+      !Number.isFinite(numericAmount) ||
+      numericAmount <= 0
     ) {
       return NextResponse.json(
         { ok: false, message: "Missing required payment or billing fields." },
@@ -213,7 +240,7 @@ export async function POST(req: NextRequest) {
       },
       orderInformation: {
         amountDetails: {
-          totalAmount: String(Number(amount).toFixed(2)),
+          totalAmount: String(numericAmount.toFixed(2)),
           currency: "USD",
         },
         billTo: {
@@ -295,11 +322,16 @@ export async function POST(req: NextRequest) {
     }
 
     /* ── Error / decline ── */
+    const gatewayReason =
+      data?.errorInformation?.reason ||
+      data?.processorInformation?.responseCode ||
+      data?.status ||
+      `HTTP_${gatewayRes.status}`;
+
     const errMsg =
       data?.errorInformation?.message ||
       data?.message ||
-      data?.status ||
-      "Payment was declined. Please check your card details and try again.";
+      `Payment was declined by the processor (${gatewayReason}).`;
 
     return NextResponse.json(
       { ok: false, message: String(errMsg) },
