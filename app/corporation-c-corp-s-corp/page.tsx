@@ -697,7 +697,13 @@ export default function CorporationPage() {
             </div>
             <div className="bg-white rounded-3xl shadow-xl border border-gray-300 p-8 md:p-10">
               <h3 className="text-xl font-bold text-gray-900 mb-6">Send us a message</h3>
-              <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+              <form
+                className="space-y-5"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  router.push("/thank-you");
+                }}
+              >
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">First Name</label>

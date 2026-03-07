@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Header from "@/app/components/Header";
 import {
-  ArrowLeft,
   Mail,
   Phone,
   MapPin,
@@ -15,6 +14,7 @@ import {
 } from "lucide-react";
 
 export default function ContactPage() {
+  const router = useRouter();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -22,7 +22,6 @@ export default function ContactPage() {
     subject: "",
     message: "",
   });
-  const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -44,7 +43,7 @@ export default function ContactPage() {
       const data = await res.json();
 
       if (data.ok) {
-        setSubmitted(true);
+        router.push("/thank-you");
       } else {
         setError(data.message || "Failed to send message. Please try again.");
       }
@@ -151,141 +150,119 @@ export default function ContactPage() {
 
             {/* Right — Contact Form */}
             <div className="lg:col-span-3">
-              {!submitted ? (
-                <div className="bg-white rounded-3xl border border-gray-200 shadow-xl p-8 md:p-10">
-                  <h2 className="text-2xl font-black text-primary mb-2">Send Us a Message</h2>
-                  <p className="text-gray-500 text-sm mb-8">
-                    Fill out the form below and we&apos;ll get back to you within one business day.
-                  </p>
+              <div className="bg-white rounded-3xl border border-gray-200 shadow-xl p-8 md:p-10">
+                <h2 className="text-2xl font-black text-primary mb-2">Send Us a Message</h2>
+                <p className="text-gray-500 text-sm mb-8">
+                  Fill out the form below and we&apos;ll get back to you within one business day.
+                </p>
 
-                  <form onSubmit={handleSubmit} className="space-y-5">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      <div>
-                        <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wider">
-                          Full Name *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="John Doe"
-                          value={form.name}
-                          onChange={(e) => setForm({ ...form, name: e.target.value })}
-                          className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-medium text-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wider">
-                          Email Address *
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          placeholder="john@example.com"
-                          value={form.email}
-                          onChange={(e) => setForm({ ...form, email: e.target.value })}
-                          className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-medium text-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      <div>
-                        <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wider">
-                          Phone Number
-                        </label>
-                        <input
-                          type="tel"
-                          placeholder="(555) 000-0000"
-                          value={form.phone}
-                          onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                          className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-medium text-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wider">
-                          Subject *
-                        </label>
-                        <select
-                          required
-                          value={form.subject}
-                          onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                          className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-medium text-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all appearance-none cursor-pointer"
-                        >
-                          <option value="">Select a topic</option>
-                          <option>Business Formation</option>
-                          <option>Pricing & Packages</option>
-                          <option>Compliance & Management</option>
-                          <option>Technical Support</option>
-                          <option>General Inquiry</option>
-                        </select>
-                      </div>
-                    </div>
-
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wider">
-                        Message *
+                        Full Name *
                       </label>
-                      <textarea
+                      <input
+                        type="text"
                         required
-                        rows={5}
-                        placeholder="Tell us how we can help you..."
-                        value={form.message}
-                        onChange={(e) => setForm({ ...form, message: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-medium text-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all resize-none"
+                        placeholder="John Doe"
+                        value={form.name}
+                        onChange={(e) => setForm({ ...form, name: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-medium text-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all"
                       />
                     </div>
-
-                    {error && (
-                      <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">
-                        {error}
-                      </div>
-                    )}
-
-                    <button
-                      type="submit"
-                      disabled={sending}
-                      className="w-full bg-accent hover:bg-accent-dark text-white font-bold py-4 rounded-xl shadow-lg shadow-accent/25 transition-all flex items-center justify-center gap-2 text-base disabled:opacity-60 disabled:cursor-not-allowed"
-                    >
-                      {sending ? (
-                        <>
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                          Sending...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-4 h-4" /> Send Message
-                        </>
-                      )}
-                    </button>
-
-                    <p className="text-center text-xs text-gray-400">
-                      By submitting, you agree to our{" "}
-                      <span className="text-accent cursor-pointer hover:underline">Privacy Policy</span>.
-                      We&apos;ll never share your information.
-                    </p>
-                  </form>
-                </div>
-              ) : (
-                /* Success state */
-                <div className="bg-white rounded-3xl border border-gray-200 shadow-xl p-10 md:p-14 text-center">
-                  <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <CheckCircle2 className="w-10 h-10 text-emerald-500" />
+                    <div>
+                      <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wider">
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        placeholder="john@example.com"
+                        value={form.email}
+                        onChange={(e) => setForm({ ...form, email: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-medium text-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all"
+                      />
+                    </div>
                   </div>
-                  <h2 className="text-3xl font-black text-primary mb-3">Message Sent!</h2>
-                  <p className="text-gray-500 mb-2 max-w-md mx-auto">
-                    Thank you for reaching out, <strong>{form.name}</strong>. Our team will review your message and get back to you within one business day.
-                  </p>
-                  <p className="text-gray-400 text-sm mb-8">
-                    A confirmation has been sent to <strong>{form.email}</strong>.
-                  </p>
-                  <Link
-                    href="/"
-                    className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-accent/20 transition-all"
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wider">
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        placeholder="(555) 000-0000"
+                        value={form.phone}
+                        onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-medium text-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wider">
+                        Subject *
+                      </label>
+                      <select
+                        required
+                        value={form.subject}
+                        onChange={(e) => setForm({ ...form, subject: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-medium text-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all appearance-none cursor-pointer"
+                      >
+                        <option value="">Select a topic</option>
+                        <option>Business Formation</option>
+                        <option>Pricing & Packages</option>
+                        <option>Compliance & Management</option>
+                        <option>Technical Support</option>
+                        <option>General Inquiry</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wider">
+                      Message *
+                    </label>
+                    <textarea
+                      required
+                      rows={5}
+                      placeholder="Tell us how we can help you..."
+                      value={form.message}
+                      onChange={(e) => setForm({ ...form, message: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-medium text-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all resize-none"
+                    />
+                  </div>
+
+                  {error && (
+                    <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">
+                      {error}
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={sending}
+                    className="w-full bg-accent hover:bg-accent-dark text-white font-bold py-4 rounded-xl shadow-lg shadow-accent/25 transition-all flex items-center justify-center gap-2 text-base disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    <ArrowLeft className="w-4 h-4" /> Back to Home
-                  </Link>
-                </div>
-              )}
+                    {sending ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" /> Send Message
+                      </>
+                    )}
+                  </button>
+
+                  <p className="text-center text-xs text-gray-400">
+                    By submitting, you agree to our{" "}
+                    <span className="text-accent cursor-pointer hover:underline">Privacy Policy</span>.
+                    We&apos;ll never share your information.
+                  </p>
+                </form>
+              </div>
             </div>
           </div>
         </div>
