@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -209,7 +209,7 @@ export default function BusinessCompliancePage() {
                 Stay ahead of evolving regulations with our business compliance services in USA. From annual report filings to managing licenses, our USA business compliance lawyers provide complete support to keep your company in good standing. Plans start at $199/year*.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-                <Link href="/order/step2" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg">
+                <Link href="/contact" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg">
                   Register My Business
                 </Link>
                 <Link href="/contact" className="inline-flex items-center gap-2 bg-white border-2 border-gray-200 hover:border-accent text-gray-700 hover:text-accent font-bold px-8 py-4 rounded-xl transition-all text-lg">
@@ -426,7 +426,7 @@ export default function BusinessCompliancePage() {
         </section>
 
         {/* ENTITY & STATE SELECTION */}
-        <section className="py-24 bg-white relative">
+        <section className="py-24 bg-white relative" id="start-order">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
@@ -684,7 +684,7 @@ export default function BusinessCompliancePage() {
                     </li>
                   ))}
                 </ul>
-                <Link href="/order/step2" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-6 py-3 rounded-xl transition-all">
+                <Link href="/contact" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-6 py-3 rounded-xl transition-all">
                   Select My Package
                 </Link>
               </div>
@@ -705,7 +705,7 @@ export default function BusinessCompliancePage() {
                    <p className="text-sm text-gray-600 font-medium">Even if your business has never faced a compliance issue, proactive management ensures you avoid costly penalties and maintain your good standing.</p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/order/step2" className="bg-gray-900 hover:bg-gray-800 text-white font-bold px-6 py-3 rounded-xl transition-all text-center">
+                  <Link href="/contact" className="bg-gray-900 hover:bg-gray-800 text-white font-bold px-6 py-3 rounded-xl transition-all text-center">
                     Select My Plan
                   </Link>
                   <Link href="/contact" className="bg-white border-2 border-gray-200 hover:border-accent text-gray-700 hover:text-accent font-bold px-6 py-3 rounded-xl transition-all text-center">

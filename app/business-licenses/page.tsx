@@ -213,7 +213,7 @@ export default function BusinessLicensePage() {
                 Are you just starting or scaling quickly and need to stay compliant? Brendat helps you find, apply for, and stay compliant with all the required business licenses and permits in USA, USA. Whether you’re launching a restaurant, opening an online store, or offering professional services, we identify your needs and handle the paperwork from start to finish.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-                <Link href="/order/step2" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg">
+                <Link href="/contact" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg">
                   Find Out What Licenses You Need
                 </Link>
                 <Link href="/contact" className="inline-flex items-center gap-2 bg-white border-2 border-gray-200 hover:border-accent text-gray-700 hover:text-accent font-bold px-8 py-4 rounded-xl transition-all text-lg">
@@ -225,7 +225,7 @@ export default function BusinessLicensePage() {
         </section>
 
         {/* ENTITY & STATE SELECTION */}
-        <section className="py-24 bg-white relative">
+        <section className="py-24 bg-white relative" id="start-order">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
@@ -360,7 +360,7 @@ export default function BusinessLicensePage() {
                  <p className="text-lg text-gray-600 mb-8">
                    Getting the right business licenses in USA can be complex, with different rules at the city, county, and state levels. Brendat guides you through every step, assessment, preparation, submission, and ongoing compliance so that you can operate confidently and avoid penalties.
                  </p>
-                 <Link href="/order/step2" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all">
+                 <Link href="/contact" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all">
                    Start My License Application
                  </Link>
                  
@@ -426,7 +426,7 @@ export default function BusinessLicensePage() {
                   ))}
                 </ul>
                 <p className="font-semibold text-gray-900 mb-6">We handle both state and USA, USA business license requirements in one go, so nothing falls through the cracks.</p>
-                <Link href="/order/step2" className="inline-flex items-center gap-2 bg-white border-2 border-gray-200 hover:border-accent text-gray-700 hover:text-accent font-bold px-6 py-3 rounded-xl transition-all">
+                <Link href="/contact" className="inline-flex items-center gap-2 bg-white border-2 border-gray-200 hover:border-accent text-gray-700 hover:text-accent font-bold px-6 py-3 rounded-xl transition-all">
                   Get My License Checklist
                 </Link>
               </div>
@@ -540,7 +540,7 @@ export default function BusinessLicensePage() {
         <section className="py-20 bg-accent text-white text-center">
            <div className="max-w-4xl mx-auto px-4">
              <h2 className="text-3xl md:text-4xl font-black mb-6">Ready to Apply for Your Business License in USA?</h2>
-             <Link href="/order/step2" className="inline-flex items-center gap-2 bg-white text-accent font-bold px-8 py-4 rounded-xl shadow-xl hover:bg-gray-100 transition-all text-lg">
+             <Link href="/contact" className="inline-flex items-center gap-2 bg-white text-accent font-bold px-8 py-4 rounded-xl shadow-xl hover:bg-gray-100 transition-all text-lg">
                 Apply for a Business License Now
              </Link>
            </div>

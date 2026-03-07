@@ -197,7 +197,7 @@ export default function CopyrightPage() {
               <div className="flex items-center gap-4 mb-8">
                  <p className="font-bold text-gray-900 text-lg">Get started with copyright registration today.</p>
               </div>
-              <Link href="/order/step2" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+              <Link href="/contact" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
                 Register My Copyright
               </Link>
             </div>
@@ -223,7 +223,7 @@ export default function CopyrightPage() {
       </section>
 
       {/* ENTITY & STATE SELECTION */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-24 bg-white relative overflow-hidden" id="start-order">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent pointer-events-none" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-12">
@@ -381,10 +381,10 @@ export default function CopyrightPage() {
                   Need quick and convenient filing? Our online copyright registration services in USA let you submit your application with ease. Prefer hands-on legal guidance? Our USA-based copyright registration lawyers can manage the full process for copyright registration, offering personalized support every step of the way.
                </p>
                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link href="/order/step2" className="text-center bg-accent text-white px-6 py-3 rounded-xl font-bold hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+                  <Link href="/contact" className="text-center bg-accent text-white px-6 py-3 rounded-xl font-bold hover:bg-accent/90 transition shadow-lg shadow-accent/20">
                      Start My Copyright Registration
                   </Link>
-                  <Link href="/order/step2" className="text-center bg-white border-2 border-accent text-accent px-6 py-3 rounded-xl font-bold hover:bg-accent/5 transition">
+                  <Link href="/contact" className="text-center bg-white border-2 border-accent text-accent px-6 py-3 rounded-xl font-bold hover:bg-accent/5 transition">
                      Online Copyright Registration
                   </Link>
                </div>
@@ -458,7 +458,7 @@ export default function CopyrightPage() {
       <section className="py-20 bg-gray-50">
           <div className="max-w-4xl mx-auto px-4 text-center">
                <h2 className="text-3xl font-black text-gray-900 mb-6">Secure Your Rights Before It’s Too Late.</h2>
-               <Link href="/order/step2" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+               <Link href="/contact" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
                   Register My Copyright Now
                </Link>
           </div>

@@ -207,7 +207,7 @@ export default function TrademarkMonitoringPage() {
                  <p className="text-xl text-gray-600 mb-8">
                    Once your trademark is registered, the real work begins. Every day, new trademarks are filed that may infringe on your brand or dilute your reputation. Brendat’s trademark monitoring service in USA gives you the peace of mind that someone is watching your back, so you can focus on running your business, not policing imitators.
                  </p>
-                 <Link href="/order/step2" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+                 <Link href="/contact" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
                    Protect My Trademark
                  </Link>
               </div>
@@ -233,7 +233,7 @@ export default function TrademarkMonitoringPage() {
       </section>
 
       {/* ENTITY & STATE SELECTION */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-24 bg-white relative overflow-hidden" id="start-order">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent pointer-events-none" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-12">
@@ -432,7 +432,7 @@ export default function TrademarkMonitoringPage() {
                   <p className="text-gray-900 font-bold mb-8">With our proactive trademark monitoring in USA, you stay in control of your brand.</p>
                   
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                      <Link href="/order/step2" className="text-center bg-accent text-white px-6 py-3 rounded-xl font-bold hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+                      <Link href="/contact" className="text-center bg-accent text-white px-6 py-3 rounded-xl font-bold hover:bg-accent/90 transition shadow-lg shadow-accent/20">
                           Protect My Trademark
                       </Link>
                       <Link href="/contact" className="text-center bg-transparent border-2 border-gray-900 text-gray-900 px-6 py-3 rounded-xl font-bold hover:bg-gray-50 transition">

@@ -230,7 +230,7 @@ export default function TrademarkRegistrationPage() {
                 Whether you’re protecting a brand name, logo, or product, our trademark attorneys make registration in USA affordable and straightforward. We handle everything from trademark search to application filing and ongoing support.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/order/step2" className="bg-accent text-white px-6 py-3 rounded-lg font-bold text-base hover:bg-accent/90 transition shadow-md shadow-accent/20 text-center">
+                <Link href="/contact" className="bg-accent text-white px-6 py-3 rounded-lg font-bold text-base hover:bg-accent/90 transition shadow-md shadow-accent/20 text-center">
                   Start My Trademark Registration
                 </Link>
                 <Link href="/contact" className="bg-white border-2 border-gray-200 text-gray-700 px-6 py-3 rounded-lg font-bold text-base hover:border-accent hover:text-accent transition text-center">
@@ -316,7 +316,7 @@ export default function TrademarkRegistrationPage() {
       </section>
 
       {/* ENTITY & STATE SELECTION */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-24 bg-white relative overflow-hidden" id="start-order">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent pointer-events-none" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-12">

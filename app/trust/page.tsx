@@ -382,7 +382,7 @@ export default function TrustPage() {
                 A living trust is one of the most effective tools for Texans who want to protect assets, avoid probate, and make sure their family is taken care of without unnecessary court delays. At Brendat, our USA-based estate planning attorneys prepare customized trusts that comply with the USA Trust Code and reflect your unique goals.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                <Link href="/order/step2" className="bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20 text-center">
+                <Link href="/contact" className="bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20 text-center">
                   Create My USA Trust
                 </Link>
                 <Link href="/contact" className="bg-transparent border-2 border-gray-900 text-gray-900 px-6 py-3 rounded-xl font-bold text-lg hover:bg-gray-100 transition text-center">
@@ -432,7 +432,7 @@ export default function TrustPage() {
       </section>
 
       {/* ENTITY & STATE SELECTION */}
-      <section className="py-24 bg-gray-50 relative overflow-hidden">
+      <section className="py-24 bg-gray-50 relative overflow-hidden" id="start-order">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
@@ -557,7 +557,7 @@ export default function TrustPage() {
                   </div>
                 ))}
               </div>
-              <Link href="/order/step2" className="mt-8 inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+              <Link href="/contact" className="mt-8 inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
                 Start My Trust Now
               </Link>
             </div>
@@ -629,7 +629,7 @@ export default function TrustPage() {
             ))}
           </div>
           <div className="text-center mt-12">
-            <Link href="/order/step2" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+            <Link href="/contact" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
               Start My Trust Now
             </Link>
           </div>
@@ -662,7 +662,7 @@ export default function TrustPage() {
       <section className="py-20 bg-accent/5 border-y border-accent/10">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-black text-gray-900 mb-4">Ready to start your Trust Estate Plan?</h2>
-          <Link href="/order/step2" className="inline-block bg-accent text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+          <Link href="/contact" className="inline-block bg-accent text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
             Start A Trust
           </Link>
         </div>

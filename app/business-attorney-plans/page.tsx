@@ -275,7 +275,7 @@ export default function BusinessAttorneyPlans() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="#pricing"
+                href="/contact"
                 className="inline-flex items-center justify-center gap-2 bg-accent text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:bg-accent/90 transition-all"
               >
                 <Scale className="w-5 h-5" />
@@ -323,7 +323,7 @@ export default function BusinessAttorneyPlans() {
       </section>
 
       {/* ENTITY & STATE SELECTION */}
-      <section id="pricing" className="py-24 bg-white relative overflow-hidden">
+      <section id="start-order" className="py-24 bg-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent"></div>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-12">
@@ -680,7 +680,7 @@ export default function BusinessAttorneyPlans() {
 
           <div className="text-center mt-12">
             <a
-              href="#pricing"
+              href="/contact"
               className="inline-flex items-center gap-2 bg-accent text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:bg-accent/90 transition-all"
             >
               <Scale className="w-5 h-5" />

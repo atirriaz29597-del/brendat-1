@@ -268,7 +268,7 @@ export default function HealthcareDirectivePage() {
             <p className="text-xl text-gray-600 mb-8">
               Making medical decisions during a crisis can be overwhelming for families. At Brendat, our USA attorneys prepare advance healthcare directives that comply with the USA Health and Human Services advance directives requirements, ensuring your documents are both valid and enforceable.
             </p>
-            <Link href="/order/step2" className="inline-block bg-accent text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+            <Link href="/contact" className="inline-block bg-accent text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
               Create My USA Healthcare Directive
             </Link>
           </div>
@@ -276,7 +276,7 @@ export default function HealthcareDirectivePage() {
       </section>
 
       {/* ENTITY & STATE SELECTION */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-24 bg-white relative overflow-hidden" id="start-order">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent"></div>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-12">
@@ -471,7 +471,7 @@ export default function HealthcareDirectivePage() {
             ))}
           </div>
           <div className="text-center mt-12 space-y-4">
-            <Link href="/order/step2" className="inline-block text-center bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+            <Link href="/contact" className="inline-block text-center bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
               Start My Advance Health Directive in USA
             </Link>
             <p>
@@ -506,7 +506,7 @@ export default function HealthcareDirectivePage() {
             ))}
           </div>
           <div className="text-center mt-12">
-            <Link href="/order/step2" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+            <Link href="/contact" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
               Get My USA Advance Health Directive Form Prepared by an Attorney
             </Link>
           </div>
@@ -547,7 +547,7 @@ export default function HealthcareDirectivePage() {
             ))}
           </div>
           <div className="text-center mt-12">
-            <Link href="/order/step2" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+            <Link href="/contact" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
               Start My Advance Health Directive Now
             </Link>
           </div>
@@ -585,7 +585,7 @@ export default function HealthcareDirectivePage() {
           <h2 className="text-3xl font-black text-gray-900 mb-8">
             Ready to Get Your Advance Healthcare Directive in USA, USA?
           </h2>
-          <Link href="/order/step2" className="inline-block bg-accent text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+          <Link href="/contact" className="inline-block bg-accent text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
             Create My USA Health Care Directive Today
           </Link>
         </div>

@@ -164,7 +164,7 @@ export default function RegisteredAgentPage() {
                 Whether you’re starting an LLC or corporation, our USA registered agent services ensure your business never misses an important deadline or legal notice. We provide professional, secure, and affordable registered agent service for USA-based and out-of-state businesses doing business in USA.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link href="/order/step2" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg">
+                <Link href="/contact" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg">
                   Get a Registered Agent
                 </Link>
                 <Link href="/contact" className="inline-flex items-center gap-2 bg-white border-2 border-gray-200 hover:border-accent text-gray-700 hover:text-accent font-bold px-8 py-4 rounded-xl transition-all text-lg">
@@ -202,7 +202,7 @@ export default function RegisteredAgentPage() {
         </section>
 
         {/* ENTITY & STATE SELECTION */}
-        <section className="py-24 bg-white relative overflow-hidden">
+        <section className="py-24 bg-white relative overflow-hidden" id="start-order">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent pointer-events-none" />
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-12">
@@ -320,7 +320,7 @@ export default function RegisteredAgentPage() {
                 </ul>
                 <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 mb-8">
                    <p className="text-gray-700 font-medium mb-4">Whether you’re conducting a USA registered agent lookup or simply want to update your current contact information, our team ensures your business remains in compliance.</p>
-                   <Link href="/order/step2" className="inline-flex items-center gap-2 text-accent font-bold hover:underline">
+                   <Link href="/contact" className="inline-flex items-center gap-2 text-accent font-bold hover:underline">
                       Get a Registered Agent <ChevronRight className="w-4 h-4" />
                    </Link>
                 </div>
@@ -428,7 +428,7 @@ export default function RegisteredAgentPage() {
           <div className="max-w-4xl mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-black mb-8">Ready to Appoint a USA Registered Agent You Can Rely On?</h2>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/order/step2" className="inline-flex items-center gap-2 bg-white text-accent font-bold px-8 py-4 rounded-xl shadow-xl hover:bg-gray-100 transition-all text-lg min-w-[200px] justify-center">
+              <Link href="/contact" className="inline-flex items-center gap-2 bg-white text-accent font-bold px-8 py-4 rounded-xl shadow-xl hover:bg-gray-100 transition-all text-lg min-w-[200px] justify-center">
                 Hire a Registered Agent in USA
               </Link>
               <Link href="/contact" className="inline-flex items-center gap-2 bg-accent-dark border-2 border-white/20 hover:bg-white/10 hover:border-white text-white font-bold px-8 py-4 rounded-xl transition-all text-lg min-w-[200px] justify-center">

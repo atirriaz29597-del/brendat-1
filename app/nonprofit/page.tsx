@@ -44,55 +44,6 @@ const STATE_FEES: Record<string, number> = {
   "West Virginia": 100, Wisconsin: 130, Wyoming: 100,
 };
 
-const pricingPlans = [
-  {
-    name: "Economy",
-    price: "99",
-    priceSubtext: "+state filing fees",
-    speed: "Standard Processing in 10–14 Days – Your formation handled quickly and efficiently",
-    buttonText: "Get started",
-    href: "/order/step2",
-    includesLabel: "Includes:",
-    features: [
-      "Preliminary Name Check – We’ll confirm your business name is available before filing",
-      "State Filing of Articles of Incorporation – Complete preparation and submission to your state.",
-      "Comprehensive Peace of Mind Review™ – We carefully check for missing details, inconsistencies, or errors so your filing goes smoothly.",
-    ],
-    color: "gray",
-  },
-  {
-    name: "Standard",
-    price: "239",
-    priceSubtext: "+state filing fees",
-    speed: "Priority Processing in Just 5 Days – Skip the wait and get your formation completed sooner.",
-    buttonText: "Get started",
-    href: "/order/step2",
-    includesLabel: "Includes Economy package, plus:",
-    features: [
-      "Deluxe Founder’s Kit – Includes your formation documents printed on premium archival paper, a personalized binder, and a matching notebook to keep everything organized.",
-      "Corporate Minutes Templates – Ready-to-use forms to record meetings and official business decisions with ease.",
-    ],
-    color: "gray",
-  },
-  {
-    name: "Express Platinum",
-    badge: "Fastest Service",
-    price: "359",
-    priceSubtext: "+state filing fees",
-    speed: "Lightning-Fast Processing – Formation completed in just 1–2 days with express shipping for ultimate speed.",
-    buttonText: "Get started",
-    href: "/order/step2",
-    includesLabel: "Includes Standard package, plus:",
-    features: [
-      "Priority State Filing – Your articles of incorporation are filed and approved faster.",
-      "Expedited EIN – Get your federal tax ID quickly so you can start business operations without delay.",
-      "Rapid Delivery – Receive your complete package within 2–3 business days after finalization.",
-      "14-Day Legal Plan Trial – Enjoy unlimited 30-minute attorney consultations on new legal matters for added peace of mind.",
-    ],
-    color: "accent",
-  },
-];
-
 const bestServiceItems = [
   {
     icon: Landmark,
@@ -265,6 +216,8 @@ export default function NonprofitPage() {
   const [selectedEntity, setSelectedEntity] = useState("Nonprofit");
   const [selectedState, setSelectedState] = useState("");
   const router = useRouter();
+  const stateFee = selectedState ? (STATE_FEES[selectedState] ?? 0) : 0;
+  const sortedStates = Object.keys(STATE_FEES).sort();
 
   const handleStartBusiness = () => {
     if (selectedEntity && selectedState) {
@@ -289,7 +242,11 @@ export default function NonprofitPage() {
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link
-                  href="/order/step2"
+                  href="#start-order"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById("start-order")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }}
                   className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg"
                 >
                   Start My USA Nonprofit
@@ -305,57 +262,77 @@ export default function NonprofitPage() {
           </div>
         </section>
 
-        <section className="py-24 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-                What’s Included in Brendat’s Nonprofit Formation Packages
+        <section className="py-24 bg-white relative overflow-hidden" id="start-order">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent pointer-events-none" />
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+                Start Your Nonprofit Formation Today
               </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Select your entity type and state to see pricing and continue your filing.
+              </p>
             </div>
-            <div className="grid md:grid-cols-3 gap-8">
-              {pricingPlans.map((plan) => (
-                <div
-                  key={plan.name}
-                  className={`relative bg-white rounded-3xl p-8 border-2 ${
-                    plan.color === "accent"
-                      ? "border-accent shadow-2xl shadow-accent/10"
-                      : "border-gray-200 shadow-xl"
-                  } flex flex-col h-full`}
-                >
-                  {plan.badge && (
-                    <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-white text-xs font-black px-4 py-2 rounded-full uppercase tracking-widest">
-                      {plan.badge}
-                    </span>
-                  )}
-                  <h3 className="text-2xl font-black text-gray-900 mb-2">{plan.name}</h3>
-                  <div className="mb-4">
-                    <div className="flex items-baseline">
-                      <span className="text-4xl font-black text-gray-900">${plan.price}</span>
-                    </div>
-                    <span className="text-sm text-gray-500">{plan.priceSubtext}</span>
+
+            <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 md:p-12">
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                <div className="relative">
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Entity Type</label>
+                  <div className="relative">
+                    <select
+                      value={selectedEntity}
+                      onChange={(e) => setSelectedEntity(e.target.value)}
+                      className="w-full appearance-none bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 text-gray-900 font-medium focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all cursor-pointer"
+                    >
+                      <option value="">Select entity type...</option>
+                      <option value="Nonprofit">Nonprofit</option>
+                      <option value="LLC">Limited Liability Company (LLC)</option>
+                      <option value="C-Corporation">Corporation (C-Corp)</option>
+                      <option value="S-Corporation">S-Corporation</option>
+                    </select>
+                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
                   </div>
-                  <p className="text-sm font-semibold text-gray-700 mb-6">{plan.speed}</p>
-                  <Link
-                    href={plan.href}
-                    className={`w-full text-center py-4 rounded-xl font-bold mb-6 transition-all ${
-                      plan.color === "accent"
-                        ? "bg-accent hover:bg-accent-dark text-white shadow-lg shadow-accent/25"
-                        : "bg-gray-900 hover:bg-gray-800 text-white"
-                    }`}
-                  >
-                    {plan.buttonText}
-                  </Link>
-                  <p className="font-bold text-gray-900 mb-4">{plan.includesLabel}</p>
-                  <ul className="space-y-4 flex-1">
-                    {plan.features.map((feature, idx) => (
-                      <li key={idx} className="flex gap-3">
-                        <Check className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-                        <span className="text-sm text-gray-700">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
                 </div>
-              ))}
+
+                <div className="relative">
+                  <label className="block text-sm font-bold text-gray-700 mb-2">State of Formation</label>
+                  <div className="relative">
+                    <select
+                      value={selectedState}
+                      onChange={(e) => setSelectedState(e.target.value)}
+                      className="w-full appearance-none bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 text-gray-900 font-medium focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all cursor-pointer"
+                    >
+                      <option value="">Select state...</option>
+                      {sortedStates.map((state) => (
+                        <option key={state} value={state}>
+                          {state}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gray-50 rounded-2xl border border-gray-200 p-5 mb-8">
+                <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+                  <span>Estimated state filing fee</span>
+                  <span className="font-semibold text-gray-900">{selectedState ? `$${stateFee}` : "Select a state"}</span>
+                </div>
+                <p className="text-xs text-gray-500">Final pricing may vary based on state-specific filing requirements.</p>
+              </div>
+
+              <button
+                onClick={handleStartBusiness}
+                disabled={!selectedEntity || !selectedState}
+                className={`w-full py-4 rounded-xl font-bold text-lg shadow-lg transition-all ${
+                  selectedEntity && selectedState
+                    ? "bg-accent hover:bg-accent-dark text-white shadow-accent/25"
+                    : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                }`}
+              >
+                Continue to Step 2
+              </button>
             </div>
           </div>
         </section>
@@ -429,7 +406,7 @@ export default function NonprofitPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
-                  href="/order/step2"
+                  href="#start-order"
                   className="inline-flex items-center justify-center bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-md transition-all text-lg"
                 >
                   Start My USA Nonprofit
@@ -466,7 +443,7 @@ export default function NonprofitPage() {
 
             <div className="text-center mt-10">
               <Link
-                href="/order/step2"
+                href="#start-order"
                 className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all text-lg"
               >
                 Customize My Package
@@ -554,7 +531,7 @@ export default function NonprofitPage() {
             </div>
             <div className="text-center">
               <Link
-                href="/order/step2"
+                href="#start-order"
                 className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all text-lg"
               >
                 Start My Nonprofit
@@ -583,7 +560,7 @@ export default function NonprofitPage() {
                   ))}
                 </ul>
                 <Link
-                  href="/order/step2"
+                  href="#start-order"
                   className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-6 py-3 rounded-xl shadow-md transition-all"
                 >
                   Start My Nonprofit
@@ -681,7 +658,7 @@ export default function NonprofitPage() {
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <Link
-                  href="/order/step2"
+                  href="#start-order"
                   className="bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all text-lg"
                 >
                   Start My USA Nonprofit

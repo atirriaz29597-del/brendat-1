@@ -198,12 +198,12 @@ export default function RealEstatePage() {
               Whether you&apos;re renting, buying, selling, or transferring property in USA, Brendat provides expert legal support for all your real estate needs. Our attorneys ensure your documents are legally sound, compliant with USA law, and properly filed with county authorities.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/residential-lease">
+              <Link href="/contact">
                 <button className="bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20 w-full sm:w-auto">
                   Create a Lease Agreement
                 </button>
               </Link>
-              <Link href="/property-deed-transfer">
+              <Link href="/contact">
                 <button className="bg-transparent border-2 border-gray-900 text-gray-900 px-6 py-3 rounded-xl font-bold text-lg hover:bg-gray-100 transition w-full sm:w-auto">
                   Transfer Property Deed
                 </button>
@@ -214,7 +214,7 @@ export default function RealEstatePage() {
       </section>
 
       {/* ENTITY & STATE SELECTION */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-24 bg-white relative overflow-hidden" id="start-order">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent pointer-events-none" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-12">

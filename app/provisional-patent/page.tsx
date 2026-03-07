@@ -233,7 +233,7 @@ export default function ProvisionalPatentPage() {
                   Are you an inventor or startup with a great idea, but not ready for a complete utility patent? Secure your invention quickly and affordably with a provisional patent registration application online or with attorney support in USA.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/order/step2" className="text-center bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+                  <Link href="/contact" className="text-center bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
                     File My Provisional Patent
                   </Link>
                   <Link href="/contact" className="text-center bg-transparent border-2 border-gray-900 text-gray-900 px-6 py-3 rounded-xl font-bold text-lg hover:bg-gray-50 transition">
@@ -262,7 +262,7 @@ export default function ProvisionalPatentPage() {
       </section>
 
       {/* ENTITY & STATE SELECTION */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-24 bg-white relative overflow-hidden" id="start-order">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent pointer-events-none" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-12">

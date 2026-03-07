@@ -214,7 +214,7 @@ export default function DissolutionPage() {
                 Whether you’re closing a chapter or dissolving a partnership, Brendat will help you make a clean legal exit with expert business dissolution services in USA, USA. We assist LLCs, corporations, and partnerships through every step of the USA business dissolution process.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link href="/order/step2" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg">
+                <Link href="/contact" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg">
                   Start My Business Dissolution
                 </Link>
                 <Link href="/contact" className="inline-flex items-center gap-2 bg-white border-2 border-gray-200 hover:border-accent text-gray-700 hover:text-accent font-bold px-8 py-4 rounded-xl transition-all text-lg">
@@ -226,7 +226,7 @@ export default function DissolutionPage() {
         </section>
 
         {/* {/* ENTITY & STATE SELECTION */}
-        <section className="py-24 bg-white relative overflow-hidden">
+        <section className="py-24 bg-white relative overflow-hidden" id="start-order">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
@@ -362,7 +362,7 @@ export default function DissolutionPage() {
                   <p className="text-lg text-gray-600 mb-8">
                     Deciding to dissolve a business is never easy, but there are times when closing your company the right way is the best step forward. Whether you’re shutting down due to financial challenges, internal changes, or strategic growth through a merger, filing for business dissolution in USA allows you to close the chapter with clarity and compliance, ensuring you’re protected from ongoing legal, financial, and tax obligations.
                   </p>
-                  <Link href="/order/step2" className="inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white font-bold px-8 py-4 rounded-xl transition-all">
+                  <Link href="/contact" className="inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white font-bold px-8 py-4 rounded-xl transition-all">
                     Start My Dissolution
                   </Link>
                </div>

@@ -195,7 +195,11 @@ export default function LLCPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
               <Link
-                href="/order/step2"
+                href="#start-order"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById("start-order")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
                 className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg"
               >
                 <Briefcase className="w-5 h-5" />
@@ -220,7 +224,7 @@ export default function LLCPage() {
       </section>
 
       {/* ── Start Your Business Section ──────────────────────── */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white" id="start-order">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-left mb-10">
             <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
@@ -395,7 +399,7 @@ export default function LLCPage() {
                   ))}
                 </ul>
                 <Link
-                  href="/order/step2"
+                  href="#start-order"
                   className="block w-full mt-6 text-center bg-accent hover:bg-accent-dark text-white font-bold py-3 rounded-xl transition-all"
                 >
                   Customize My Package

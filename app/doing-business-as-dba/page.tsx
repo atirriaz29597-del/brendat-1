@@ -143,7 +143,7 @@ export default function DBAPage() {
                 Whether you’re ready to file your DBA on your own or want legal support along the way, our DBA registration Attorneys in USA have got your back. We handle every step of Doing Business As registration process, from name search and paperwork to local filing and renewals, so you can focus on running your business.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-                <Link href="/order/step2" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg">
+                <Link href="/contact" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg">
                   Register My DBA
                 </Link>
                 <Link href="/contact" className="inline-flex items-center gap-2 bg-white border-2 border-gray-200 hover:border-accent text-gray-700 hover:text-accent font-bold px-8 py-4 rounded-xl transition-all text-lg">
@@ -226,7 +226,7 @@ export default function DBAPage() {
         </section>
 
 {/* ENTITY & STATE SELECTION */}
-        <section className="py-24 bg-white relative overflow-hidden">
+        <section className="py-24 bg-white relative overflow-hidden" id="start-order">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
@@ -349,7 +349,7 @@ export default function DBAPage() {
                 <h3 className="text-2xl font-black text-gray-900 mb-4">Do I Need a Business License Too?</h3>
                 <p className="text-gray-600 mb-4">A USA DBA is not the same as a business license. Some businesses operating under a DBA may still be required to register for local or state-level permits, depending on their industry.</p>
                 <p className="text-gray-600 mb-8">Our Legal plan includes a review of your USA, USA , business license registration to ensure your business meets all compliance requirements.</p>
-                <Link href="/order/step2" className="inline-flex items-center gap-2 bg-white border-2 border-gray-200 hover:border-accent text-gray-700 hover:text-accent font-bold px-6 py-3 rounded-xl transition-all">
+                <Link href="/contact" className="inline-flex items-center gap-2 bg-white border-2 border-gray-200 hover:border-accent text-gray-700 hover:text-accent font-bold px-6 py-3 rounded-xl transition-all">
                   Check My Licensing Requirements
                 </Link>
               </div>
@@ -367,7 +367,7 @@ export default function DBAPage() {
                 ))}
               </ul>
               <p className="text-gray-600 mb-8">We help you determine whether your business structure requires county-level, state-level, or both filings.</p>
-              <Link href="/order/step2" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-md transition-all text-lg">
+              <Link href="/contact" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-md transition-all text-lg">
                 Start My DBA Filing
               </Link>
             </div>
@@ -393,7 +393,7 @@ export default function DBAPage() {
               ))}
             </div>
             <div className="mt-12 text-center">
-               <Link href="/order/step2" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all text-lg">
+               <Link href="/contact" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all text-lg">
                  Register My DBA
                </Link>
             </div>
@@ -483,7 +483,7 @@ export default function DBAPage() {
             <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-6">Register Your DBA in USA Today</h2>
             <p className="text-lg text-gray-600 mb-8">Whether you’re starting fresh or expanding your existing business, our USA DBA registration services make it easy to launch under a new name without legal risk or confusion.</p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link href="/order/step2" className="bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all text-lg">
+              <Link href="/contact" className="bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all text-lg">
                 Start My DBA Filing
               </Link>
               <Link href="/contact" className="bg-white border-2 border-gray-200 hover:border-accent text-gray-700 hover:text-accent font-bold px-8 py-4 rounded-xl transition-all text-lg">

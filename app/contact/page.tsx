@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import Header from "@/app/components/Header";
 import {
   ArrowLeft,
   Mail,
@@ -58,29 +58,7 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/80 backdrop-blur-lg">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <Link href="/" className="flex items-center shrink-0">
-              <Image
-                src="/WhatsApp_Image_2026-03-01_at_12.13.31_PM-removebg-preview.png"
-                alt="Brendat"
-                width={360}
-                height={130}
-                className="h-16 w-auto object-contain"
-                priority
-              />
-            </Link>
-            <Link
-              href="/"
-              className="flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-accent transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" /> Back to Home
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero */}
       <section className="relative bg-primary py-20 overflow-hidden">

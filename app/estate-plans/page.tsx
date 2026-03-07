@@ -283,7 +283,7 @@ export default function EstatePlansPage() {
               Planning for the future shouldn't feel overwhelming. With our estate planning services in USA, you can safeguard your assets, protect your loved ones, and gain peace of mind knowing everything is legally structured for your wishes. Whether you need a simple will, a detailed trust, or comprehensive guidance, our USA estate planning attorneys are here to guide you every step of the way.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
-              <Link href="/order/step2" className="bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20 text-center">
+              <Link href="/contact" className="bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20 text-center">
                 Start My Estate Plan
               </Link>
               <Link href="/contact" className="bg-transparent border-2 border-gray-900 text-gray-900 px-6 py-3 rounded-xl font-bold text-lg hover:bg-gray-100 transition text-center">
@@ -319,7 +319,7 @@ export default function EstatePlansPage() {
       </section>
 
       {/* ENTITY & STATE SELECTION */}
-      <section className="py-24 bg-gray-50 relative overflow-hidden">
+      <section className="py-24 bg-gray-50 relative overflow-hidden" id="start-order">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
@@ -480,7 +480,7 @@ export default function EstatePlansPage() {
           <p className="text-gray-600 text-lg mb-8">
             Contact our USA estate planning attorneys today for a confidential consultation and take the first step toward securing your legacy.
           </p>
-          <Link href="/order/step2" className="inline-block bg-accent text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+          <Link href="/contact" className="inline-block bg-accent text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
             Create My Estate Plan Now
           </Link>
         </div>

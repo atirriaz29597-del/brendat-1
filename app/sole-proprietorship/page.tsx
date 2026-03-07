@@ -157,7 +157,7 @@ export default function SoleProprietorshipPage() {
                 Whether you want to set up your sole proprietorship online in USA or need step-by-step legal support, we’ve got your back. We help you register your sole proprietorship in USA, USA, file your DBA (Doing Business As), and understand your local licensing and tax obligations so that you can launch your business with confidence.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-                <Link href="/order/step2" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg">
+                <Link href="/contact" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg">
                   Register My Sole Proprietorship
                 </Link>
                 <Link href="/contact" className="inline-flex items-center gap-2 bg-white border-2 border-gray-200 hover:border-accent text-gray-700 hover:text-accent font-bold px-8 py-4 rounded-xl transition-all text-lg">
@@ -202,7 +202,7 @@ export default function SoleProprietorshipPage() {
         </section>
 
         {/* HOW TO REGISTER */}
-        <section className="py-20 bg-gray-50">
+        <section className="py-20 bg-gray-50" id="start-order">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">How to Register a Sole Proprietorship in USA with Brendat</h2>
@@ -288,7 +288,7 @@ export default function SoleProprietorshipPage() {
                 Start your business in USA today with Brendat, and get expert guidance to choose the right structure when you’re ready. Simple, Flexible, and Stress-free.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4 relative z-10">
-                <Link href="/order/step2" className="bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 transition-all text-lg">
+                <Link href="/contact" className="bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 transition-all text-lg">
                   Start My Sole Proprietorship
                 </Link>
                 <Link href="/contact" className="bg-white/10 hover:bg-white/20 border-2 border-white/20 hover:border-white text-white font-bold px-8 py-4 rounded-xl transition-all text-lg">
@@ -310,7 +310,7 @@ export default function SoleProprietorshipPage() {
                 </p>
                 <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm mb-8">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">Start Your USA Sole Proprietorship Formation Today!</h3>
-                  <Link href="/order/step2" className="text-accent font-bold hover:underline inline-flex items-center gap-1">
+                  <Link href="/contact" className="text-accent font-bold hover:underline inline-flex items-center gap-1">
                     Register Online Now <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>

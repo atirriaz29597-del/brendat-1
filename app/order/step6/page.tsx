@@ -35,11 +35,11 @@ function ProgressBar() {
 
 /* -- Virtual address benefits ------------------------------- */
 const virtualBenefits = [
-  { icon: Eye, text: "Keep your home address off public records" },
-  { icon: MapPin, text: "Real physical address, not a PO Box" },
-  { icon: Shield, text: "Compliant with state/mail requirements" },
-  { icon: Mail, text: "Unlimited mail scans included" },
-  { icon: Clock, text: "24/7 online access to your mailbox" },
+  { icon: Eye, text: "- Keep your home address off public records" },
+  { icon: MapPin, text: "- Real physical address with unique suite number, not a PO Box" },
+  { icon: Shield, text: "- Compliant with state/mail requirements" },
+  { icon: Mail, text: "- Mail scans included" },
+  { icon: Clock, text: "- 24/7 online access to your mailbox" },
 ];
 
 function Step6Inner() {

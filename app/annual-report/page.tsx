@@ -245,7 +245,7 @@ export default function AnnualReportPage() {
                 Whether you want to file your annual business report on your own or prefer expert help, Brendat has got your back. Our streamlined service helps you file your business annual report in USA, USA, quickly, correctly, and on time, so you can avoid penalties, reinstatement fees, or worse, administrative dissolution.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-                <Link href="/order/step2" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg">
+                <Link href="/contact" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg">
                   File My Annual Report
                 </Link>
                 <Link href="/contact" className="inline-flex items-center gap-2 bg-white border-2 border-gray-200 hover:border-accent text-gray-700 hover:text-accent font-bold px-8 py-4 rounded-xl transition-all text-lg">
@@ -257,7 +257,7 @@ export default function AnnualReportPage() {
         </section>
 
         {/* ENTITY & STATE SELECTION */}
-        <section className="py-24 bg-white relative">
+        <section className="py-24 bg-white relative" id="start-order">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">Start Your Filing in Minutes</h2>
@@ -405,7 +405,7 @@ export default function AnnualReportPage() {
                  <p className="text-lg text-gray-600 mb-8">
                    Filing your annual business report in USA, USA, doesn’t have to be complicated. Whether you’re a seasoned entrepreneur or handling this for the first time, our step-by-step process makes compliance simple. We gather the required info, prepare the correct documents for your business type, and submit them to the state, accurately and on time.
                  </p>
-                 <Link href="/order/step2" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all">
+                 <Link href="/contact" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all">
                    File My Report Now
                  </Link>
                  <div className="mt-8 flex items-center gap-2">
@@ -498,7 +498,7 @@ export default function AnnualReportPage() {
                   <p className="font-semibold text-gray-900 mb-2">Stay ahead of deadlines and avoid penalties.</p>
                   <p className="text-sm text-gray-600">Let Brendat handle your annual report filing in USA so your business stays compliant and ready to grow.</p>
                 </div>
-                <Link href="/order/step2" className="w-full block text-center bg-accent hover:bg-accent-dark text-white font-bold py-4 rounded-xl shadow-md transition-all">
+                <Link href="/contact" className="w-full block text-center bg-accent hover:bg-accent-dark text-white font-bold py-4 rounded-xl shadow-md transition-all">
                   File My USA Business Annual Report
                 </Link>
               </div>
@@ -605,7 +605,7 @@ export default function AnnualReportPage() {
                   ))}
                 </ul>
                 <p className="text-sm font-bold text-gray-900 mb-4">With Brendat, your USA business annual report is filed accurately and on time, helping you avoid penalties and keep your business in good standing.</p>
-                <Link href="/order/step2" className="inline-flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white font-bold px-6 py-3 rounded-xl shadow-md transition-all">
+                <Link href="/contact" className="inline-flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white font-bold px-6 py-3 rounded-xl shadow-md transition-all">
                   Get Help With My Annual Business Report
                 </Link>
               </div>
@@ -679,7 +679,7 @@ export default function AnnualReportPage() {
            <div className="max-w-4xl mx-auto px-4">
              <h2 className="text-3xl md:text-4xl font-black mb-6">Ready to File Your USA Annual Business Report?</h2>
              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-               <Link href="/order/step2" className="bg-white text-accent font-bold px-8 py-4 rounded-xl shadow-xl hover:bg-gray-100 transition-all text-lg">
+               <Link href="/contact" className="bg-white text-accent font-bold px-8 py-4 rounded-xl shadow-xl hover:bg-gray-100 transition-all text-lg">
                  Start Filing Now
                </Link>
                <Link href="/contact" className="bg-accent-dark text-white border-2 border-white/20 hover:bg-black/20 font-bold px-8 py-4 rounded-xl transition-all text-lg">

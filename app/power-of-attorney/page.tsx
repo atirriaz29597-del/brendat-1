@@ -244,7 +244,7 @@ export default function PowerOfAttorneyPage() {
               When life takes an unexpected turn, having a legally valid Power of Attorney in USA ensures that your affairs are managed by someone you trust. At Brendat, our power of attorney lawyers prepare tailored documents that meet USA law, protect your interests, and provide peace of mind for you and your loved ones.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/order/step2" className="bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20 text-center">
+              <Link href="/contact" className="bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20 text-center">
                 Start My Power of Attorney
               </Link>
               <Link href="/contact" className="bg-transparent border-2 border-gray-900 text-gray-900 px-6 py-3 rounded-xl font-bold text-lg hover:bg-gray-100 transition text-center">
@@ -256,7 +256,7 @@ export default function PowerOfAttorneyPage() {
       </section>
 
       {/* ENTITY & STATE SELECTION */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-24 bg-white relative overflow-hidden" id="start-order">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent pointer-events-none" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-12">
@@ -553,7 +553,7 @@ export default function PowerOfAttorneyPage() {
             Ready to Start Your Power of Attorney in USA?
           </h2>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/order/step2" className="bg-accent text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20 text-center">
+            <Link href="/contact" className="bg-accent text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20 text-center">
               Start My Power of Attorney
             </Link>
             <Link href="/contact" className="bg-transparent border-2 border-gray-900 text-gray-900 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition text-center">

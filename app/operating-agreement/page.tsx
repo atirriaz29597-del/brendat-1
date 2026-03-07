@@ -267,7 +267,7 @@ export default function OperatingAgreementPage() {
                 Whether you need help customizing your LLC operating agreement in USA, or simply want to ensure it’s done correctly, Brendat has got your back. We help single-member and 2-member LLCs draft and file personalized operating agreement documents that meet USA state requirements and your company’s structure.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link href="/order/step2" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg">
+                <Link href="/contact" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg">
                   Start My Operating Agreement
                 </Link>
                 <Link href="/contact" className="inline-flex items-center gap-2 bg-white border-2 border-gray-200 hover:border-accent text-gray-700 hover:text-accent font-bold px-8 py-4 rounded-xl transition-all text-lg">
@@ -280,7 +280,7 @@ export default function OperatingAgreementPage() {
         </section>
 
         {/* ENTITY & STATE SELECTION */}
-        <section className="py-24 bg-white relative overflow-hidden">
+        <section className="py-24 bg-white relative overflow-hidden" id="start-order">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
@@ -484,7 +484,7 @@ export default function OperatingAgreementPage() {
                  <p className="text-white/60 italic mb-8 border-l-4 border-accent pl-4">
                    "Even if USA doesn’t require one by law, it’s highly recommended. Without an agreement, your LLC may be governed by default state rules, which may not align with your business goals."
                  </p>
-                 <Link href="/order/step2" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-light text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all">
+                 <Link href="/contact" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-light text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all">
                    Start My Operating Agreement
                  </Link>
                </div>
@@ -587,7 +587,7 @@ export default function OperatingAgreementPage() {
                 </table>
               </div>
               <div className="mt-8 text-center">
-                 <Link href="/order/step2" className="inline-flex items-center gap-2 bg-accent text-white font-bold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl hover:bg-accent-dark transition-all">
+                 <Link href="/contact" className="inline-flex items-center gap-2 bg-accent text-white font-bold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl hover:bg-accent-dark transition-all">
                    Draft My Operating Agreement
                  </Link>
               </div>
@@ -648,7 +648,7 @@ export default function OperatingAgreementPage() {
             </div>
             <div className="text-center mt-12">
               <h3 className="text-xl font-bold text-gray-900 mb-4">From Filing to Fine Print, Brendat Will Make Your USA LLC Rock Solid</h3>
-              <Link href="/order/step2" className="inline-flex items-center gap-2 bg-accent text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl hover:bg-accent-dark transition-all">
+              <Link href="/contact" className="inline-flex items-center gap-2 bg-accent text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl hover:bg-accent-dark transition-all">
                  Draft My Operating Agreement
               </Link>
             </div>

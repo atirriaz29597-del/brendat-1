@@ -335,14 +335,14 @@ export default function ComprehensiveTrademarkSearchPage() {
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
             Before investing in your brand, ensure it’s legally available. Our trademark search services in USA provide clarity and confidence, ensuring it’s legally available and avoiding infringement risks.
           </p>
-          <Link href="/order/step2" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+          <Link href="/contact" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
             Start My Trademark Search
           </Link>
         </div>
       </section>
 
       {/* Entity & State Selection */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white" id="start-order">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
           <h2 className="text-3xl font-black text-center text-gray-900 mb-4">
@@ -486,7 +486,7 @@ export default function ComprehensiveTrademarkSearchPage() {
               ))}
            </div>
            <div className="text-center mt-12">
-              <Link href="/order/step2" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+              <Link href="/contact" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
                 Schedule A Trademark Search
               </Link>
            </div>
@@ -565,7 +565,7 @@ export default function ComprehensiveTrademarkSearchPage() {
             ))}
           </div>
           <div className="flex justify-center gap-4 flex-col sm:flex-row">
-             <Link href="/order/step2" className="text-center bg-accent text-white px-6 py-3 rounded-xl font-bold hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+             <Link href="/contact" className="text-center bg-accent text-white px-6 py-3 rounded-xl font-bold hover:bg-accent/90 transition shadow-lg shadow-accent/20">
                 Start My Trademark Search
              </Link>
              <Link href="/contact" className="text-center bg-transparent border-2 border-white text-white px-6 py-3 rounded-xl font-bold hover:bg-white/10 transition">

@@ -128,7 +128,7 @@ export default function ResidentialLeasePage() {
             <p className="text-xl text-gray-600 mb-8">
               At Brendat, we help landlords and tenants create a residential lease agreement in USA that is legally sound, compliant with USA law, and tailored to your situation. Whether you need a basic residential lease agreement for a single-family home or a more detailed basic residential rental agreement lease for a multi-unit property, our attorneys ensure your rights and responsibilities are clearly defined.
             </p>
-            <Link href="/order/step2" className="inline-block bg-accent text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+            <Link href="/contact" className="inline-block bg-accent text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
               Get A Legally Sound Lease Today
             </Link>
           </div>
@@ -158,7 +158,7 @@ export default function ResidentialLeasePage() {
             ))}
           </div>
           <div className="text-center mt-12">
-            <Link href="/order/step2" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
+            <Link href="/contact" className="inline-block bg-accent text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-accent/90 transition shadow-lg shadow-accent/20">
               Get a USA-compliant Lease Agreement Now
             </Link>
           </div>
@@ -166,7 +166,7 @@ export default function ResidentialLeasePage() {
       </section>
 
       {/* ENTITY & STATE SELECTION */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-24 bg-white relative overflow-hidden" id="start-order">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent pointer-events-none" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-12">
