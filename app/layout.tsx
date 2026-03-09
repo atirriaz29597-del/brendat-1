@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Brendat — Start & Manage Your Business | Georgia, USA",
   description: "Brendat helps entrepreneurs form LLCs, S-Corps, C-Corps, and Nonprofits across all 50 states. Business formation, EIN filing, compliance tools, and ongoing management — starting at $0.",
+  verification: {
+    google: "j-aVzd56opcMko2y_RsXK7_Glpgz6AHtX-93ci8DT5Y",
+  },
   icons: {
     icon: "/logo.jpeg",
     apple: "/logo.jpeg",
