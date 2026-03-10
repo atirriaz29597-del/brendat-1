@@ -1,7 +1,25 @@
+"use client";
+
 import Link from "next/link";
 import { CheckCircle2, ArrowRight } from "lucide-react";
+import { useEffect } from "react";
+
+declare global {
+  interface Window {
+    dataLayer: Record<string, unknown>[];
+  }
+}
 
 export default function ThankYouPage() {
+  useEffect(() => {
+    // Push conversion event to dataLayer for GTM
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "conversion",
+      conversionType: "form_submission",
+    });
+  }, []);
+
   return (
     <main className="min-h-screen bg-white px-4 py-20">
       <section className="mx-auto w-full max-w-3xl rounded-3xl border border-gray-200 bg-white p-10 text-center shadow-xl sm:p-14">
