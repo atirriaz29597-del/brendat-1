@@ -17,7 +17,10 @@ export const metadata: Metadata = {
   title: "Brendat — Start & Manage Your Business | Georgia, USA",
   description: "Brendat helps entrepreneurs form LLCs, S-Corps, C-Corps, and Nonprofits across all 50 states. Business formation, EIN filing, compliance tools, and ongoing management — starting at $0.",
   verification: {
-    google: "j-aVzd56opcMko2y_RsXK7_Glpgz6AHtX-93ci8DT5Y",
+    google: [
+      "j-aVzd56opcMko2y_RsXK7_Glpgz6AHtX-93ci8DT5Y",
+      "ozcWJnrq3p9-3qwdmbOwIEtZbwyhS6B8-7nwK1I8wnE",
+    ],
   },
   icons: {
     icon: "/logo.jpeg",
