@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, Info, MapPin, Home, CreditCard, Lock } from "lucide-react";
+import { ArrowLeft, Info, MapPin, CreditCard, Lock } from "lucide-react";
 import Header from "../../components/Header";
 import { buildPricingParams, resolveSelectedPricing } from "../pricing";
 
@@ -33,42 +33,6 @@ function ProgressBar({ pct }: { pct: number }) {
   );
 }
 
-/* -- Success Modal -------------------------------------------- */
-function SuccessModal() {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl p-10 max-w-lg w-full mx-4 text-center shadow-2xl animate-in fade-in zoom-in duration-300">
-        {/* Confetti-style icon */}
-        <div className="relative mx-auto mb-6 w-24 h-24">
-          <div className="absolute inset-0 rounded-full bg-emerald-100 animate-ping opacity-30" />
-          <div className="relative w-24 h-24 rounded-full bg-emerald-100 flex items-center justify-center">
-            <CheckCircle2 className="w-12 h-12 text-emerald-500" />
-          </div>
-        </div>
-
-        <h3 className="text-2xl font-black text-black mb-2">Thank You for Your Order!</h3>
-        <p className="text-gray-500 text-sm leading-relaxed mb-2">
-          Your payment has been processed successfully. Our team will begin working on your business formation right away.
-        </p>
-        <p className="text-gray-500 text-sm leading-relaxed mb-8">
-          A confirmation email has been sent to your inbox. Our team will get in touch with you within <span className="font-bold text-black">1-2 business days</span> with updates on your filing.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-accent text-white font-bold rounded-xl hover:bg-accent-dark transition-all shadow-lg shadow-accent/25"
-          >
-            <Home className="w-4 h-4" /> Go to Home Page
-          </Link>
-        </div>
-
-        <p className="text-xs text-gray-400 mt-6">Order reference will be included in your confirmation email.</p>
-      </div>
-    </div>
-  );
-}
-
 /* -- Processing Overlay --------------------------------------- */
 function ProcessingOverlay() {
   return (
@@ -87,6 +51,7 @@ function ProcessingOverlay() {
 }
 
 function Step10Inner() {
+  const router = useRouter();
   const params = useSearchParams();
   const entity = params.get("entity") || "LLC";
   const state = params.get("state") || "";
@@ -126,7 +91,6 @@ function Step10Inner() {
   const [agreed, setAgreed] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [processing, setProcessing] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
   const formatCardNumber = (v: string) => {
@@ -331,7 +295,7 @@ function Step10Inner() {
         }
 
         setProcessing(false);
-        setSuccess(true);
+        router.push("/thank-you?type=order");
       } else {
         setProcessing(false);
         setPaymentError(data.message || "Payment was declined. Please check your card details and try again.");
@@ -349,7 +313,6 @@ function Step10Inner() {
       <ProgressBar pct={90} />
 
       {processing && <ProcessingOverlay />}
-      {success && <SuccessModal />}
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-8 items-start">

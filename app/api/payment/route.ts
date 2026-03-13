@@ -289,6 +289,9 @@ export async function POST(req: NextRequest) {
       clientReferenceInformation: {
         code: `biz-${(planName || "plan").toLowerCase()}-${Date.now()}`,
       },
+      processingInformation: {
+        capture: true,
+      },
       paymentInformation: {
         card: {
           number: cleanCard,
