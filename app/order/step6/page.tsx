@@ -180,7 +180,6 @@ function Step6Inner() {
                   </button>
                 </div>
 
-                <p className="text-xs text-gray-400 text-center">$29/month, Cancel anytime.</p>
               </div>
 
               <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-xl">

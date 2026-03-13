@@ -523,10 +523,6 @@ function Step7Inner() {
                   <span className="font-bold text-black">${expeditedFee}</span>
                 </div>
               )}
-              <div className="flex justify-between">
-                <span className="text-gray-500">Business Address (1st Month)</span>
-                <span className="font-bold text-emerald-600">Free</span>
-              </div>
               {virtualAddress === "virtual" && (
                 <div className="flex justify-between">
                   <span className="text-gray-500">Virtual Address (1 Year)</span>
