@@ -95,6 +95,7 @@ export default function ContactPage() {
                     icon: Phone,
                     title: "Phone",
                     detail: "+1 303 246-8693",
+                    href: "tel:+13032468693",
                     sub: "Mon–Sat, 8AM–8PM CT",
                   },
                   {
@@ -122,7 +123,13 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h4 className="font-bold text-primary text-sm">{item.title}</h4>
-                      <p className="text-primary font-medium">{item.detail}</p>
+                      {item.href ? (
+                        <a href={item.href} className="text-primary font-medium hover:text-accent transition-colors">
+                          {item.detail}
+                        </a>
+                      ) : (
+                        <p className="text-primary font-medium">{item.detail}</p>
+                      )}
                       <p className="text-gray-500 text-xs mt-0.5">{item.sub}</p>
                     </div>
                   </div>
