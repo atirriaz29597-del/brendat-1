@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
+// Preload critical font
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -36,6 +38,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Preconnect to critical origins */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         {/* Google Tag Manager */}
         <Script
           id="gtm-script"
@@ -48,10 +53,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-5D64J798');`,
           }}
         />
-        {/* Google Analytics (gtag.js) */}
+        {/* Google Analytics (gtag.js) - deferred for performance */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-YENGGDG05P"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
         <Script
           id="gtag-init"
