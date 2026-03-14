@@ -44,10 +44,17 @@ import {
   Scale,
   Stamp,
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import FallingText from "./components/FallingText";
-import FloatingContactButtons from "./components/FloatingContactButtons";
+
+const FallingText = dynamic(() => import("./components/FallingText"), {
+  ssr: false,
+  loading: () => <div className="w-full h-[400px]" />,
+});
+const FloatingContactButtons = dynamic(() => import("./components/FloatingContactButtons"), {
+  ssr: false,
+});
 
 /* ─── Payment Modal ─── */
 type Plan = { name: string; price: string; color: string };
@@ -469,6 +476,8 @@ export default function HomePage() {
           alt="Business Registration Services"
           fill
           priority
+          fetchPriority="high"
+          quality={65}
           sizes="100vw"
           className="object-cover object-center"
         />

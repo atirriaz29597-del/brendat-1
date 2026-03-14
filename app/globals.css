@@ -47,46 +47,4 @@ body {
   animation: fade-in-up 0.7s 0.3s ease-out both;
 }
 
-/* With & Without falling cards */
-@keyframes fall-card-1 {
-  0% { opacity: 0; transform: translateY(-120%) rotate(0deg); }
-  60% { opacity: 1; transform: translateY(10%) rotate(-18deg); }
-  80% { transform: translateY(-2%) rotate(-15deg); }
-  100% { opacity: 1; transform: translateY(0) rotate(-12deg); }
-}
-@keyframes fall-card-2 {
-  0% { opacity: 0; transform: translateY(-120%) rotate(0deg); }
-  60% { opacity: 1; transform: translateY(10%) rotate(-35deg); }
-  80% { transform: translateY(-2%) rotate(-30deg); }
-  100% { opacity: 1; transform: translateY(0) rotate(-28deg); }
-}
-@keyframes fall-card-3 {
-  0% { opacity: 0; transform: translateY(-120%) rotate(0deg); }
-  60% { opacity: 1; transform: translateY(10%) rotate(-52deg); }
-  80% { transform: translateY(-2%) rotate(-48deg); }
-  100% { opacity: 1; transform: translateY(0) rotate(-45deg); }
-}
-@keyframes fall-card-4 {
-  0% { opacity: 0; transform: translateY(-120%) rotate(0deg); }
-  60% { opacity: 1; transform: translateY(10%) rotate(10deg); }
-  80% { transform: translateY(-2%) rotate(8deg); }
-  100% { opacity: 1; transform: translateY(0) rotate(5deg); }
-}
-@keyframes fall-card-5 {
-  0% { opacity: 0; transform: translateY(-120%) rotate(0deg); }
-  60% { opacity: 1; transform: translateY(10%) rotate(18deg); }
-  80% { transform: translateY(-2%) rotate(16deg); }
-  100% { opacity: 1; transform: translateY(0) rotate(12deg); }
-}
-@keyframes fall-card-6 {
-  0% { opacity: 0; transform: translateY(-80%) rotate(0deg); }
-  60% { opacity: 1; transform: translateY(10%) rotate(0deg); }
-  80% { transform: translateY(-2%) rotate(0deg); }
-  100% { opacity: 1; transform: translateY(0) rotate(0deg); }
-}
-.animate-fall-1 { animation: fall-card-1 0.9s 0.2s ease-out both; }
-.animate-fall-2 { animation: fall-card-2 0.9s 0.4s ease-out both; }
-.animate-fall-3 { animation: fall-card-3 0.9s 0.6s ease-out both; }
-.animate-fall-4 { animation: fall-card-4 0.9s 0.8s ease-out both; }
-.animate-fall-5 { animation: fall-card-5 0.9s 1.0s ease-out both; }
-.animate-fall-6 { animation: fall-card-6 0.9s 1.2s ease-out both; }
+
