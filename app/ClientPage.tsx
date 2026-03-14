@@ -464,7 +464,7 @@ export default function HomePage() {
       <section className="relative min-h-[520px] md:min-h-[600px] flex items-center overflow-hidden">
         {/* Background image */}
         <img
-          src="/banner.png"
+          src="/Whisk_9ada015a6939d46bb0a463afd412e6d2dr (1).png"
           alt="Business Registration Services"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
