@@ -265,7 +265,7 @@ export async function POST(req: NextRequest) {
     }
 
     const { data: emailData, error } = await resend.emails.send({
-      from: "Brendat <onboarding@resend.dev>",
+      from: "Brendat <contact@brendat.com>",
       to: [RECIPIENT_EMAIL],
       subject,
       html: htmlContent,
