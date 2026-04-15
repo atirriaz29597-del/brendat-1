@@ -99,7 +99,7 @@ export default function Header() {
               alt="Brendat"
               width={360}
               height={130}
-              className="h-28 w-auto object-contain"
+              className="h-38 w-auto"
               priority
             />
           </Link>
@@ -247,15 +247,22 @@ export default function Header() {
               )}
             </div>
 
+
+            <Link href="/about" className="text-sm font-semibold rounded-lg text-gray-600 hover:text-accent transition-all">
+              About Us
+            </Link>
             {/* Blogs */}
-            <Link href="#" className={navLinkClass()}>Blogs</Link>
+            {/* <Link href="#" className={navLinkClass()}>Blogs</Link> */}
           </nav>
 
           {/* CTA */}
           <div className="hidden md:flex items-center gap-3">
-            <Link href="/about" className="text-sm font-semibold px-4 py-2 rounded-lg text-gray-600 hover:text-accent hover:bg-gray-50 transition-all">
-              About Us
-            </Link>
+          <a href="tel:3032468693" className="font-bold bg-accent/10 text-secondary rounded-md px-3 py-1 hover:underline">
+                  (303) 246-8693
+                </a>
+            {/* <Link href="/about" className="text-sm font-semibold px-4 py-2 rounded-lg text-gray-600 hover:text-accent hover:bg-gray-50 transition-all">
+              (303) 246-8693
+            </Link> */}
             <Link href="/contact" className="bg-accent hover:bg-accent-dark text-white text-sm font-bold px-5 py-2.5 rounded-xl shadow-md shadow-accent/20 hover:shadow-lg hover:shadow-accent/30 transition-all">
               Contact Us
             </Link>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Briefcase, Globe, MessageCircle, Phone } from "lucide-react";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -9,12 +10,21 @@ export default function Footer() {
           {/* Brand */}
           <div className="col-span-2 lg:col-span-2">
             <Link href="/" className="flex items-center gap-2.5 mb-6">
-              <div className="rounded-lg bg-accent p-1.5">
+              {/* <div className="rounded-lg bg-accent p-1.5">
                 <Briefcase className="h-5 w-5 text-white" />
               </div>
               <span className="text-xl font-extrabold tracking-tight text-white">
                 Brendat
-              </span>
+              </span> */}
+
+              <Image
+                  src="/WhatsApp_Image_2026-03-01_at_12.13.31_PM-removebg-preview.png"
+                  alt="Brendat"
+                  width={360}
+                  height={130}
+                  className="h-38 w-auto"
+                  priority
+                />
             </Link>
             <p className="max-w-sm mb-8 leading-relaxed text-sm">
               Georgia-based business formation and management platform empowering entrepreneurs across all 50 states to start, run, and grow with confidence.

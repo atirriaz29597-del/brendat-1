@@ -1,174 +1,69 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Check, Phone, MessageCircle, Shield, DollarSign, FileText, Building2, Users, Scale, ChevronRight, ChevronDown, ArrowRight, Star, Clock, Mail, HelpCircle, Briefcase, Home } from "lucide-react";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
-import HeroAvatars from "@/app/components/HeroAvatars";
+import { ArrowRight, Check, ChevronDown, ChevronRight } from "lucide-react";
 
-/* ── State Fees Data ──────────────────────────────────────── */
 const STATE_FEES: Record<string, number> = {
-  Alabama: 236, Alaska: 250, Arizona: 50, Arkansas: 45, California: 70,
-  Colorado: 50, Connecticut: 120, Delaware: 90, Florida: 125, Georgia: 100,
-  Hawaii: 50, Idaho: 100, Illinois: 150, Indiana: 95, Iowa: 50, Kansas: 160,
-  Louisiana: 75, Maine: 175, Maryland: 100, Massachusetts: 500, Michigan: 50,
-  Minnesota: 155, Mississippi: 50, Missouri: 50, Montana: 70, Nebraska: 105,
-  Nevada: 75, "New Hampshire": 100, "New Jersey": 125, "New Mexico": 50,
-  "New York": 200, "North Carolina": 125, "North Dakota": 135, Ohio: 99,
-  Oklahoma: 100, Oregon: 100, Pennsylvania: 125, "Rhode Island": 150,
-  "South Carolina": 110, "South Dakota": 150, Tennessee: 300, Texas: 300,
-  Utah: 72, Vermont: 125, Virginia: 100, Washington: 200, "Washington DC": 220,
-  "West Virginia": 100, Wisconsin: 130, Wyoming: 100,
+  Alabama: 236,
+  Alaska: 250,
+  Arizona: 50,
+  Arkansas: 45,
+  California: 70,
+  Colorado: 50,
+  Connecticut: 120,
+  Delaware: 90,
+  Florida: 125,
+  Georgia: 100,
+  Hawaii: 50,
+  Idaho: 100,
+  Illinois: 150,
+  Indiana: 95,
+  Iowa: 50,
+  Kansas: 160,
+  Louisiana: 75,
+  Maine: 175,
+  Maryland: 100,
+  Massachusetts: 500,
+  Michigan: 50,
+  Minnesota: 155,
+  Mississippi: 50,
+  Missouri: 50,
+  Montana: 70,
+  Nebraska: 105,
+  Nevada: 75,
+  "New Hampshire": 100,
+  "New Jersey": 125,
+  "New Mexico": 50,
+  "New York": 200,
+  "North Carolina": 125,
+  "North Dakota": 135,
+  Ohio: 99,
+  Oklahoma: 100,
+  Oregon: 100,
+  Pennsylvania: 125,
+  "Rhode Island": 150,
+  "South Carolina": 110,
+  "South Dakota": 150,
+  Tennessee: 300,
+  Texas: 300,
+  Utah: 72,
+  Vermont: 125,
+  Virginia: 100,
+  Washington: 200,
+  "Washington DC": 220,
+  "West Virginia": 100,
+  Wisconsin: 130,
+  Wyoming: 100,
 };
 
-/* ── Top Reasons Data ─────────────────────────────────────── */
-const topReasons = [
-  {
-    icon: Shield,
-    title: "Protect Personal Assets",
-    description: "An LLC separates your personal finances from your business debts and liabilities.",
-  },
-  {
-    icon: DollarSign,
-    title: "Custom Tax Status",
-    description: "Subject to pass-through taxation. You can elect S Corporation tax status for added flexibility.",
-  },
-  {
-    icon: FileText,
-    title: "Less Paperwork",
-    description: "Compared to Corporations, LLCs have fewer formalities and annual requirements.",
-  },
-  {
-    icon: Building2,
-    title: "Ideal for Holding Companies",
-    description: "An LLC separates your personal finances from your business debts and liabilities.",
-  },
-];
-
-/* ── Add-On Services Data ─────────────────────────────────── */
-const addOnServices = [
-  "DBA (Doing Business As) Registration",
-  "USA Registered Agent Service",
-  "Annual Franchise Tax Filing Support",
-  "Operating Agreement Review",
-  "Startup Compliance Kit",
-  "Conversion Services (Sole Prop → LLC)",
-];
-
-/* ── Steps Data ───────────────────────────────────────────── */
-const steps = [
-  {
-    number: "01",
-    title: "Tell Us About Your Business",
-    description: "We'll help determine if an LLC is the right fit and collect the necessary details.",
-  },
-  {
-    number: "02",
-    title: "File Certificate of Formation",
-    description: "We submit your LLC Certificate of Formation with the USA Secretary of State.",
-  },
-  {
-    number: "03",
-    title: "Receive Official Documents",
-    description: "Get your EIN, Operating Agreement, and other key documents via email or mail.",
-  },
-  {
-    number: "04",
-    title: "Stay Compliant Year-Round",
-    description: "Our Legal plan keeps your LLC on track with alerts for renewals, franchise taxes, and other deadlines.",
-  },
-];
-
-/* ── Comparison Data ──────────────────────────────────────── */
-const comparisonData = {
-  llc: {
-    name: "LLC",
-    features: [
-      { title: "Liability Protection", description: "Owners (members) are not personally liable for business debts, protecting personal assets." },
-      { title: "Pass-Through Taxation", description: "Profits and losses pass directly to members' personal tax returns, avoiding double taxation." },
-      { title: "Optional S Corporation", description: "LLCs can elect S-Corp status to reduce self-employment taxes if eligible." },
-      { title: "Minimal Paperwork", description: "Annual reports and a few compliance requirements depending on the state." },
-      { title: "Great for Holding Companies", description: "Flexible structure for managing multiple businesses or investments under one entity." },
-      { title: "Startup-Friendly", description: "Easy to form, flexible ownership, and minimal ongoing compliance make LLCs attractive to new businesses." },
-    ],
-  },
-  corporation: {
-    name: "Corporation",
-    features: [
-      { title: "Limited Liability", description: "Shareholders have limited liability, separating personal and business assets." },
-      { title: "Corporate Tax", description: "(C-Corp) Profits are taxed at the corporate level and again on dividends to shareholders." },
-      { title: "S-Corp Status Available", description: "Corporations can file for S-Corp status to enjoy pass-through taxation (subject to IRS rules)." },
-      { title: "Hefty Paperwork", description: "Corporations must hold annual meetings, maintain bylaws, and file extensive reports." },
-      { title: "Best for Holding Companies", description: "Strong structure for managing subsidiaries and raising investment capital." },
-      { title: "Ideal for Startups", description: "C-Corps and S-Corps are ideal for startups seeking venture capital or issuing shares to investors." },
-    ],
-  },
-  soleProprietorship: {
-    name: "Sole Proprietorship",
-    features: [
-      { title: "No Protection", description: "No legal separation; personal assets are at risk if the business incurs debt or lawsuits." },
-      { title: "No Corporate Tax", description: "Income is reported on the owner's personal tax return, avoiding corporate tax." },
-      { title: "No S-Corp Status", description: "S-Corp status is not available for sole proprietors." },
-      { title: "Minimal Paperwork", description: "Few legal requirements beyond basic permits and licenses are required." },
-      { title: "Not Suitable for Holding Companies", description: "Sole Proprietorships are not suited for managing multiple businesses under one entity." },
-      { title: "Not Startup Friendly", description: "Limited growth potential and harder to secure funding compared to other structures." },
-    ],
-  },
-};
-
-/* ── FAQ Data ─────────────────────────────────────────────── */
-const faqs = [
-  {
-    question: "How do I start a limited liability company in USA?",
-    answer: "Choose a name, appoint a Registered Agent in USA, file your Certificate of Formation, and apply for an EIN. We can take care of all of this for you.",
-  },
-  {
-    question: "What is a Certificate of Formation for an LLC in USA?",
-    answer: "The Certificate of Formation is the official legal document required to form your LLC in USA. It includes your company name, Registered Agent address, management structure (member-managed or manager-managed), and organizer signature.",
-  },
-  {
-    question: "Can I form a holding company as an LLC?",
-    answer: "Yes, LLCs are an excellent choice for holding companies. They provide flexible structure for managing multiple businesses or investments under one entity with liability protection.",
-  },
-  {
-    question: "Do I need a lawyer to start my LLC in USA?",
-    answer: "While not legally required, having an attorney can help ensure your LLC is properly structured, especially for complex ownership arrangements, holding companies, or multi-member LLCs.",
-  },
-  {
-    question: "How long does the LLC formation process take?",
-    answer: "Processing times vary by state, but typically range from a few days to several weeks. Expedited filing options are available in most states for faster processing.",
-  },
-  {
-    question: "Can I use my home address as my business address?",
-    answer: "Yes, you can use your home address, but many business owners prefer to use a Registered Agent service to maintain privacy and ensure important documents are received promptly.",
-  },
-];
-
-/* ── Reviews Data ─────────────────────────────────────────── */
-const reviews = [
-  {
-    name: "Samantha P.",
-    type: "LLC Customer",
-    text: "I was nervous about filing my LLC, but Brendat walked me through everything step-by-step. I had my paperwork done in days, and the flat fee meant no surprises. Highly recommend!",
-  },
-  {
-    name: "Carlos M.",
-    type: "Trademark Customer",
-    text: "I needed help registering a trademark for my business logo. Their team handled the search, paperwork, and filing seamlessly. I felt protected every step of the way.",
-  },
-  {
-    name: "Nell C.",
-    type: "Last Will Customer",
-    text: "We used Brendat for our estate planning documents, and I can't thank them enough. Everything was explained thoroughly, and now I know my family is taken care of.",
-  },
-];
-
-export default function LLCPage() {
+export default function CampaignLandingPage() {
   const [selectedEntity, setSelectedEntity] = useState("LLC");
   const [selectedState, setSelectedState] = useState("");
+  const [expandedPackages, setExpandedPackages] = useState<string[]>([]);
   const router = useRouter();
 
   const handleStartBusiness = () => {
@@ -176,78 +71,290 @@ export default function LLCPage() {
       router.push(`/order/step2?entity=${encodeURIComponent(selectedEntity)}&state=${encodeURIComponent(selectedState)}`);
     }
   };
+  const scrollToStartOrder = () => {
+    document.getElementById("start-order")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  const togglePackageExpanded = (packageName: string) => {
+    setExpandedPackages((current) =>
+      current.includes(packageName) ? current.filter((name) => name !== packageName) : [...current, packageName]
+    );
+  };
+
+  const serviceHighlights = [
+    {
+      label: "Formation & Compliance",
+      icon: "/icons/llc-landing/formation-compliance.svg",
+      alt: "Formation and compliance icon",
+    },
+    {
+      label: "Banking & Bookkeeping",
+      icon: "/icons/llc-landing/banking-bookeeping.svg",
+      alt: "Banking and bookkeeping icon",
+    },
+    {
+      label: "Tax Advice and Filing",
+      icon: "/icons/llc-landing/tax-advice-filing.svg",
+      alt: "Tax advice and filing icon",
+    },
+    {
+      label: "Expert Customer Support",
+      icon: "/icons/llc-landing/expert-customer-support.svg",
+      alt: "Expert customer support icon",
+    },
+  ];
+  const packageOptions = [
+    {
+      name: "Basic",
+      price: "$0",
+      subtitle: "Perfect to get started",
+      cta: "Get Started Free",
+      featured: false,
+      features: [
+        "Preparing & Filing Articles of Organization",
+        "Name Availability Check",
+        "Business Tax Consultation",
+      ],
+    },
+    {
+      name: "Standard",
+      price: "$149",
+      subtitle: "Best Value for New Businesses",
+      cta: "Form My LLC",
+      featured: true,
+      features: [
+        "Preparing & Filing Articles of Organization",
+        "Name Availability Check",
+        "Registered Agent (1st year)",
+        "EIN Business Tax Number",
+        "Banking Resolutions",
+        "Operating Agreement",
+        "Business Banking Account Offer",
+        "Phone & Email Support",
+        "Business Tax Consultation",
+        "Lifetime Compliance Alerts",
+      ],
+    },
+    {
+      name: "Premium",
+      price: "$249",
+      subtitle: "Launch Your Business Faster & Smarter",
+      cta: "Launch My Business Fast",
+      featured: false,
+      features: [
+        "Preparing & Filing Articles of Organization",
+        "Name Availability Check",
+        "Registered Agent (1st year)",
+        "EIN Business Tax Number",
+        "Banking Resolutions",
+        "Operating Agreement",
+        "Fintech Bank Account Setup",
+        "Domain Name + Business Email",
+        "Expedited Filing (3 to 5 Business Days)",
+        "Google My Business (GMB) Setup",
+        "Unlimited Phone & Email Support",
+        "Business Tax Consultation",
+        "Lifetime Compliance Alerts",
+        "IRS Form 2553",
+        "Basic multi-page website (Home, About, Services, Contact)",
+      ],
+    },
+  ];
+  const howItWorksSteps = [
+    {
+      icon: "/icons/llc-landing/how-it-works/1.svg",
+      text: "Tell Us About Your Business.\nEnter your details in minutes.",
+    },
+    {
+      icon: "/icons/llc-landing/how-it-works/2.svg",
+      text: "We Handle the Paperwork.\nWe file everything with the state.",
+    },
+    {
+      icon: "/icons/llc-landing/how-it-works/3.svg",
+      text: "Get Your LLC + EIN.\nReceive official documents quickly.",
+    },
+    {
+      icon: "/icons/llc-landing/how-it-works/4.svg",
+      text: "Stay Compliant Year-Round.\nWe remind you of deadlines and filings.",
+    },
+  ];
+  const whyChooseCards = [
+    {
+      image: "/icons/llc-landing/why-choose/1.png",
+      title: "USA-Specific Expertise",
+      description:
+        "Get your corporation formed right the first time with attorneys who know USA laws inside out.",
+    },
+    {
+      image: "/icons/llc-landing/why-choose/2.png",
+      title: "S-Corp Election Assistance",
+      description: "Easily set up and file your S-Corp election without confusing IRS paperwork.",
+    },
+    {
+      image: "/icons/llc-landing/why-choose/3.png",
+      title: "Fast Turnaround",
+      description: "Form your corporation quickly, with expedited service when you need it done fast.",
+    },
+    {
+      image: "/icons/llc-landing/why-choose/4.png",
+      title: "Full Compliance Support",
+      description: "We ensure your corporate filings meet all USA Secretary of State requirements.",
+    },
+  ];
+  const reviewTestimonials = [
+    {
+      name: "Samantha P.",
+      role: "LLC Customer",
+      quote:
+        "I was nervous about filing my LLC, but Brendat walked me through everything step-by-step. I had my paperwork done in days, and the flat fee meant no surprises. Highly recommend!",
+    },
+    {
+      name: "Carlos M.",
+      role: "Trademark Customer",
+      quote:
+        "I needed help registering a trademark for my business logo. Their team handled the search, paperwork, and filing seamlessly. I felt protected every step of the way.",
+    },
+    {
+      name: "Nell C.",
+      role: "Last Will Customer",
+      quote:
+        "We used Brendat for our estate planning documents, and I can't thank them enough. Everything was explained clearly, and now I know my family is taken care of.",
+    },
+  ];
 
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-white">
-      {/* ── Hero Section ───────────────────────────────────────── */}
-      <section className="relative bg-gradient-to-br from-gray-50 via-white to-accent/5 py-20 overflow-hidden">
-        <HeroAvatars />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,74,0,0.08),transparent_50%)]" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 leading-tight mb-6">
-              Professional LLC Formation Service in USA Done Right
-            </h1>
-            <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Get best LLC formation services in USA at Brendat. Our attorneys handle everything from paperwork to compliance so that you can launch your business confidently, protect your assets, and focus on growth.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-              <Link
-                href="#start-order"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById("start-order")?.scrollIntoView({ behavior: "smooth", block: "start" });
-                }}
-                className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all text-lg"
-              >
-                <Briefcase className="w-5 h-5" />
-                Start My LLC
-              </Link>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 bg-white border-2 border-gray-200 hover:border-accent text-gray-700 hover:text-accent font-bold px-8 py-4 rounded-xl transition-all text-lg"
-              >
-                <MessageCircle className="w-5 h-5" />
-                Talk to LLC Agent
-              </Link>
+    <main className="bg-white">
+      <section className="relative isolate overflow-hidden">
+        <div
+          className="grid min-h-[680px] w-full bg-cover bg-center grid-cols-1 lg:grid-cols-2"
+          style={{ backgroundImage: "url('/campaign-hero-bg.png')", backgroundSize: "cover", backgroundPosition: "right" }}
+        >
+          <div className="relative z-10 flex items-center  justify-end  py-16 ">
+            <div className="max-w-xl">
+              <h1 className="text-3xl font-bold leading-tight tracking-tight  sm:text-5xl">
+                Start Your <span className="text-secondary">US LLC</span> in 5 Minutes | $0 + State Fees
+              </h1>
+
+              <p className="mt-6 text-base leading-[1.4]  text-black sm:text-lg">
+                Launch your business with expert support. We handle everything
+                formation, EIN, and compliance - so you can focus on growth.
+              </p>
+
+              <p className="mt-5 inline-flex rounded-md bg-accent/15 px-4 py-0.5 text-lg font-bold text-black">
+                Trusted by 10,000+ Entrepreneurs.
+              </p>
+
+              <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-lg font-bold text-black">
+                <span>50-State Compliance</span>
+                <span className="text-black/30">|</span>
+                <span>Fast &amp; Secure Filing</span>
+              </div>
+
+              <div className="mt-2 flex flex-wrap items-center gap-5">
+                <span className="font-bold text-black text-lg">Excellent</span>
+                <Image
+                  src="/trustpilot-ratings.svg"
+                  alt="Trustpilot rating"
+                  width={180}
+                  height={34}
+                  className="h-auto w-[110px]"
+                />
+                <Image
+                  src="/Trustpilot_Logo.svg"
+                  alt="Trustpilot logo"
+                  width={170}
+                  height={40}
+                  className="h-auto w-[100px] mt-[-2]"
+                />
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-4">
+                <button
+                  type="button"
+                  onClick={scrollToStartOrder}
+                  className="cursor-pointer rounded-lg bg-secondary px-8 py-2.5 text-base font-medium text-white shadow-lg shadow-accent/25 transition hover:bg-accent-dark sm:text-lg"
+                >
+                  Start My LLC Now
+                </button>
+                <button
+                  type="button"
+                  onClick={() => router.push("/contact")}
+                  className="cursor-pointer rounded-lg border border-secondary bg-secondary/5 px-8 py-2.5 text-base font-medium text-black transition hover:bg-transparent sm:text-lg"
+                >
+                  Talk to an Expert
+                </button>
+              </div>
+
+              <p className="mt-8 flex flex-wrap items-center gap-3 text-lg">
+                <span className="font-bold text-black">Speak to a Business Specialist:</span>
+                <a href="tel:3032468693" className="font-bold bg-accent/10 text-secondary rounded-md px-3 py-1 hover:underline">
+                  (303) 246-8693
+                </a>
+              </p>
             </div>
-            <div className="flex items-center justify-center gap-2 text-gray-600">
-              <Phone className="w-5 h-5 text-accent" />
-              <span>Have Questions? Call</span>
-              <a href="tel:3032468693" className="font-bold text-accent hover:underline">(303) 246-8693</a>
-              <span>to Speak with a Business Formation Lawyer.</span>
+          </div>
+
+          <div className="relative flex items-center justify-start px-6 py-16 sm:px-10 lg:px-14">
+            <div className="absolute inset-0 bg-black/50" />
+
+            <div className="relative z-10 w-full max-w-[620px]">
+              <Image src="/campaign-hero-llc.png" alt="Business Formation" width={620} height={620} priority />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Start Your Business Section ──────────────────────── */}
-      <section className="py-20 bg-white" id="start-order">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-left mb-10">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-              Start Your LLC Today
+      <section className="bg-[#FF7828]">
+        <div className="mx-auto w-full max-w-6xl px-4 sm:px-8">
+          <ul className="flex flex-col md:flex-row">
+            {serviceHighlights.map((item, index) => (
+              <li key={item.label} className="relative flex flex-1 items-center justify-center py-6 sm:py-7">
+                <div className="flex items-center gap-3 text-white">
+                  <Image src={item.icon} alt={item.alt} width={40} height={40} />
+                  <p className="text-sm">{item.label}</p>
+                </div>
+                {index < serviceHighlights.length - 1 && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute right-0 top-1/2 hidden h-12 w-[2px] -translate-y-1/2 bg-white/40 md:block"
+                  />
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="bg-white px-4 pb-20 pt-20 md:pb-28 md:pt-24" id="start-order">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-14 text-left">
+            <h2 className="animate-fade-in-up mb-6 text-4xl leading-[1.08] font-black tracking-tight text-black md:text-[48px]">
+              Start Your Business
+              <br />
+              With <span className="text-accent">Confidence</span>
             </h2>
-            <p className="text-gray-600 text-base max-w-lg leading-relaxed">
-              Choose your entity type and state to begin the formation process.
+            <p className="animate-fade-in-up-delay max-w-lg text-base leading-relaxed text-gray-600">
+              Join over 1,000,000 happy business owners. Get started by choosing your entity type and state of
+              formation.
             </p>
           </div>
 
-          {/* Form card */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-8 md:p-10 max-w-4xl">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
-              {/* Pick Entity */}
+          <div className="animate-fade-in-up-delay-2 rounded-2xl border border-gray-200 bg-white p-8 shadow-lg md:p-10">
+            <div className="grid grid-cols-1 items-end gap-4 sm:grid-cols-3">
               <div>
-                <div className="flex items-center gap-3 border border-accent rounded-xl px-4 py-3.5 bg-gray-50 focus-within:ring-2 ring-accent/30 transition-all">
-                  <span className="flex items-center justify-center w-7 h-7 rounded-full bg-accent text-white text-xs font-bold shrink-0">1</span>
-                  <div className="flex flex-col flex-1">
-                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-none mb-0.5">Entity Type</span>
+                <div className="ring-accent/30 flex items-center gap-3 rounded-xl border border-accent bg-gray-50 px-4 py-3.5 transition-all focus-within:ring-2">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-bold text-white">
+                    1
+                  </span>
+                  <div className="flex flex-1 flex-col">
+                    <span className="mb-0.5 text-[10px] font-bold uppercase leading-none tracking-wider text-gray-400">
+                      Entity Type
+                    </span>
                     <select
                       value={selectedEntity}
                       onChange={(e) => setSelectedEntity(e.target.value)}
-                      className="bg-transparent text-black border-none focus:outline-none w-full font-semibold appearance-none cursor-pointer text-sm"
+                      className="w-full cursor-pointer appearance-none border-none bg-transparent text-sm font-semibold text-black focus:outline-none"
                     >
                       <option value="">Pick Entity</option>
                       <option>LLC</option>
@@ -256,517 +363,270 @@ export default function LLCPage() {
                       <option>Nonprofit</option>
                     </select>
                   </div>
-                  <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 pointer-events-none" />
+                  <ChevronDown className="pointer-events-none h-4 w-4 shrink-0 text-gray-400" />
                 </div>
               </div>
 
-              {/* Select State */}
               <div>
-                <div className="flex items-center gap-3 border border-accent rounded-xl px-4 py-3.5 bg-gray-50 focus-within:ring-2 ring-accent/30 transition-all">
-                  <span className="flex items-center justify-center w-7 h-7 rounded-full bg-accent text-white text-xs font-bold shrink-0">2</span>
-                  <div className="flex flex-col flex-1">
-                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-none mb-0.5">State</span>
+                <div className="ring-accent/30 flex items-center gap-3 rounded-xl border border-accent bg-gray-50 px-4 py-3.5 transition-all focus-within:ring-2">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-bold text-white">
+                    2
+                  </span>
+                  <div className="flex flex-1 flex-col">
+                    <span className="mb-0.5 text-[10px] font-bold uppercase leading-none tracking-wider text-gray-400">
+                      State
+                    </span>
                     <select
                       value={selectedState}
                       onChange={(e) => setSelectedState(e.target.value)}
-                      className="bg-transparent text-black border-none focus:outline-none w-full font-semibold appearance-none cursor-pointer text-sm"
+                      className="w-full cursor-pointer appearance-none border-none bg-transparent text-sm font-semibold text-black focus:outline-none"
                     >
                       <option value="">Select State</option>
-                      {Object.keys(STATE_FEES).map((st) => (
-                        <option key={st}>{st}</option>
+                      {Object.keys(STATE_FEES).map((stateName) => (
+                        <option key={stateName}>{stateName}</option>
                       ))}
                     </select>
                   </div>
-                  <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 pointer-events-none" />
+                  <ChevronDown className="pointer-events-none h-4 w-4 shrink-0 text-gray-400" />
                 </div>
               </div>
 
-              {/* CTA Button */}
               <button
+                type="button"
                 onClick={handleStartBusiness}
                 disabled={!selectedEntity || !selectedState}
-                className="bg-accent hover:bg-accent-dark disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-xl px-6 py-3.5 transition-all flex items-center justify-center gap-2 shadow-lg shadow-accent/25 text-sm whitespace-nowrap"
+                className="cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-accent px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-accent/25 transition-all hover:bg-accent-dark disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Start My Business <ArrowRight className="w-4 h-4" />
+                Start My Business <ArrowRight className="h-4 w-4" />
               </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Top Reasons Section ────────────────────────────────── */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-              Top Reasons to Form an LLC in USA
-            </h2>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {topReasons.map((reason) => {
-              const Icon = reason.icon;
-              return (
-                <div key={reason.title} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:border-accent/20 transition-all">
-                  <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-4">
-                    <Icon className="w-7 h-7 text-accent" />
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{reason.title}</h3>
-                  <p className="text-sm text-gray-600">{reason.description}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 100% Accurate Filing Guarantee ─────────────────────── */}
-      <section className="py-16 bg-accent">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
-                <Check className="w-8 h-8 text-white" />
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-white">100% Accurate Filing Guarantee</h3>
-                <p className="text-white/80">Whether you&apos;re a first-time founder or a seasoned investor, Brendat&apos;s experienced LLC Formation Lawyers in USA offer a strategic path forward.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Why Use Brendat Section ────────────────────────────── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-6">
-                Why Use Brendat to Set Up Your LLC?
-              </h2>
-              <h3 className="text-xl font-bold text-accent mb-4">Legal Help When You Need It</h3>
-              <p className="text-gray-600 mb-6">
-                Some businesses are straightforward. Others need more structure, legal protection, or tax planning, especially if you&apos;re forming a holding company in USA or preparing for outside investment.
-              </p>
-              <p className="text-gray-700 font-semibold mb-4">Our limited liability company formation attorneys in USA are here to help with:</p>
-              <ul className="space-y-3 mb-8">
-                {[
-                  "Ownership structure and equity planning",
-                  "Multi-member LLC agreements",
-                  "Holding company setup",
-                  "Registered agent requirements",
-                  "Local licensing and compliance",
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-3">
-                    <ChevronRight className="w-5 h-5 text-accent shrink-0" />
-                    <span className="text-gray-600">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="text-gray-600 mb-6">
-                So whether you&apos;re starting small or building big, we ensure your LLC is set up correctly.
-              </p>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-6 py-3 rounded-xl shadow-md shadow-accent/20 transition-all"
-              >
-                Talk to a LLC Formation Attorney
-              </Link>
-            </div>
-            <div className="bg-gradient-to-br from-accent/5 to-accent/10 rounded-3xl p-8 border border-accent/20">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-accent rounded-xl flex items-center justify-center">
-                  <Scale className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-gray-900">LLC Formation Consultation</h4>
-                  <p className="text-sm text-gray-500">LLC Registration Services</p>
-                </div>
-              </div>
-              <div className="bg-white rounded-2xl p-6">
-                <h4 className="font-bold text-gray-900 mb-4">Add-On LLC Formation Services</h4>
-                <p className="text-sm text-gray-600 mb-4">
-                  With our add-on LLC formation services in USA, you can easily customize your setup:
-                </p>
-                <ul className="space-y-3">
-                  {addOnServices.map((service) => (
-                    <li key={service} className="flex items-center gap-3">
-                      <div className="w-5 h-5 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
-                        <Check className="w-3 h-3 text-accent" />
-                      </div>
-                      <span className="text-sm text-gray-700">{service}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="#start-order"
-                  className="block w-full mt-6 text-center bg-accent hover:bg-accent-dark text-white font-bold py-3 rounded-xl transition-all"
-                >
-                  Customize My Package
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 4 Easy Steps Section ───────────────────────────────── */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-              Start Your LLC in 4 Easy Steps with Brendat
-            </h2>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {steps.map((step) => (
-              <div key={step.number} className="relative">
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-full">
-                  <div className="w-14 h-14 rounded-xl bg-accent text-white flex items-center justify-center font-black text-xl mb-4">
-                    {step.number}
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{step.title}</h3>
-                  <p className="text-sm text-gray-600">{step.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Comparison Section ─────────────────────────────────── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-              LLC vs. Corporation vs. Sole Proprietorship
-            </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Choosing the right business structure is a crucial first step in setting up your company in USA. Whether you&apos;re considering an LLC, a corporation, or a sole proprietorship, understanding the differences can help you protect your assets, reduce tax burdens, and simplify operations.
+      <section className="bg-[#F3F3F3] px-4 py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-4xl font-bold tracking-tight text-secondary sm:text-5xl">Choose Your Package</h2>
+            <p className="mt-4 text-lg leading-relaxed text-black/80">
+              Launch your business with expert support. We handle everything formation, EIN, and compliance - so you
+              can focus on growth.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
-            {/* LLC */}
-            <div className="bg-gradient-to-b from-accent/5 to-accent/10 rounded-2xl p-6 border-2 border-accent">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-accent rounded-xl flex items-center justify-center">
-                  <Building2 className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900">LLC</h3>
-              </div>
-              <div className="space-y-4">
-                {comparisonData.llc.features.map((feature) => (
-                  <div key={feature.title} className="bg-white rounded-xl p-4">
-                    <h4 className="font-bold text-gray-900 mb-1 flex items-center gap-2">
-                      <Check className="w-4 h-4 text-accent" />
-                      {feature.title}
-                    </h4>
-                    <p className="text-sm text-gray-600">{feature.description}</p>
+          <div className="mt-10 py-10 grid grid-cols-1 items-start gap-4 md:grid-cols-3 md:gap-5">
+            {packageOptions.map((option) => (
+              <div key={option.name} className="w-full">
+                <article
+                  className={`relative rounded-t-xl p-8 text-center ${
+                    option.featured ? "bg-[rgba(255,120,40,0.2)]" : "bg-[rgba(255,120,40,0.08)]"
+                  } ${expandedPackages.includes(option.name) ? "" : "rounded-b-xl"}`}
+                >
+                  {option.featured && (
+                    <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded bg-[#FF7828] px-7 py-2 text-xs font-medium text-white">
+                      Recommended
+                    </span>
+                  )}
+
+                  <h3 className="mt-5 text-4xl font-medium text-black">{option.name}</h3>
+                  <p className="my-6 text-5xl font-bold text-[#FF7828]">
+                    {option.price} <span className="text-2xl font-medium text-black">+ State Fee</span>
+                  </p>
+                  <p className="mt-4 text-md font-medium text-black/85">{option.subtitle}</p>
+
+                  <button
+                    type="button"
+                    onClick={scrollToStartOrder}
+                    className="mt-8 w-full cursor-pointer rounded-md bg-[#FF7828] py-3 text-md font-medium text-white transition hover:bg-[#E96C20]"
+                  >
+                    {option.cta}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => togglePackageExpanded(option.name)}
+                    className="mt-5 inline-flex cursor-pointer items-center gap-1 text-md font-bold text-black underline underline-offset-2"
+                  >
+                    Learn More
+                    {expandedPackages.includes(option.name) ? (
+                      <ChevronDown className="h-3.5 w-3.5 text-[#FF7828]" />
+                    ) : (
+                      <ChevronRight className="h-3.5 w-3.5 text-[#FF7828]" />
+                    )}
+                  </button>
+                </article>
+
+                {expandedPackages.includes(option.name) && (
+                  <div className={`rounded-b-xl px-6 pb-6 pt-5 text-left ${
+                    option.featured ? "bg-[#FF7828]/10" : "bg-[#FF7828]/15"
+                  }`}>
+                    <p className="mb-3 text-2xl font-extrabold text-black">Includes</p>
+                    <ul className="space-y-2.5">
+                      {option.features.map((feature) => (
+                        <li key={feature} className="flex items-start gap-2 text-base font-medium text-black/85">
+                          <span className="mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-[2px] bg-[rgba(255,120,40,0.2)]">
+                            <Check className="h-3 w-3 text-[#FF7828]" />
+                          </span>
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Corporation */}
-            <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-gray-400 rounded-xl flex items-center justify-center">
-                  <Briefcase className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900">Corporation</h3>
-              </div>
-              <div className="space-y-4">
-                {comparisonData.corporation.features.map((feature) => (
-                  <div key={feature.title} className="bg-white rounded-xl p-4">
-                    <h4 className="font-bold text-gray-900 mb-1">{feature.title}</h4>
-                    <p className="text-sm text-gray-600">{feature.description}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Sole Proprietorship */}
-            <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-gray-400 rounded-xl flex items-center justify-center">
-                  <Users className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900">Sole Proprietorship</h3>
-              </div>
-              <div className="space-y-4">
-                {comparisonData.soleProprietorship.features.map((feature) => (
-                  <div key={feature.title} className="bg-white rounded-xl p-4">
-                    <h4 className="font-bold text-gray-900 mb-1">{feature.title}</h4>
-                    <p className="text-sm text-gray-600">{feature.description}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="text-center mt-12 bg-accent/5 rounded-2xl p-8 border border-accent/20">
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Still Not 100% Sure?</h3>
-            <p className="text-gray-600 mb-6">Our experienced LLC Attorneys in USA will help you weigh your options before filing!</p>
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-6 py-3 rounded-xl shadow-md shadow-accent/20 transition-all"
-            >
-              Talk to an Attorney
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Certificate of Formation Section ───────────────────── */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-12 text-center">
-            What You Should Know About Starting An LLC in USA
-          </h2>
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Content */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                What Is a Certificate of Formation for an LLC?
-              </h3>
-              <p className="text-gray-600 mb-6">
-                The Certificate of Formation is the official legal document required to form your LLC in USA. It includes:
-              </p>
-              <ul className="space-y-3 mb-6">
-                {[
-                  "Your company name",
-                  "Registered Agent address",
-                  "Management structure (member-managed or manager-managed)",
-                  "Organizer signature",
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
-                      <Check className="w-3 h-3 text-accent" />
-                    </div>
-                    <span className="text-gray-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="text-gray-600">
-                We prepare and file your LLC certificate of formation with the USA Secretary of State, and you&apos;ll receive a stamped copy once approved.
-              </p>
-            </div>
-            {/* Image */}
-            <div className="relative">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                <Image
-                  src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=800&auto=format&fit=crop"
-                  alt="Certificate of Formation - LLC Documents"
-                  width={600}
-                  height={450}
-                  className="w-full h-auto object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6">
-                  <div className="bg-white/95 backdrop-blur rounded-xl p-4 shadow-lg">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center">
-                        <FileText className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <p className="font-bold text-gray-900">Official Documents</p>
-                        <p className="text-sm text-gray-500">Stamped & approved by the state</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* Decorative elements */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-accent/10 rounded-full blur-2xl" />
-              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-accent/5 rounded-full blur-3xl" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── FAQ Section ────────────────────────────────────────── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-              Frequently Asked Questions About LLC Formation USA
-            </h2>
-          </div>
-          <div className="max-w-4xl mx-auto space-y-4">
-            {faqs.map((faq) => (
-              <div key={faq.question} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
-                <h3 className="flex items-start gap-3">
-                  <HelpCircle className="w-6 h-6 text-accent shrink-0 mt-0.5" />
-                  <span className="font-bold text-gray-900">{faq.question}</span>
-                </h3>
-                <p className="text-gray-600 mt-3 pl-9">{faq.answer}</p>
+                )}
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Reviews Section ────────────────────────────────────── */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-              Our Reviews
-            </h2>
-            <p className="text-lg text-gray-600">What our customers are saying?</p>
+      <section className=" px-4 py-25">
+        <div className="mx-auto max-w-6xl">
+          <div className="text-center mb-15">
+            <h2 className="text-4xl mb-5 font-bold uppercase tracking-tight text-secondary sm:text-5xl">How It Works?</h2>
+            <p className="mt-2 text-4xl font-bold tracking-tight text-black sm:text-5xl">Start Your LLC in 4 Easy Steps:</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {reviews.map((review) => (
-              <div key={review.name} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+
+          <div className="mt-8 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            {howItWorksSteps.map((step, index) => (
+              <article
+                key={step.icon}
+                className={`rounded-xl py-12 p-7 ${
+                  index % 2 === 0 ? "bg-[rgba(255,120,40,0.08)]" : "bg-[rgba(255,120,40,0.15)]"
+                }`}
+              >
+                <Image className="mb-8" src={step.icon} alt="" width={60} height={60} />
+                <p className="mt-6 whitespace-pre-line  leading-tight text-black/85">{step.text}</p>
+              </article>
+            ))}
+          </div>
+
+          <div className="mt-8 flex flex-col gap-4 sm:mt-10 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-center text-xl font-bold text-black sm:text-left">
+              50-State Compliance&nbsp; | &nbsp;Fast &amp; Secure Filing&nbsp; | &nbsp;Trusted by 10,000+ Entrepreneurs.
+            </p>
+            <button
+              type="button"
+              onClick={scrollToStartOrder}
+              className="mx-auto w-full max-w-[220px] cursor-pointer rounded-md bg-secondary px-8 py-3 text-md font-medium text-white transition hover:bg-secondary-light sm:mx-0 sm:w-auto"
+            >
+              Start my LLC
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[#F3F3F3] px-4 py-20">
+        <div className="mx-auto max-w-6xl">
+          <h3 className="mb-15 text-center font-bold tracking-tight text-black md:text-left text-[36px]">
+            <span className="inline-block rounded-xl bg-[rgba(255,120,40,0.18)] px-4 py-2">Why Choose Brendat&apos;s</span>{" "}
+            Corporate Formation Services in <span className="text-secondary">US?</span>
+          </h3>
+
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {whyChooseCards.map((card) => (
+              <article key={card.title} className="pb-8 overflow-hidden rounded-xl bg-[#E6E6E6]">
+                <Image
+                  src={card.image}
+                  alt={card.title}
+                  width={290}
+                  height={175}
+                  className="h-[175px] w-full object-cover"
+                />
+                <div className="p-7">
+                  <h3 className="mt-3 font-bold leading-tight text-black">{card.title}</h3>
+                  <p className="mt-2 leading-snug text-black/85">{card.description}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="relative isolate overflow-hidden">
+        <section className="our-reviews-bg hidden md:block">
+          <div className="py-20">
+            <div className="grid min-h-[680px] w-full grid-cols-1 bg-cover bg-center lg:grid-cols-2">
+              <div className="relative z-10 flex items-center px-6 py-16 sm:px-10 lg:px-20"></div>
+
+              <div
+                className="relative flex items-center justify-center px-6 py-16"
+                style={{
+                  backgroundImage: "url('/icons/llc-landing/our-reviews.png')",
+                  backgroundSize: "cover",
+                  backgroundPosition: "right",
+                }}
+              ></div>
+            </div>
+          </div>
+        </section>
+        <section className="our-reviews-content z-10 bg-white/0 px-4 py-12 md:absolute md:inset-0 md:py-20">
+          <div className="mx-auto max-w-6xl">
+            <div className="grid items-start gap-6 md:grid-cols-12">
+              <div className="md:col-span-6">
+                <p className="text-2xl font-bold text-secondary">Our Reviews</p>
+                <h2 className="mt-4 text-5xl leading-tight text-black">
+                  What{" "}
+                  <span className="rounded-xl bg-[rgba(255,120,40,0.18)] px-3 py-1 font-bold text-secondary">
+                    Our Customers
+                  </span> <br />
+                  are saying?
+                </h2>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-12 mt-8">
+              <div className="col-span-11">
+                <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-2">
+                  {reviewTestimonials.map((review) => (
+                    <article key={review.name} className="rounded-md bg-[#F3F3F3] p-6 md:p-7">
+                      <p className="text-xl font-bold text-black">
+                        <span className="text-secondary">{review.name}</span>,{" "}
+                        <span className="font-medium">{review.role}</span>
+                      </p>
+                      <p className="mt-4 text-8xl font-black leading-none text-white">“</p>
+                      <p className="-mt-2 text-lg leading-relaxed text-black/90">{review.quote}</p>
+                      <p className="mt-6 text-3xl tracking-wide text-secondary">★★★★★</p>
+                    </article>
                   ))}
                 </div>
-                <p className="text-gray-600 mb-6">&quot;{review.text}&quot;</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
-                    <span className="text-accent font-bold">{review.name.charAt(0)}</span>
-                  </div>
-                  <div>
-                    <p className="font-bold text-gray-900">{review.name}</p>
-                    <p className="text-sm text-gray-500">{review.type}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Contact/CTA Section ────────────────────────────────── */}
-      <section className="py-16 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Questions card */}
-            <div className="bg-gray-50 rounded-2xl p-8 border border-gray-300 flex gap-5 items-start">
-              <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
-                <MessageCircle className="w-6 h-6 text-accent" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-gray-900">Questions? Ask An Attorney</h3>
-                <p className="text-sm text-gray-600 mt-1 mb-3">Get expert support for legal matters with our attorney by your side.</p>
-                <div className="flex items-center gap-2 text-gray-500 text-sm">
-                  <Clock className="w-4 h-4 shrink-0" />
-                  <span>Mon–Fri 5 am–7 pm PT &nbsp;·&nbsp; Sat–Sun 7 am–4 pm PT</span>
-                </div>
-              </div>
-            </div>
-            {/* Call card */}
-            <div className="bg-gray-50 rounded-2xl p-8 border border-gray-300 flex gap-5 items-start">
-              <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
-                <Phone className="w-6 h-6 text-accent" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-gray-900">Call An Agent</h3>
-                <a href="tel:3032468693" className="text-2xl font-black text-accent hover:underline block mt-1">(303) 246-8693</a>
-                <p className="text-sm text-gray-500 mt-1">Mon–Fri 5 am–7 pm PT &nbsp;·&nbsp; Sat–Sun 7 am–4 pm PT</p>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold px-5 py-2.5 rounded-xl mt-4 text-sm shadow-md shadow-accent/20 transition-all"
-                >
-                  Get legal help
-                </Link>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
-      {/* ── Contact Form Section ───────────────────────────────── */}
-      <section className="py-24 bg-gray-50 border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left — copy */}
-            <div>
-              <span className="inline-block text-xs font-black uppercase tracking-widest text-accent mb-4">Get Started Today</span>
-              <h2 className="text-3xl md:text-4xl font-black text-gray-900 leading-tight mb-6">
-                Launch your Business in USA
-              </h2>
-              <p className="text-gray-600 text-lg mb-10 leading-relaxed">
-                Dreaming to start a business in USA? At Brendat, we believe even entrepreneurs deserve expert assistance and legal backup. Our vetted network of USA-based attorneys is here to guide you.
-              </p>
-              <ul className="space-y-5">
-                {[
-                  { icon: FileText, text: "50 State Filing Compliance" },
-                  { icon: Shield,   text: "Registered Agent Service Included" },
-                  { icon: Check,    text: "Fast Transparent Service" },
-                ].map(({ icon: Icon, text }) => (
-                  <li key={text} className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center shrink-0">
-                      <Icon className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-gray-800 font-semibold text-lg">{text}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+      <section className="bg-secondary px-4 py-14 sm:py-20">
+        <div className="mx-auto max-w-6xl rounded-2xl bg-white/8 px-6 py-10 sm:px-12 sm:py-14">
+          <div className="max-w-4xl">
+            <h2 className="text-5xl font-bold tracking-tight text-white sm:text-7xl">Not Ready Yet?</h2>
+            <p className="mt-5 text-3xl font-bold text-white underline underline-offset-4 sm:text-3xl">
+              Download our FREE LLC Starter Guide.
+            </p>
+            <p className="mt-4 text-xl text-white/95 sm:text-xl">Enter your email to get instant access.</p>
 
-            {/* Right — form */}
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-300 p-8 md:p-10">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Send us a message</h3>
-              <form
-                className="space-y-5"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  router.push("/thank-you");
-                }}
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="h-12 w-full rounded-md border-none bg-white/85 px-4 text-base text-black placeholder:text-black/30 focus:outline-none sm:max-w-[460px]"
+              />
+              <button
+                type="button"
+                className="h-12 cursor-pointer rounded-md bg-white px-8 font-medium text-secondary transition hover:bg-white/90"
               >
-                <div className="grid sm:grid-cols-2 gap-5">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">First Name</label>
-                    <input
-                      type="text"
-                      placeholder="John"
-                      className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Last Name</label>
-                    <input
-                      type="text"
-                      placeholder="Doe"
-                      className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition"
-                    />
-                  </div>
+                Send Email
+              </button>
+            </div>
+
+            <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-3">
+              {["Choose the right state.", "Avoid costly mistakes.", "Set up your business properly."].map((item, idx) => (
+                <div key={item} className="flex items-center gap-3 rounded-md bg-white p-4">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-secondary text-xs text-white/90">
+                    {idx + 1}
+                  </span>
+                  <span className=" text-black/90">{item}</span>
                 </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Email Address</label>
-                  <input
-                    type="email"
-                    placeholder="john@example.com"
-                    className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Phone Number</label>
-                  <input
-                    type="tel"
-                    placeholder="(555) 000-0000"
-                    className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Message</label>
-                  <textarea
-                    rows={4}
-                    placeholder="Tell us about your business idea..."
-                    className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition resize-none"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full bg-accent hover:bg-accent-dark text-white font-bold py-3.5 rounded-xl shadow-md shadow-accent/25 hover:shadow-lg hover:shadow-accent/30 transition-all text-sm"
-                >
-                  Send Message
-                </button>
-              </form>
+              ))}
             </div>
           </div>
         </div>

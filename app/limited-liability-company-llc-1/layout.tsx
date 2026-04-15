@@ -1,10 +1,4 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Best LLC Formation Services in USA | Top USA Attorneys",
@@ -12,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <div className={outfit.className}>{children}</div>;
+  return <>{children}</>;
 }
