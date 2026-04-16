@@ -230,8 +230,8 @@ export default function CampaignLandingPage() {
           className="grid min-h-[680px] w-full bg-cover bg-center grid-cols-1 lg:grid-cols-2"
           style={{ backgroundImage: "url('/campaign-hero-bg.png')", backgroundSize: "cover", backgroundPosition: "right" }}
         >
-          <div className="relative z-10 flex items-center  justify-end  py-16 ">
-            <div className="max-w-xl">
+          <div className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-end px-4 py-16 lg:max-w-none lg:px-0">
+            <div className="w-full max-w-xl">
               <h1 className="text-3xl font-bold leading-tight tracking-tight  sm:text-5xl">
                 Start Your <span className="text-secondary">US LLC</span> in 5 Minutes | $0 + State Fees
               </h1>
