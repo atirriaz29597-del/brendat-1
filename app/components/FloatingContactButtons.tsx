@@ -25,7 +25,7 @@ export default function FloatingContactButtons() {
         className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3 text-sm font-black text-white shadow-xl shadow-[#25D366]/25 transition-all hover:-translate-y-0.5 hover:bg-[#1fb45a]"
       >
         <MessageCircle className="h-4 w-4" />
-        WhatsApp
+        Live Chat
       </a>
     </div>
   );
