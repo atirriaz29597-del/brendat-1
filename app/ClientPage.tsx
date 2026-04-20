@@ -504,7 +504,7 @@ export default function HomePage() {
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 rounded-xl border border-[#25D366] bg-white/90 px-7 py-3.5 text-sm font-bold text-[#128C4A] shadow-lg shadow-black/10 transition-all hover:bg-[#25D366] hover:text-white"
               >
-                WhatsApp <MessageCircle className="w-4 h-4" />
+                Live Chat <MessageCircle className="w-4 h-4" />
               </a>
             </div>
           </div>
