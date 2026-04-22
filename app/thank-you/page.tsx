@@ -8,20 +8,39 @@ import { useSearchParams } from "next/navigation";
 declare global {
   interface Window {
     dataLayer: Record<string, unknown>[];
+    gtag?: (...args: any[]) => void;
   }
 }
 
 function ThankYouContent() {
   const searchParams = useSearchParams();
   const isOrder = searchParams.get("type") === "order";
+  const transactionId = searchParams.get("transactionId") || "";
+  const parsedValue = Number(searchParams.get("value"));
+  const conversionValue = Number.isFinite(parsedValue) ? parsedValue : 1.0;
 
   useEffect(() => {
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: "conversion",
-      conversionType: isOrder ? "order_payment" : "form_submission",
+    if (!isOrder) return;
+
+    // Fire Google Ads purchase conversion only for real orders (not form submissions)
+    // and only once per unique transaction id (or once per session if none).
+    const dedupeKey = transactionId ? `ads_conv_order_${transactionId}` : "ads_conv_order";
+    try {
+      if (typeof window !== "undefined" && window.sessionStorage?.getItem(dedupeKey)) return;
+      window.sessionStorage?.setItem(dedupeKey, "1");
+    } catch {
+      // ignore storage errors (private mode / blocked storage)
+    }
+
+    if (typeof window.gtag !== "function") return;
+    window.gtag("event", "conversion", {
+      send_to: "AW-17996578935/FeG0CNXAl6AcEPeAuIVD",
+      value: conversionValue,
+      currency: "USD",
+      transaction_id: transactionId,
+      // new_customer: true/false, // add when available
     });
-  }, [isOrder]);
+  }, [isOrder, transactionId, conversionValue]);
 
   return (
     <main className="min-h-screen bg-white px-4 py-20">
