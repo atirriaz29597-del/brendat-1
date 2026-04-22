@@ -16,6 +16,8 @@ function ThankYouContent() {
   const searchParams = useSearchParams();
   const isOrder = searchParams.get("type") === "order";
   const transactionId = searchParams.get("transactionId") || "";
+  const parsedValue = Number(searchParams.get("value"));
+  const conversionValue = Number.isFinite(parsedValue) ? parsedValue : 1.0;
 
   useEffect(() => {
     if (!isOrder) return;
@@ -33,12 +35,12 @@ function ThankYouContent() {
     if (typeof window.gtag !== "function") return;
     window.gtag("event", "conversion", {
       send_to: "AW-17996578935/FeG0CNXAl6AcEPeAuIVD",
-      value: 1.0,
+      value: conversionValue,
       currency: "USD",
       transaction_id: transactionId,
       // new_customer: true/false, // add when available
     });
-  }, [isOrder, transactionId]);
+  }, [isOrder, transactionId, conversionValue]);
 
   return (
     <main className="min-h-screen bg-white px-4 py-20">

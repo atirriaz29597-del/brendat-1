@@ -320,6 +320,7 @@ function Step10Inner() {
         setProcessing(false);
         const q = new URLSearchParams({ type: "order" });
         if (data.transactionId) q.set("transactionId", String(data.transactionId));
+        q.set("value", orderTotal.toFixed(2));
         router.push(`/thank-you?${q.toString()}`);
       } else {
         setProcessing(false);
