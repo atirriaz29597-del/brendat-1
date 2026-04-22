@@ -4,7 +4,7 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Email recipient for contact form and order notifications
-const RECIPIENT_EMAIL = process.env.NOTIFICATION_EMAIL || "no-reply@mail.brendat.com";
+const RECIPIENT_EMAIL = process.env.NOTIFICATION_EMAIL || "contact@brendat.com";
 
 export async function POST(req: NextRequest) {
   try {
