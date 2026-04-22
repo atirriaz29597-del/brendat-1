@@ -318,7 +318,9 @@ function Step10Inner() {
         }
 
         setProcessing(false);
-        router.push("/thank-you?type=order");
+        const q = new URLSearchParams({ type: "order" });
+        if (data.transactionId) q.set("transactionId", String(data.transactionId));
+        router.push(`/thank-you?${q.toString()}`);
       } else {
         setProcessing(false);
         setPaymentError(data.message || "Payment was declined. Please check your card details and try again.");
