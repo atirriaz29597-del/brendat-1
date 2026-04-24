@@ -3,6 +3,7 @@
 import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, Info, MapPin, CreditCard, Lock } from "lucide-react";
 import Header from "../../components/Header";
 import { buildPricingParams, resolveSelectedPricing } from "../pricing";
@@ -345,7 +346,20 @@ function Step10Inner() {
 
           {/* Left - Billing Form */}
           <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 md:p-10">
-            <h2 className="text-xl font-black text-black mb-8">Billing Information</h2>
+            <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:items-end">
+              <h2 className="text-xl font-black text-black">Billing Information</h2>
+              <div className="justify-self-start sm:justify-self-end text-left sm:text-right">
+                <p className="mb-1 text-sm font-medium text-gray-400">We accept all major cards</p>
+                <Image
+                  src="/card-options.png"
+                  alt="Accepted card options"
+                  width={100}
+                  height={26}
+                  className="h-auto w-full max-w-[380px]"
+                  priority
+                />
+              </div>
+            </div>
 
             {/* Payment Error Alert */}
             {paymentError && (
@@ -637,45 +651,58 @@ function Step10Inner() {
           </div>
 
           {/* Right - Order Summary */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sticky top-24">
-            <h3 className="text-2xl font-black text-black mb-5">Order Summary</h3>
-            <div className="border-t border-gray-200 pt-5 space-y-4 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-500">Entity Type</span>
-                <span className="font-bold text-accent">{entity}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">{pkg} Package</span>
-                <span className="font-bold text-black">{packagePrice === 0 ? "Free" : `$${packagePrice}`}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">{state} State Filing Fee</span>
-                <span className="font-bold text-black">${stateFee}</span>
-              </div>
-              {expeditedFee > 0 && (
+          <div className="space-y-4 sticky top-24">
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+              <h3 className="text-2xl font-black text-black mb-5">Order Summary</h3>
+              <div className="border-t border-gray-200 pt-5 space-y-4 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Expedited Filing</span>
-                  <span className="font-bold text-black">${expeditedFee}</span>
+                  <span className="text-gray-500">Entity Type</span>
+                  <span className="font-bold text-accent">{entity}</span>
                 </div>
-              )}
-              {virtualAddress === "virtual" && (
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Virtual Address (1 Year)</span>
-                  <span className="font-bold text-black">$110</span>
+                  <span className="text-gray-500">{pkg} Package</span>
+                  <span className="font-bold text-black">{packagePrice === 0 ? "Free" : `$${packagePrice}`}</span>
                 </div>
-              )}
-              {pkg === "Basic" && einChoice === "get" && (
                 <div className="flex justify-between">
-                  <span className="text-gray-500">EIN Filing Fee</span>
-                  <span className="font-bold text-black">$70</span>
+                  <span className="text-gray-500">{state} State Filing Fee</span>
+                  <span className="font-bold text-black">${stateFee}</span>
                 </div>
-              )}
-              <div className="border-t border-gray-200 pt-4 flex justify-between">
-                <span className="font-black text-black">Total:</span>
-                <span className="font-black text-black text-xl">${orderTotal.toFixed(2)}</span>
+                {expeditedFee > 0 && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Expedited Filing</span>
+                    <span className="font-bold text-black">${expeditedFee}</span>
+                  </div>
+                )}
+                {virtualAddress === "virtual" && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Virtual Address (1 Year)</span>
+                    <span className="font-bold text-black">$110</span>
+                  </div>
+                )}
+                {pkg === "Basic" && einChoice === "get" && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">EIN Filing Fee</span>
+                    <span className="font-bold text-black">$70</span>
+                  </div>
+                )}
+                <div className="border-t border-gray-200 pt-4 flex justify-between">
+                  <span className="font-black text-black">Total:</span>
+                  <span className="font-black text-black text-xl">${orderTotal.toFixed(2)}</span>
+                </div>
               </div>
             </div>
+            <div className="flex justify-center mt-6">
+              <Image
+                src="/secure-checkout-transparent.png"
+                alt="Secure checkout badge"
+                width={350}
+                height={125}
+                className="h-auto w-full max-w-[150px]"
+                priority
+              />
+            </div>
           </div>
+          
 
         </div>
       </div>

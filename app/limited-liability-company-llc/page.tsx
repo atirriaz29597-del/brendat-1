@@ -295,7 +295,7 @@ export default function CampaignLandingPage() {
             </div>
           </div>
 
-          <div className="relative flex items-center justify-start px-6 py-16 sm:px-10 lg:px-14">
+          <div className="relative hidden items-center justify-start px-6 py-16 lg:flex sm:px-10 lg:px-14">
             <div className="absolute inset-0 bg-black/50" />
 
             <div className="relative z-10 w-full max-w-[620px]">
