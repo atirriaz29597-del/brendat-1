@@ -233,7 +233,7 @@ export default function CampaignLandingPage() {
           <div className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-end px-4 py-16 lg:max-w-none lg:px-0">
             <div className="w-full max-w-xl">
               <h1 className="text-3xl font-bold leading-tight tracking-tight  sm:text-5xl">
-                Start Your <span className="text-secondary">US LLC</span> in 5 Minutes | $0 + State Fees
+                Start Your <span className="text-secondary">US LLC</span> in 5 Minutes | $0 + State Fee
               </h1>
 
               <p className="mt-6 text-base leading-[1.4]  text-black sm:text-lg">
