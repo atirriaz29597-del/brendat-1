@@ -330,13 +330,12 @@ export default function CampaignLandingPage() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-14 text-left">
             <h2 className="animate-fade-in-up mb-6 text-4xl leading-[1.08] font-black tracking-tight text-black md:text-[48px]">
-              Start Your Business
+              Start Your LLC With
               <br />
-              With <span className="text-accent">Confidence</span>
+               <span className="text-accent">Lifetime Expert Support</span>
             </h2>
             <p className="animate-fade-in-up-delay max-w-lg text-base leading-relaxed text-gray-600">
-              Join over 1,000,000 happy business owners. Get started by choosing your entity type and state of
-              formation.
+              End-to-end business formation, compliance, and tax guidance with support for the life of your business.
             </p>
           </div>
 
