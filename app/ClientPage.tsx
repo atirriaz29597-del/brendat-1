@@ -824,7 +824,7 @@ export default function HomePage() {
       </section>
 
       {/* ═══════════════ BANNER ═══════════════ */}
-      <section className="relative min-h-[520px] md:min-h-[600px] flex items-center overflow-hidden">
+      {/* <section className="relative min-h-[520px] md:min-h-[600px] flex items-center overflow-hidden">
         <Image
           src="/hero-bg-1.jpg"
           alt="Business Registration Services"
@@ -862,7 +862,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ═══════════════ SERVICES OVERVIEW ═══════════════ */}
       <section className="py-20 bg-white">
