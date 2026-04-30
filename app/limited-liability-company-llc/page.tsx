@@ -61,7 +61,7 @@ const STATE_FEES: Record<string, number> = {
 };
 
 export default function CampaignLandingPage() {
-  const [selectedEntity, setSelectedEntity] = useState("LLC");
+  const [selectedEntity, setSelectedEntity] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [expandedPackages, setExpandedPackages] = useState<string[]>([]);
   const router = useRouter();
@@ -225,34 +225,36 @@ export default function CampaignLandingPage() {
     <>
       <Header />
     <main className="bg-white">
-      <section className="relative isolate overflow-hidden">
-        <div
-          className="grid min-h-[680px] w-full bg-cover bg-center grid-cols-1 lg:grid-cols-2"
-          style={{ backgroundImage: "url('/campaign-hero-bg.png')", backgroundSize: "cover", backgroundPosition: "right" }}
-        >
-          <div className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-end px-4 py-16 lg:max-w-none lg:px-0">
-            <div className="w-full max-w-xl">
-              <h1 className="text-3xl font-bold leading-tight tracking-tight  sm:text-5xl">
-                Start Your <span className="text-secondary">US LLC</span> in 5 Minutes | $0 + State Fee
-              </h1>
+      
 
-              <p className="mt-6 text-base leading-[1.4]  text-black sm:text-lg">
-                Launch your business with expert support. We handle everything
-                formation, EIN, and compliance - so you can focus on growth.
+      <section className="bg-white px-4 pb-20 pt-20 md:pb-28 md:pt-24" id="start-order">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-14 grid grid-cols-1 gap-8 text-left md:grid-cols-2 md:items-center">
+            <div>
+              <h2 className="animate-fade-in-up mb-6 text-4xl leading-[1.08] font-black tracking-tight text-black md:text-[48px]">
+                Start Your LLC 
+                <br />
+                With <span className="text-accent">Confidance</span>
+              </h2>
+              <p className="animate-fade-in-up-delay max-w-lg text-base leading-relaxed text-gray-600">
+                End-to-end business formation, compliance, and tax guidance with support for the life of your business.
               </p>
+            </div>
 
-              <p className="mt-5 inline-flex rounded-md bg-accent/15 px-4 py-0.5 text-lg font-bold text-black">
+            <div className="md:justify-self-end">
+              <p className="text-lg text-black mb-4">Say goodbye to paperwork and hello to growth.</p>
+              <p className=" inline-flex rounded-md bg-accent/15 px-4 py-0.5 text-lg font-bold text-black">
                 Trusted by 10,000+ Entrepreneurs.
               </p>
 
-              <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-lg font-bold text-black">
-                <span>50-State Compliance</span>
-                <span className="text-black/30">|</span>
-                <span>Fast &amp; Secure Filing</span>
+              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-lg font-bold text-black">
+                <span className="inline-flex rounded-md bg-accent/15 px-4 py-0.5 text-lg font-bold text-black">50-State Compliance</span>
+                {/* <span className="text-black/30">|</span> */}
+                <span className="inline-flex rounded-md bg-accent/15 px-4 py-0.5 text-lg font-bold text-black">Fast &amp; Secure Filing</span>
               </div>
 
-              <div className="mt-2 flex flex-wrap items-center gap-5">
-                <span className="font-bold text-black text-lg">Excellent</span>
+              <div className="mt-3 flex flex-wrap items-center gap-5">
+                <span className="text-lg font-bold text-black">Excellent</span>
                 <Image
                   src="/trustpilot-ratings.svg"
                   alt="Trustpilot rating"
@@ -265,44 +267,86 @@ export default function CampaignLandingPage() {
                   alt="Trustpilot logo"
                   width={170}
                   height={40}
-                  className="h-auto w-[100px] mt-[-2]"
+                  className="mt-[-2] h-auto w-[100px]"
                 />
               </div>
+            </div>
+          </div>
 
-              <div className="mt-8 flex flex-wrap gap-4">
-                <button
-                  type="button"
-                  onClick={scrollToStartOrder}
-                  className="cursor-pointer rounded-lg bg-secondary px-8 py-2.5 text-base font-medium text-white shadow-lg shadow-accent/25 transition hover:bg-accent-dark sm:text-lg"
-                >
-                  Start My LLC Now
-                </button>
-                <button
-                  type="button"
-                  onClick={() => router.push("/contact")}
-                  className="cursor-pointer rounded-lg border border-secondary bg-secondary/5 px-8 py-2.5 text-base font-medium text-black transition hover:bg-transparent sm:text-lg"
-                >
-                  Talk to an Expert
-                </button>
+          <div className="animate-fade-in-up-delay-2 rounded-2xl border border-gray-200 bg-white p-8 shadow-lg md:p-10">
+          <h2 className="text-2xl  leading-tight tracking-tight  sm:text-3xl mb-6">
+                Start Your <span className="text-secondary">US LLC</span> With $0 + State Fee
+              </h2>
+            <div className="grid grid-cols-1 items-end gap-4 sm:grid-cols-3">
+              <div>
+                
+                <div className="ring-accent/30 flex items-center gap-3 rounded-xl border border-accent bg-gray-50 px-4 py-3.5 transition-all focus-within:ring-2">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-bold text-white">
+                    1
+                  </span>
+                  <div className="flex flex-1 flex-col">
+                    {/* <span className="mb-0.5 text-[10px] font-bold uppercase leading-none tracking-wider text-gray-400">
+                      Entity 
+                    </span> */}
+                    <select
+                      value={selectedEntity}
+                      onChange={(e) => setSelectedEntity(e.target.value)}
+                      className="w-full cursor-pointer appearance-none border-none bg-transparent text-lg  text-black focus:outline-none"
+                    >
+                      <option value="">Pick Entity</option>
+                      <option>LLC</option>
+                      <option>S-Corporation</option>
+                      <option>C-Corporation</option>
+                      <option>Nonprofit</option>
+                    </select>
+                  </div>
+                  <ChevronDown className="pointer-events-none h-4 w-4 shrink-0 text-gray-400" />
+                </div>
               </div>
 
-              <p className="mt-8 flex flex-wrap items-center gap-3 text-lg">
-                <span className="font-bold text-black">Speak to a Business Specialist:</span>
-                <a href="tel:3032468693" className="font-bold bg-accent/10 text-secondary rounded-md px-3 py-1 hover:underline">
+              <div>
+                <div className="ring-accent/30 flex items-center gap-3 rounded-xl border border-accent bg-gray-50 px-4 py-3.5 transition-all focus-within:ring-2">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-bold text-white">
+                    2
+                  </span>
+                  <div className="flex flex-1 flex-col">
+                    {/* <span className="mb-0.5 text-[10px] font-bold uppercase leading-none tracking-wider text-gray-400">
+                      State
+                    </span> */}
+                    <select
+                      value={selectedState}
+                      onChange={(e) => setSelectedState(e.target.value)}
+                      className="w-full cursor-pointer appearance-none border-none bg-transparent text-lg text-black focus:outline-none"
+                    >
+                      <option value="">Select State</option>
+                      {Object.keys(STATE_FEES).map((stateName) => (
+                        <option key={stateName}>{stateName}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <ChevronDown className="pointer-events-none h-4 w-4 shrink-0 text-gray-400" />
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleStartBusiness}
+                disabled={!selectedEntity || !selectedState}
+                className="cursor-pointer flex h-[62px] items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-accent px-6 text-lg font-bold text-white shadow-lg shadow-accent/25 transition-all hover:bg-accent-dark disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Start My Business <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+
+          <p className="mt-8 items-center gap-3 text-lg">
+                <span className=" text-gray-500">Speak to a Business Specialist:</span>
+                <a href="tel:3032468693" className="font-bold bg-accent/10 text-secondary rounded-md px-3 py-1 hover:underline ml-2">
                   (303) 246-8693
                 </a>
               </p>
-            </div>
-          </div>
-
-          <div className="relative hidden items-center justify-start px-6 py-16 lg:flex sm:px-10 lg:px-14">
-            <div className="absolute inset-0 bg-black/50" />
-
-            <div className="relative z-10 w-full max-w-[620px]">
-              <Image src="/campaign-hero-llc.png" alt="Business Formation" width={620} height={620} priority />
-            </div>
-          </div>
         </div>
+        
       </section>
 
       <section className="bg-[#FF7828]">
@@ -323,83 +367,6 @@ export default function CampaignLandingPage() {
               </li>
             ))}
           </ul>
-        </div>
-      </section>
-
-      <section className="bg-white px-4 pb-20 pt-20 md:pb-28 md:pt-24" id="start-order">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-14 text-left">
-            <h2 className="animate-fade-in-up mb-6 text-4xl leading-[1.08] font-black tracking-tight text-black md:text-[48px]">
-              Start Your LLC With
-              <br />
-               <span className="text-accent">Lifetime Expert Support</span>
-            </h2>
-            <p className="animate-fade-in-up-delay max-w-lg text-base leading-relaxed text-gray-600">
-              End-to-end business formation, compliance, and tax guidance with support for the life of your business.
-            </p>
-          </div>
-
-          <div className="animate-fade-in-up-delay-2 rounded-2xl border border-gray-200 bg-white p-8 shadow-lg md:p-10">
-            <div className="grid grid-cols-1 items-end gap-4 sm:grid-cols-3">
-              <div>
-                <div className="ring-accent/30 flex items-center gap-3 rounded-xl border border-accent bg-gray-50 px-4 py-3.5 transition-all focus-within:ring-2">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-bold text-white">
-                    1
-                  </span>
-                  <div className="flex flex-1 flex-col">
-                    <span className="mb-0.5 text-[10px] font-bold uppercase leading-none tracking-wider text-gray-400">
-                      Entity Type
-                    </span>
-                    <select
-                      value={selectedEntity}
-                      onChange={(e) => setSelectedEntity(e.target.value)}
-                      className="w-full cursor-pointer appearance-none border-none bg-transparent text-sm font-semibold text-black focus:outline-none"
-                    >
-                      <option value="">Pick Entity</option>
-                      <option>LLC</option>
-                      <option>S-Corporation</option>
-                      <option>C-Corporation</option>
-                      <option>Nonprofit</option>
-                    </select>
-                  </div>
-                  <ChevronDown className="pointer-events-none h-4 w-4 shrink-0 text-gray-400" />
-                </div>
-              </div>
-
-              <div>
-                <div className="ring-accent/30 flex items-center gap-3 rounded-xl border border-accent bg-gray-50 px-4 py-3.5 transition-all focus-within:ring-2">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-bold text-white">
-                    2
-                  </span>
-                  <div className="flex flex-1 flex-col">
-                    <span className="mb-0.5 text-[10px] font-bold uppercase leading-none tracking-wider text-gray-400">
-                      State
-                    </span>
-                    <select
-                      value={selectedState}
-                      onChange={(e) => setSelectedState(e.target.value)}
-                      className="w-full cursor-pointer appearance-none border-none bg-transparent text-sm font-semibold text-black focus:outline-none"
-                    >
-                      <option value="">Select State</option>
-                      {Object.keys(STATE_FEES).map((stateName) => (
-                        <option key={stateName}>{stateName}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <ChevronDown className="pointer-events-none h-4 w-4 shrink-0 text-gray-400" />
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleStartBusiness}
-                disabled={!selectedEntity || !selectedState}
-                className="cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-accent px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-accent/25 transition-all hover:bg-accent-dark disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Start My Business <ArrowRight className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -477,6 +444,64 @@ export default function CampaignLandingPage() {
           </div>
         </div>
       </section>
+
+      {/* <section className="relative isolate overflow-hidden">
+        <div
+          className="grid min-h-[680px] w-full bg-cover bg-center grid-cols-1 lg:grid-cols-2"
+          style={{ backgroundImage: "url('/campaign-hero-bg.png')", backgroundSize: "cover", backgroundPosition: "right" }}
+        >
+          <div className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-end px-4 py-16 lg:max-w-none lg:px-0">
+            <div className="w-full max-w-xl">
+              <h1 className="text-3xl font-bold leading-tight tracking-tight  sm:text-5xl">
+                Start Your <span className="text-secondary">US LLC</span> in 5 Minutes | $0 + State Fee
+              </h1>
+
+              <p className="mt-6 text-base leading-[1.4]  text-black sm:text-lg">
+                Launch your business with expert support. We handle everything
+                formation, EIN, and compliance - so you can focus on growth.
+              </p>
+
+            
+
+              <div className="mt-8 flex flex-wrap gap-4">
+                <button
+                  type="button"
+                  onClick={scrollToStartOrder}
+                  className="cursor-pointer rounded-lg bg-secondary px-8 py-2.5 text-base font-medium text-white shadow-lg shadow-accent/25 transition hover:bg-accent-dark sm:text-lg"
+                >
+                  Start My LLC Now
+                </button>
+                <button
+                  type="button"
+                  onClick={() => router.push("/contact")}
+                  className="cursor-pointer rounded-lg border border-secondary bg-secondary/5 px-8 py-2.5 text-base font-medium text-black transition hover:bg-transparent sm:text-lg"
+                >
+                  Talk to an Expert
+                </button>
+              </div>
+
+              <p className="mt-8 flex flex-wrap items-center gap-3 text-lg">
+                <span className="font-bold text-black">Speak to a Business Specialist:</span>
+                <a href="tel:3032468693" className="font-bold bg-accent/10 text-secondary rounded-md px-3 py-1 hover:underline">
+                  (303) 246-8693
+                </a>
+              </p>
+            </div>
+          </div>
+
+          <div className="relative hidden items-center justify-start px-6 py-16 lg:flex sm:px-10 lg:px-14">
+            <div className="absolute inset-0 bg-black/50" />
+
+            <div className="relative z-10 w-full max-w-[620px]">
+              <Image src="/campaign-hero-llc.png" alt="Business Formation" width={620} height={620} priority />
+            </div>
+          </div>
+        </div>
+      </section> */}
+
+      
+
+      
 
       <section className=" px-4 py-25">
         <div className="mx-auto max-w-6xl">

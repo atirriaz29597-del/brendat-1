@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   Building2,
+  Check,
   CheckCircle2,
   ChevronDown,
   FileText,
@@ -60,6 +61,106 @@ const FloatingContactButtons = dynamic(() => import("./components/FloatingContac
 type Plan = { name: string; price: string; color: string };
 
 const WHATSAPP_HREF = "https://wa.me/13032468693?text=Hi%20Brendat%2C%20I%20need%20help%20with%20my%20business%20formation.";
+
+const topServiceHighlights = [
+  {
+    label: "Formation & Compliance",
+    icon: "/icons/llc-landing/formation-compliance.svg",
+    alt: "Formation and compliance icon",
+  },
+  {
+    label: "Banking & Bookkeeping",
+    icon: "/icons/llc-landing/banking-bookeeping.svg",
+    alt: "Banking and bookkeeping icon",
+  },
+  {
+    label: "Tax Advice and Filing",
+    icon: "/icons/llc-landing/tax-advice-filing.svg",
+    alt: "Tax advice and filing icon",
+  },
+  {
+    label: "Expert Customer Support",
+    icon: "/icons/llc-landing/expert-customer-support.svg",
+    alt: "Expert customer support icon",
+  },
+];
+
+const topPackageOptions = [
+  {
+    name: "Basic",
+    price: "$0",
+    subtitle: "Perfect to get started",
+    cta: "Get Started Free",
+    featured: false,
+    features: [
+      "Preparing & Filing Articles of Organization",
+      "Name Availability Check",
+      "Business Tax Consultation",
+    ],
+  },
+  {
+    name: "Standard",
+    price: "$149",
+    subtitle: "Best Value for New Businesses",
+    cta: "Form My LLC",
+    featured: true,
+    features: [
+      "Preparing & Filing Articles of Organization",
+      "Name Availability Check",
+      "Registered Agent (1st year)",
+      "EIN Business Tax Number",
+      "Banking Resolutions",
+      "Operating Agreement",
+      "Business Banking Account Offer",
+      "Phone & Email Support",
+      "Business Tax Consultation",
+      "Lifetime Compliance Alerts",
+    ],
+  },
+  {
+    name: "Premium",
+    price: "$249",
+    subtitle: "Launch Your Business Faster & Smarter",
+    cta: "Launch My Business Fast",
+    featured: false,
+    features: [
+      "Preparing & Filing Articles of Organization",
+      "Name Availability Check",
+      "Registered Agent (1st year)",
+      "EIN Business Tax Number",
+      "Banking Resolutions",
+      "Operating Agreement",
+      "Fintech Bank Account Setup",
+      "Domain Name + Business Email",
+      "Expedited Filing (3 to 5 Business Days)",
+      "Google My Business (GMB) Setup",
+      "Unlimited Phone & Email Support",
+      "Business Tax Consultation",
+      "Lifetime Compliance Alerts",
+      "IRS Form 2553",
+      "Basic multi-page website (Home, About, Services, Contact)",
+    ],
+  },
+];
+
+const topHowItWorksSteps = [
+  {
+    icon: "/icons/llc-landing/how-it-works/1.svg",
+    text: "Tell Us About Your Business.\nEnter your details in minutes.",
+  },
+  {
+    icon: "/icons/llc-landing/how-it-works/2.svg",
+    text: "We Handle the Paperwork.\nWe file everything with the state.",
+  },
+  {
+    icon: "/icons/llc-landing/how-it-works/3.svg",
+    text: "Get Your LLC + EIN.\nReceive official documents quickly.",
+  },
+  {
+    icon: "/icons/llc-landing/how-it-works/4.svg",
+    text: "Stay Compliant Year-Round.\nWe remind you of deadlines and filings.",
+  },
+];
 
 function PaymentModal({ plan, onClose }: { plan: Plan; onClose: () => void }) {
   const [step, setStep] = useState<"details" | "processing" | "success" | "error">("details");
@@ -447,6 +548,7 @@ export default function HomePage() {
   const [activePlan, setActivePlan] = useState<Plan | null>(null);
   const [entityTab, setEntityTab] = useState<string>("LLC");
   const [entityFaq, setEntityFaq] = useState<number | null>(0);
+  const [expandedTopPackages, setExpandedTopPackages] = useState<string[]>([]);
 
   /* Hero step flow */
   const [selectedEntity, setSelectedEntity] = useState("");
@@ -458,6 +560,14 @@ export default function HomePage() {
       router.push(`/order/step2?entity=${encodeURIComponent(selectedEntity)}&state=${encodeURIComponent(selectedState)}`);
     }
   };
+  const scrollToStartOrder = () => {
+    document.getElementById("start-order")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  const toggleTopPackageExpanded = (packageName: string) => {
+    setExpandedTopPackages((current) =>
+      current.includes(packageName) ? current.filter((name) => name !== packageName) : [...current, packageName]
+    );
+  };
 
   const openPayment = (plan: Plan) => setActivePlan(plan);
   const closePayment = () => setActivePlan(null);
@@ -468,11 +578,255 @@ export default function HomePage() {
       <Header />
       <FloatingContactButtons />
 
+      <section className="bg-white px-4 pb-20 pt-20 md:pb-28 md:pt-24" id="start-order">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-14 grid grid-cols-1 gap-8 text-left md:grid-cols-2 md:items-center">
+            <div>
+              <h2 className="animate-fade-in-up mb-6 text-4xl leading-[1.08] font-black tracking-tight text-black md:text-[48px]">
+                Start Your LLC
+                <br />
+                With <span className="text-accent">Confidance</span>
+              </h2>
+              <p className="animate-fade-in-up-delay max-w-lg text-base leading-relaxed text-gray-600">
+                End-to-end business formation, compliance, and tax guidance with support for the life of your business.
+              </p>
+            </div>
+
+            <div className="md:justify-self-end">
+              <p className="mb-4 text-lg text-black">Say goodbye to paperwork and hello to growth.</p>
+              <p className="inline-flex rounded-md bg-accent/15 px-4 py-0.5 text-lg font-bold text-black">
+                Trusted by 10,000+ Entrepreneurs.
+              </p>
+
+              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-lg font-bold text-black">
+                <span className="inline-flex rounded-md bg-accent/15 px-4 py-0.5 text-lg font-bold text-black">50-State Compliance</span>
+                <span className="inline-flex rounded-md bg-accent/15 px-4 py-0.5 text-lg font-bold text-black">Fast &amp; Secure Filing</span>
+              </div>
+
+              <div className="mt-3 flex flex-wrap items-center gap-5">
+                <span className="text-lg font-bold text-black">Excellent</span>
+                <Image
+                  src="/trustpilot-ratings.svg"
+                  alt="Trustpilot rating"
+                  width={180}
+                  height={34}
+                  className="h-auto w-[110px]"
+                />
+                <Image
+                  src="/Trustpilot_Logo.svg"
+                  alt="Trustpilot logo"
+                  width={170}
+                  height={40}
+                  className="mt-[-2] h-auto w-[100px]"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="animate-fade-in-up-delay-2 rounded-2xl border border-gray-200 bg-white p-8 shadow-lg md:p-10">
+            <h2 className="mb-6 text-2xl leading-tight tracking-tight sm:text-3xl">
+              Start Your <span className="text-secondary">US LLC</span> With $0 + State Fee
+            </h2>
+            <div className="grid grid-cols-1 items-end gap-4 sm:grid-cols-3">
+              <div>
+                <div className="ring-accent/30 flex items-center gap-3 rounded-xl border border-accent bg-gray-50 px-4 py-3.5 transition-all focus-within:ring-2">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-bold text-white">
+                    1
+                  </span>
+                  <div className="flex flex-1 flex-col">
+                    <select
+                      value={selectedEntity}
+                      onChange={(e) => setSelectedEntity(e.target.value)}
+                      className="w-full cursor-pointer appearance-none border-none bg-transparent text-lg text-black focus:outline-none"
+                    >
+                      <option value="">Pick Entity</option>
+                      <option>LLC</option>
+                      <option>S-Corporation</option>
+                      <option>C-Corporation</option>
+                      <option>Nonprofit</option>
+                    </select>
+                  </div>
+                  <ChevronDown className="pointer-events-none h-4 w-4 shrink-0 text-gray-400" />
+                </div>
+              </div>
+
+              <div>
+                <div className="ring-accent/30 flex items-center gap-3 rounded-xl border border-accent bg-gray-50 px-4 py-3.5 transition-all focus-within:ring-2">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-bold text-white">
+                    2
+                  </span>
+                  <div className="flex flex-1 flex-col">
+                    <select
+                      value={selectedState}
+                      onChange={(e) => setSelectedState(e.target.value)}
+                      className="w-full cursor-pointer appearance-none border-none bg-transparent text-lg text-black focus:outline-none"
+                    >
+                      <option value="">Select State</option>
+                      {Object.keys(STATE_FEES).map((stateName) => (
+                        <option key={stateName}>{stateName}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <ChevronDown className="pointer-events-none h-4 w-4 shrink-0 text-gray-400" />
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleStartBusiness}
+                disabled={!selectedEntity || !selectedState}
+                className="flex h-[62px] cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-accent px-6 text-lg font-bold text-white shadow-lg shadow-accent/25 transition-all hover:bg-accent-dark disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Start My Business <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+
+          <p className="mt-8 items-center gap-3 text-lg">
+            <span className="text-gray-500">Speak to a Business Specialist:</span>
+            <a href="tel:3032468693" className="ml-2 rounded-md bg-accent/10 px-3 py-1 font-bold text-secondary hover:underline">
+              (303) 246-8693
+            </a>
+          </p>
+        </div>
+      </section>
+
+      <section className="bg-[#FF7828]">
+        <div className="mx-auto w-full max-w-6xl px-4 sm:px-8">
+          <ul className="flex flex-col md:flex-row">
+            {topServiceHighlights.map((item, index) => (
+              <li key={item.label} className="relative flex flex-1 items-center justify-center py-6 sm:py-7">
+                <div className="flex items-center gap-3 text-white">
+                  <Image src={item.icon} alt={item.alt} width={40} height={40} />
+                  <p className="text-sm">{item.label}</p>
+                </div>
+                {index < topServiceHighlights.length - 1 && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute right-0 top-1/2 hidden h-12 w-[2px] -translate-y-1/2 bg-white/40 md:block"
+                  />
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="bg-[#F3F3F3] px-4 py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-4xl font-bold tracking-tight text-secondary sm:text-5xl">Choose Your Package</h2>
+            <p className="mt-4 text-lg leading-relaxed text-black/80">
+              Launch your business with expert support. We handle everything formation, EIN, and compliance - so you
+              can focus on growth.
+            </p>
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 items-start gap-4 py-10 md:grid-cols-3 md:gap-5">
+            {topPackageOptions.map((option) => (
+              <div key={option.name} className="w-full">
+                <article
+                  className={`relative rounded-t-xl p-8 text-center ${
+                    option.featured ? "bg-[rgba(255,120,40,0.2)]" : "bg-[rgba(255,120,40,0.08)]"
+                  } ${expandedTopPackages.includes(option.name) ? "" : "rounded-b-xl"}`}
+                >
+                  {option.featured && (
+                    <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded bg-[#FF7828] px-7 py-2 text-xs font-medium text-white">
+                      Recommended
+                    </span>
+                  )}
+
+                  <h3 className="mt-5 text-4xl font-medium text-black">{option.name}</h3>
+                  <p className="my-6 text-5xl font-bold text-[#FF7828]">
+                    {option.price} <span className="text-2xl font-medium text-black">+ State Fee</span>
+                  </p>
+                  <p className="mt-4 text-md font-medium text-black/85">{option.subtitle}</p>
+
+                  <button
+                    type="button"
+                    onClick={scrollToStartOrder}
+                    className="mt-8 w-full cursor-pointer rounded-md bg-[#FF7828] py-3 text-md font-medium text-white transition hover:bg-[#E96C20]"
+                  >
+                    {option.cta}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => toggleTopPackageExpanded(option.name)}
+                    className="mt-5 inline-flex cursor-pointer items-center gap-1 text-md font-bold text-black underline underline-offset-2"
+                  >
+                    Learn More
+                    {expandedTopPackages.includes(option.name) ? (
+                      <ChevronDown className="h-3.5 w-3.5 text-[#FF7828]" />
+                    ) : (
+                      <ChevronRight className="h-3.5 w-3.5 text-[#FF7828]" />
+                    )}
+                  </button>
+                </article>
+
+                {expandedTopPackages.includes(option.name) && (
+                  <div className={`rounded-b-xl px-6 pb-6 pt-5 text-left ${
+                    option.featured ? "bg-[#FF7828]/10" : "bg-[#FF7828]/15"
+                  }`}>
+                    <p className="mb-3 text-2xl font-extrabold text-black">Includes</p>
+                    <ul className="space-y-2.5">
+                      {option.features.map((feature) => (
+                        <li key={feature} className="flex items-start gap-2 text-base font-medium text-black/85">
+                          <span className="mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-[2px] bg-[rgba(255,120,40,0.2)]">
+                            <Check className="h-3 w-3 text-[#FF7828]" />
+                          </span>
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="px-4 py-25">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-15 text-center">
+            <h2 className="mb-5 text-4xl font-bold uppercase tracking-tight text-secondary sm:text-5xl">How It Works?</h2>
+            <p className="mt-2 text-4xl font-bold tracking-tight text-black sm:text-5xl">Start Your LLC in 4 Easy Steps:</p>
+          </div>
+
+          <div className="mt-8 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            {topHowItWorksSteps.map((step, index) => (
+              <article
+                key={step.icon}
+                className={`rounded-xl p-7 py-12 ${
+                  index % 2 === 0 ? "bg-[rgba(255,120,40,0.08)]" : "bg-[rgba(255,120,40,0.15)]"
+                }`}
+              >
+                <Image className="mb-8" src={step.icon} alt="" width={60} height={60} />
+                <p className="mt-6 whitespace-pre-line leading-tight text-black/85">{step.text}</p>
+              </article>
+            ))}
+          </div>
+
+          <div className="mt-8 flex flex-col gap-4 sm:mt-10 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-center text-xl font-bold text-black sm:text-left">
+              50-State Compliance&nbsp; | &nbsp;Fast &amp; Secure Filing&nbsp; | &nbsp;Trusted by 10,000+ Entrepreneurs.
+            </p>
+            <button
+              type="button"
+              onClick={scrollToStartOrder}
+              className="mx-auto w-full max-w-[220px] cursor-pointer rounded-md bg-secondary px-8 py-3 text-md font-medium text-white transition hover:bg-secondary-light sm:mx-0 sm:w-auto"
+            >
+              Start my LLC
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* ═══════════════ BANNER ═══════════════ */}
-      <section className="relative min-h-[520px] md:min-h-[600px] flex items-center overflow-hidden">
-        {/* Background image */}
+      {/* <section className="relative min-h-[520px] md:min-h-[600px] flex items-center overflow-hidden">
         <Image
-          src="/hero section.png"
+          src="/hero-bg-1.jpg"
           alt="Business Registration Services"
           fill
           priority
@@ -481,7 +835,6 @@ export default function HomePage() {
           sizes="100vw"
           className="object-cover object-center"
         />
-        {/* Text content */}
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 w-full">
           <div className="max-w-xl text-left">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-black leading-tight mb-6">
@@ -509,85 +862,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
-
-      {/* ═══════════════ HERO ═══════════════ */}
-      <section id="hero" className="bg-white pt-28 md:pt-36 pb-20 md:pb-28 px-4">
-        <div className="mx-auto max-w-7xl">
-
-          {/* ── Step 1: Entity & State selection ── */}
-          <>
-              {/* Heading */}
-              <div className="text-left mb-14">
-                <h1 className="animate-fade-in-up text-[48px] font-black text-black leading-[1.08] tracking-tight mb-6">
-                  Start Your Business<br />
-                  With <span className="text-accent">Confidence</span>
-                </h1>
-                <p className="animate-fade-in-up-delay text-gray-600 text-base max-w-lg leading-relaxed">
-                  Join over 1,000,000 happy business owners. Get started by choosing your entity type and state of formation.
-                </p>
-              </div>
-
-              {/* Form card */}
-              <div className="animate-fade-in-up-delay-2 bg-white rounded-2xl border border-gray-200 shadow-lg p-8 md:p-10">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
-                  {/* Pick Entity */}
-                  <div>
-                    <div className="flex items-center gap-3 border border-accent rounded-xl px-4 py-3.5 bg-gray-50 focus-within:ring-2 ring-accent/30 transition-all">
-                      <span className="flex items-center justify-center w-7 h-7 rounded-full bg-accent text-white text-xs font-bold shrink-0">1</span>
-                      <div className="flex flex-col flex-1">
-                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-none mb-0.5">Entity Type</span>
-                        <select
-                          value={selectedEntity}
-                          onChange={(e) => setSelectedEntity(e.target.value)}
-                          className="bg-transparent text-black border-none focus:outline-none w-full font-semibold appearance-none cursor-pointer text-sm"
-                        >
-                          <option value="">Pick Entity</option>
-                          <option>LLC</option>
-                          <option>S-Corporation</option>
-                          <option>C-Corporation</option>
-                          <option>Nonprofit</option>
-                        </select>
-                      </div>
-                      <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 pointer-events-none" />
-                    </div>
-                  </div>
-
-                  {/* Select State */}
-                  <div>
-                    <div className="flex items-center gap-3 border border-accent rounded-xl px-4 py-3.5 bg-gray-50 focus-within:ring-2 ring-accent/30 transition-all">
-                      <span className="flex items-center justify-center w-7 h-7 rounded-full bg-accent text-white text-xs font-bold shrink-0">2</span>
-                      <div className="flex flex-col flex-1">
-                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-none mb-0.5">State</span>
-                        <select
-                          value={selectedState}
-                          onChange={(e) => setSelectedState(e.target.value)}
-                          className="bg-transparent text-black border-none focus:outline-none w-full font-semibold appearance-none cursor-pointer text-sm"
-                        >
-                          <option value="">Select State</option>
-                          {Object.keys(STATE_FEES).map((st) => (
-                            <option key={st}>{st}</option>
-                          ))}
-                        </select>
-                      </div>
-                      <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 pointer-events-none" />
-                    </div>
-                  </div>
-
-                  {/* CTA Button */}
-                  <button
-                    onClick={handleStartBusiness}
-                    disabled={!selectedEntity || !selectedState}
-                    className="bg-accent hover:bg-accent-dark disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-xl px-6 py-3.5 transition-all flex items-center justify-center gap-2 shadow-lg shadow-accent/25 text-sm whitespace-nowrap"
-                  >
-                    Start My Business <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            </>
-
-        </div>
-      </section>
+      </section> */}
 
       {/* ═══════════════ SERVICES OVERVIEW ═══════════════ */}
       <section className="py-20 bg-white">
