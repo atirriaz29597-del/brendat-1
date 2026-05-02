@@ -53,9 +53,6 @@ const FallingText = dynamic(() => import("./components/FallingText"), {
   ssr: false,
   loading: () => <div className="w-full h-[400px]" />,
 });
-const FloatingContactButtons = dynamic(() => import("./components/FloatingContactButtons"), {
-  ssr: false,
-});
 
 /* ─── Payment Modal ─── */
 type Plan = { name: string; price: string; color: string };
@@ -576,7 +573,6 @@ export default function HomePage() {
     <div className="min-h-screen bg-white text-primary">
       {activePlan && <PaymentModal plan={activePlan} onClose={closePayment} />}
       <Header />
-      <FloatingContactButtons />
 
       <section className="bg-white px-4 pb-20 pt-20 md:pb-28 md:pt-24" id="start-order">
         <div className="mx-auto max-w-6xl">
