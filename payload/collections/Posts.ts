@@ -51,5 +51,52 @@ export const Posts: CollectionConfig = {
         position: 'sidebar',
       },
     },
+    {
+      name: 'seo',
+      type: 'group',
+      label: 'SEO',
+      fields: [
+        {
+          name: 'metaTitle',
+          type: 'text',
+          label: 'SEO Title',
+        },
+        {
+          name: 'metaDescription',
+          type: 'textarea',
+          label: 'Meta Description',
+        },
+        {
+          name: 'metaKeywords',
+          type: 'array',
+          label: 'Meta Keywords',
+          fields: [
+            {
+              name: 'keyword',
+              type: 'text',
+              required: true,
+            },
+          ],
+        },
+        {
+          name: 'canonicalUrl',
+          type: 'text',
+          label: 'Canonical URL',
+        },
+        {
+          name: 'noIndex',
+          type: 'checkbox',
+          label: 'No Index',
+          defaultValue: false,
+        },
+        {
+          name: 'ogImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Open Graph Image',
+          required: false,
+        },
+      ],
+    },
   ],
 }
