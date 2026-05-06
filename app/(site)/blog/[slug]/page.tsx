@@ -148,7 +148,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
       <main className="pb-16">
         <section className="bg-primary py-14 md:py-20">
           <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
-            <Link
+            {/* <Link
               href="/blog"
               className="inline-flex items-center text-sm font-semibold text-gray-300 transition-colors hover:text-accent-light"
             >
@@ -157,7 +157,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
 
             <p className="mt-8 inline-flex rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-orange-200">
               Strategies
-            </p>
+            </p> */}
             <h1 className="mt-4 max-w-4xl text-4xl font-black leading-tight tracking-tight text-white md:text-6xl">
               {post.title}
             </h1>
