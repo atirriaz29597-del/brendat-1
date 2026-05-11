@@ -5,6 +5,8 @@ import Footer from "@/app/components/Footer";
 import config from "@payload-config";
 import { getPayload } from "payload";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Blog | Brendat",
   description: "Insights, updates, and practical guides from Brendat.",
@@ -36,18 +38,7 @@ async function getPosts(): Promise<BlogPost[]> {
     sort: "-publishedAt",
   });
 
-  if (publishedPosts.docs.length > 0) {
-    return publishedPosts.docs as unknown as BlogPost[];
-  }
-
-  const fallbackPosts = await payload.find({
-    collection: "posts",
-    depth: 1,
-    limit: 50,
-    sort: "-updatedAt",
-  });
-
-  return fallbackPosts.docs as unknown as BlogPost[];
+  return publishedPosts.docs as unknown as BlogPost[];
 }
 
 function formatDate(dateString?: string) {
