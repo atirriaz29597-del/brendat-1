@@ -7,6 +7,8 @@ import config from "@payload-config";
 import { convertLexicalToHTML } from "@payloadcms/richtext-lexical/html";
 import { getPayload } from "payload";
 
+export const dynamic = "force-dynamic";
+
 type BlogDetailPageProps = {
   params: Promise<{
     slug: string;
@@ -44,6 +46,9 @@ async function getPostBySlug(slug: string): Promise<BlogPost | null> {
     where: {
       slug: {
         equals: slug,
+      },
+      _status: {
+        equals: "published",
       },
     },
     depth: 1,
