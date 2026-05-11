@@ -12,6 +12,7 @@
     "@payloadcms/db-postgres": "^3.84.1",
     "@payloadcms/next": "^3.84.1",
     "@payloadcms/richtext-lexical": "^3.84.1",
+    "@payloadcms/storage-s3": "^3.84.1",
     "@radix-ui/react-avatar": "^1.1.11",
     "@supabase/supabase-js": "^2.98.0",
     "clsx": "^2.1.1",
