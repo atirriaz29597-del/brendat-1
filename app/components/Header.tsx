@@ -95,11 +95,11 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center shrink-0">
             <Image
-              src="/WhatsApp_Image_2026-03-01_at_12.13.31_PM-removebg-preview.png"
+              src="/site_logo.svg"
               alt="Brendat"
-              width={360}
-              height={130}
-              className="h-38 w-auto"
+              width={120}
+              height={40}
+              className="h-7 w-auto"
               priority
             />
           </Link>
