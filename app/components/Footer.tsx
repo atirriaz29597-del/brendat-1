@@ -2,7 +2,54 @@ import Link from "next/link";
 import { Briefcase, Globe, MessageCircle, Phone } from "lucide-react";
 import Image from "next/image";
 
+type FooterItem = {
+  label: string;
+  href?: string;
+};
+
+function FooterLinks({ items }: { items: FooterItem[] }) {
+  return (
+    <ul className="space-y-3 text-sm">
+      {items.map((item) => (
+        <li key={item.label}>
+          {item.href ? (
+            <Link href={item.href} className="hover:text-accent-light transition-colors">
+              {item.label}
+            </Link>
+          ) : (
+            <span className="text-gray-500 cursor-not-allowed">{item.label}</span>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export default function Footer() {
+  const formationLinks: FooterItem[] = [
+    { label: "LLC", href: "/limited-liability-company-llc" },
+    { label: "S Corporation", href: "/corporation-c-corp-s-corp" },
+    { label: "C Corporation", href: "/corporation-c-corp-s-corp" },
+    { label: "Nonprofit", href: "/nonprofit" },
+    { label: "DBA Name", href: "/doing-business-as-dba" },
+  ];
+
+  const serviceLinks: FooterItem[] = [
+    { label: "Registered Agent", href: "/registered-agent" },
+    { label: "EIN / Tax ID" },
+    { label: "Annual Reports", href: "/annual-report" },
+    { label: "Trademark", href: "/trademark-registration" },
+    { label: "Virtual Address" },
+  ];
+
+  const resourceLinks: FooterItem[] = [
+    { label: "Formation Guide", href: "/business-formation" },
+    { label: "Blog", href: "/blog" },
+    { label: "Help Center" },
+    { label: "Contact Us", href: "/contact" },
+    { label: "Privacy Policy" },
+  ];
+
   return (
     <footer className="bg-primary text-gray-400 pt-20 pb-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -46,31 +93,19 @@ export default function Footer() {
           {/* Formation */}
           <div>
             <h5 className="text-white font-bold mb-5">Formation</h5>
-            <ul className="space-y-3 text-sm">
-              {["LLC", "S Corporation", "C Corporation", "Nonprofit", "DBA Name"].map(s => (
-                <li key={s}><Link href="#" className="hover:text-accent-light transition-colors">{s}</Link></li>
-              ))}
-            </ul>
+            <FooterLinks items={formationLinks} />
           </div>
 
           {/* Services */}
           <div>
             <h5 className="text-white font-bold mb-5">Services</h5>
-            <ul className="space-y-3 text-sm">
-              {["Registered Agent", "EIN / Tax ID", "Annual Reports", "Trademark", "Virtual Address"].map(s => (
-                <li key={s}><Link href="#" className="hover:text-accent-light transition-colors">{s}</Link></li>
-              ))}
-            </ul>
+            <FooterLinks items={serviceLinks} />
           </div>
 
           {/* Resources */}
           <div>
             <h5 className="text-white font-bold mb-5">Resources</h5>
-            <ul className="space-y-3 text-sm">
-              {["Formation Guide", "Blog", "Help Center", "Contact Us", "Privacy Policy"].map(s => (
-                <li key={s}><Link href="#" className="hover:text-accent-light transition-colors">{s}</Link></li>
-              ))}
-            </ul>
+            <FooterLinks items={resourceLinks} />
           </div>
         </div>
 
