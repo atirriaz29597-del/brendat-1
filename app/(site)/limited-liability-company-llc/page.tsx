@@ -231,11 +231,11 @@ export default function CampaignLandingPage() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-14 grid grid-cols-1 gap-8 text-left md:grid-cols-2 md:items-center">
             <div>
-              <h2 className="animate-fade-in-up mb-6 text-4xl leading-[1.08] font-black tracking-tight text-black md:text-[48px]">
+              <h1 className="animate-fade-in-up mb-6 text-4xl leading-[1.08] font-black tracking-tight text-black md:text-[48px]">
                 Start Your LLC 
                 <br />
                 With <span className="text-accent">Confidence</span>
-              </h2>
+              </h1>
               <p className="animate-fade-in-up-delay max-w-lg text-base leading-relaxed text-gray-600">
                 End-to-end business formation, compliance, and tax guidance with support for the life of your business.
               </p>
