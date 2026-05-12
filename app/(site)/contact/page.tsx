@@ -23,7 +23,7 @@ const SUBJECT_OPTIONS = [
 ] as const;
 
 const NAME_REGEX = /^[A-Za-z][A-Za-z' -]*[A-Za-z]$/;
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 const PHONE_ALLOWED_CHARS_REGEX = /^[+()\d\s-]+$/;
 const SUSPICIOUS_MESSAGE_PATTERNS = [
   /<\s*script\b/i,
