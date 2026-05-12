@@ -17,7 +17,7 @@ function FooterLinks({ items }: { items: FooterItem[] }) {
               {item.label}
             </Link>
           ) : (
-            <span className="text-gray-500 cursor-not-allowed">{item.label}</span>
+            <span className="text-gray-500">{item.label}</span>
           )}
         </li>
       ))}
