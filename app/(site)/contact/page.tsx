@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/app/components/Header";
+import Footer from "@/app/components/Footer";
 import {
   Mail,
   Phone,
@@ -275,14 +276,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Footer bar */}
-      <footer className="bg-primary py-8">
-        <div className="mx-auto max-w-7xl px-4 text-center">
-          <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} Brendat Inc. All rights reserved. Georgia, USA.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

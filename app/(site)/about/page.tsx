@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Shield, Zap, Users, Globe, Award, TrendingUp, Heart, Star } from "lucide-react";
 import Header from "@/app/components/Header";
+import Footer from "@/app/components/Footer";
 
 const stats = [
   { value: "1M+", label: "Businesses Formed", desc: "Entrepreneurs trust Brendat" },
@@ -334,6 +335,8 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }
