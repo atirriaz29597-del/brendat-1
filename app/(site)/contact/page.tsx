@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/app/components/Header";
+import Footer from "@/app/components/Footer";
 import {
   Mail,
   Phone,
@@ -12,6 +13,89 @@ import {
   MessageCircle,
   CheckCircle2,
 } from "lucide-react";
+
+const SUBJECT_OPTIONS = [
+  "Business Formation",
+  "Pricing & Packages",
+  "Compliance & Management",
+  "Technical Support",
+  "General Inquiry",
+] as const;
+
+const NAME_REGEX = /^[A-Za-z][A-Za-z' -]*[A-Za-z]$/;
+const EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+const PHONE_ALLOWED_CHARS_REGEX = /^[+()\d\s-]+$/;
+const SUSPICIOUS_MESSAGE_PATTERNS = [
+  /<\s*script\b/i,
+  /<\s*\/\s*script\s*>/i,
+  /javascript\s*:/i,
+  /on\w+\s*=/i,
+  /<\s*iframe\b/i,
+  /document\./i,
+  /window\./i,
+  /eval\s*\(/i,
+  /data\s*:\s*text\/html/i,
+];
+
+const normalizePhone = (value: string) => value.replace(/[^\d]/g, "");
+
+type ContactForm = {
+  name: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+};
+
+const validateForm = (rawForm: ContactForm): { error: string | null; sanitizedForm: ContactForm } => {
+  const sanitizedForm: ContactForm = {
+    name: rawForm.name.trim(),
+    email: rawForm.email.trim().toLowerCase(),
+    phone: rawForm.phone.trim(),
+    subject: rawForm.subject.trim(),
+    message: rawForm.message.trim(),
+  };
+
+  if (sanitizedForm.name.length < 2 || sanitizedForm.name.length > 80) {
+    return { error: "Name must be between 2 and 80 characters.", sanitizedForm };
+  }
+  if (!NAME_REGEX.test(sanitizedForm.name)) {
+    return { error: "Name can only include letters, spaces, apostrophes, and hyphens.", sanitizedForm };
+  }
+  if (/^\d+$/.test(sanitizedForm.name)) {
+    return { error: "Name cannot be only numbers.", sanitizedForm };
+  }
+
+  if (sanitizedForm.email.length > 254 || !EMAIL_REGEX.test(sanitizedForm.email)) {
+    return { error: "Please provide a valid email address.", sanitizedForm };
+  }
+
+  if (sanitizedForm.phone) {
+    if (!PHONE_ALLOWED_CHARS_REGEX.test(sanitizedForm.phone)) {
+      return {
+        error: "Phone number can only include digits, spaces, +, parentheses, and hyphens.",
+        sanitizedForm,
+      };
+    }
+    const digitsOnly = normalizePhone(sanitizedForm.phone);
+    if (digitsOnly.length < 7 || digitsOnly.length > 15) {
+      return { error: "Phone number must contain 7 to 15 digits.", sanitizedForm };
+    }
+  }
+
+  if (!SUBJECT_OPTIONS.includes(sanitizedForm.subject as (typeof SUBJECT_OPTIONS)[number])) {
+    return { error: "Please select a valid subject.", sanitizedForm };
+  }
+
+  if (sanitizedForm.message.length < 20 || sanitizedForm.message.length > 5000) {
+    return { error: "Message must be between 20 and 5000 characters.", sanitizedForm };
+  }
+  if (SUSPICIOUS_MESSAGE_PATTERNS.some((pattern) => pattern.test(sanitizedForm.message))) {
+    return { error: "Message contains unsupported content. Please remove code or script-like text.", sanitizedForm };
+  }
+
+  return { error: null, sanitizedForm };
+};
 
 export default function ContactPage() {
   const router = useRouter();
@@ -27,8 +111,14 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSending(true);
     setError(null);
+    const { error: validationError, sanitizedForm } = validateForm(form);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    setSending(true);
 
     try {
       const res = await fetch("/api/send-email", {
@@ -36,7 +126,7 @@ export default function ContactPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: "contact",
-          data: form,
+          data: sanitizedForm,
         }),
       });
 
@@ -172,6 +262,8 @@ export default function ContactPage() {
                       <input
                         type="text"
                         required
+                        minLength={2}
+                        maxLength={80}
                         placeholder="John Doe"
                         value={form.name}
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -185,6 +277,7 @@ export default function ContactPage() {
                       <input
                         type="email"
                         required
+                        maxLength={254}
                         placeholder="john@example.com"
                         value={form.email}
                         onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -202,7 +295,15 @@ export default function ContactPage() {
                         type="tel"
                         placeholder="(555) 000-0000"
                         value={form.phone}
-                        onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                        maxLength={25}
+                        pattern="[+()\d\s-]*"
+                        inputMode="tel"
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value === "" || PHONE_ALLOWED_CHARS_REGEX.test(value)) {
+                            setForm({ ...form, phone: value });
+                          }
+                        }}
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-medium text-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all"
                       />
                     </div>
@@ -217,11 +318,11 @@ export default function ContactPage() {
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-medium text-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all appearance-none cursor-pointer"
                       >
                         <option value="">Select a topic</option>
-                        <option>Business Formation</option>
-                        <option>Pricing & Packages</option>
-                        <option>Compliance & Management</option>
-                        <option>Technical Support</option>
-                        <option>General Inquiry</option>
+                        {SUBJECT_OPTIONS.map((subject) => (
+                          <option key={subject} value={subject}>
+                            {subject}
+                          </option>
+                        ))}
                       </select>
                     </div>
                   </div>
@@ -233,6 +334,8 @@ export default function ContactPage() {
                     <textarea
                       required
                       rows={5}
+                      minLength={20}
+                      maxLength={5000}
                       placeholder="Tell us how we can help you..."
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
@@ -275,14 +378,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Footer bar */}
-      <footer className="bg-primary py-8">
-        <div className="mx-auto max-w-7xl px-4 text-center">
-          <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} Brendat Inc. All rights reserved. Georgia, USA.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
