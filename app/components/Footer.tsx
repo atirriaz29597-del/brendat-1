@@ -45,9 +45,10 @@ export default function Footer() {
   const resourceLinks: FooterItem[] = [
     { label: "Formation Guide", href: "/business-formation" },
     { label: "Blog", href: "/blog" },
-    { label: "Help Center" },
+    { label: "FAQs", href: "/faqs" },
     { label: "Contact Us", href: "/contact" },
-    { label: "Privacy Policy" },
+    { label: "Privacy Policy", href: "/privacy-policy" },
+    { label: "Refund Policy", href: "/refund-policy" },
   ];
 
   return (
